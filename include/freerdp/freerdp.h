@@ -152,9 +152,11 @@ struct rdp_freerdp
 							  Can be allocated by a call to freerdp_context_new().
 							  Must be deallocated by a call to freerdp_context_free() before deallocating the current instance. */
 
-	ALIGN64 RDP_CLIENT_ENTRY_POINTS* pClientEntryPoints;
+	ALIGN64 RDP_CLIENT_ENTRY_POINTS* pClientEntryPoints; /* 1 */
 
-	UINT64 paddingA[16 - 2]; /* 2 */
+	ALIGN64 void* pUser; /* 2 */
+
+	UINT64 paddingA[16 - 3]; /* 3 */
 
 	ALIGN64 rdpInput* input; /* (offset 16)
 						Input handle for the connection.

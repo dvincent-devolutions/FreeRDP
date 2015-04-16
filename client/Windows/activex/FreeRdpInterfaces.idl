@@ -1,0 +1,1076 @@
+// FreeRdpActivex.idl : type library source for ActiveX Control project.
+
+// This file will be processed by the MIDL compiler tool to
+// produce the type library (FreeRdpActivex.tlb) that will become a resource in
+// FreeRdpActivex.ocx.
+
+#include <olectl.h>
+#include <idispids.h>
+
+midl_pragma warning(disable: 2362)
+
+[
+	uuid(1B209E0F-1D4F-4A97-BB6B-24CF335EB8FD),
+	version(1.0),
+	helpstring("Free RDP Control Type Library")
+]
+library FreeRdpActivex
+{
+	importlib(STDOLE_TLB);
+
+	//  Primary dispatch interface for CFreeRdpActivexCtrl
+	[ 
+		uuid(FEC3E2EA-695D-48F7-9CB6-ADCAD050C7EC)	
+	]
+	dispinterface _DFreeRdpActivex
+	{
+		properties:
+		methods:
+			[id(0x10)] void Method1();
+	};
+
+	//  Event dispatch interface for CFreeRdpActivexCtrl
+	[ 
+		uuid(740FC5CD-B2CD-495B-9628-9CC8351CC13A)	
+	]
+	dispinterface _DFreeRdpActivexEvents
+	{
+		properties:
+		methods:
+			[id(1)] void Test();
+	};
+
+	// Compatibility interfaces.
+
+	// Secured settings.
+	[
+		object,
+		uuid(C9D65442-A0F9-45B2-8F73-D61D2DB8CBB6),
+		dual,
+		oleautomation
+	]
+	interface IMsTscSecuredSettings : IDispatch
+	{
+		[id(0x00000001), propput] HRESULT StartProgram([in] BSTR pStartProgram);
+		[id(0x00000001), propget] HRESULT StartProgram([out, retval] BSTR* pStartProgram);
+		[id(0x00000002), propput] HRESULT WorkDir([in] BSTR pWorkDir);
+		[id(0x00000002), propget] HRESULT WorkDir([out, retval] BSTR* pWorkDir);
+		[id(0x00000003), propput] HRESULT FullScreen([in] long pfFullScreen);
+		[id(0x00000003), propget] HRESULT FullScreen([out, retval] long* pfFullScreen);
+	};
+
+	[
+		object,
+		uuid(605BEFCF-39C1-45CC-A811-068FB7BE346D),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientSecuredSettings : IMsTscSecuredSettings
+	{
+		[id(0x00000004), propput] HRESULT KeyboardHookMode([in] long pkeyboardHookMode);
+		[id(0x00000004), propget] HRESULT KeyboardHookMode([out, retval] long* pkeyboardHookMode);
+		[id(0x00000005), propput] HRESULT AudioRedirectionMode([in] long pAudioRedirectionMode);
+		[id(0x00000005), propget] HRESULT AudioRedirectionMode([out, retval] long* pAudioRedirectionMode);
+	};
+
+	[
+		object,
+		uuid(25F2CE20-8B1D-4971-A7CD-549DAE201FC0),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientSecuredSettings2 : IMsRdpClientSecuredSettings
+	{
+		[id(0x00000006), propget] HRESULT PCB([out, retval] BSTR* bstrPCB);
+		[id(0x00000006), propput] HRESULT PCB([in] BSTR bstrPCB);
+	};
+
+	// Advanced settings.
+	[
+		object,
+		uuid(809945CC-4B3B-4A92-A6B0-DBF9B5F2EF2D),
+		dual,
+		oleautomation
+	]
+	interface IMsTscAdvancedSettings : IDispatch
+	{
+		[id(0x00000079), propput] HRESULT Compress([in] long pcompress);
+		[id(0x00000079), propget] HRESULT Compress([out, retval] long* pcompress);
+		[id(0x0000007a), propput] HRESULT BitmapPeristence([in] long pbitmapPeristence);
+		[id(0x0000007a), propget] HRESULT BitmapPeristence([out, retval] long* pbitmapPeristence);
+		[id(0x000000a1), propput] HRESULT allowBackgroundInput([in] long pallowBackgroundInput);
+		[id(0x000000a1), propget] HRESULT allowBackgroundInput([out, retval] long* pallowBackgroundInput);
+		[id(0x000000a2), propput] HRESULT KeyBoardLayoutStr([in] BSTR rhs);
+		[id(0x000000aa), propput] HRESULT PluginDlls([in] BSTR rhs);
+		[id(0x000000ab), propput] HRESULT IconFile([in] BSTR rhs);
+		[id(0x000000ac), propput] HRESULT IconIndex([in] long rhs);
+		[id(0x000000ad), propput] HRESULT ContainerHandledFullScreen([in] long pContainerHandledFullScreen);
+		[id(0x000000ad), propget] HRESULT ContainerHandledFullScreen([out, retval] long* pContainerHandledFullScreen);
+		[id(0x000000ae), propput] HRESULT DisableRdpdr([in] long pDisableRdpdr);
+		[id(0x000000ae), propget] HRESULT DisableRdpdr([out, retval] long* pDisableRdpdr);
+	};
+
+	[
+		odl,
+		uuid(3C65B4AB-12B3-465B-ACD4-B8DAD3BFF9E2),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientAdvancedSettings : IMsTscAdvancedSettings
+	{
+		[id(0x00000065), propput] HRESULT SmoothScroll([in] long psmoothScroll);
+		[id(0x00000065), propget] HRESULT SmoothScroll([out, retval] long* psmoothScroll);
+		[id(0x00000066), propput] HRESULT AcceleratorPassthrough([in] long pacceleratorPassthrough);
+		[id(0x00000066), propget] HRESULT AcceleratorPassthrough([out, retval] long* pacceleratorPassthrough);
+		[id(0x00000067), propput] HRESULT ShadowBitmap([in] long pshadowBitmap);
+		[id(0x00000067), propget] HRESULT ShadowBitmap([out, retval] long* pshadowBitmap);
+		[id(0x00000068), propput] HRESULT TransportType([in] long ptransportType);
+		[id(0x00000068), propget] HRESULT TransportType([out, retval] long* ptransportType);
+		[id(0x00000069), propput] HRESULT SasSequence([in] long psasSequence);
+		[id(0x00000069), propget] HRESULT SasSequence([out, retval] long* psasSequence);
+		[id(0x0000006a), propput] HRESULT EncryptionEnabled([in] long pencryptionEnabled);
+		[id(0x0000006a), propget] HRESULT EncryptionEnabled([out, retval] long* pencryptionEnabled);
+		[id(0x0000006b), propput] HRESULT DedicatedTerminal([in] long pdedicatedTerminal);
+		[id(0x0000006b), propget] HRESULT DedicatedTerminal([out, retval] long* pdedicatedTerminal);
+		[id(0x0000006c), propput] HRESULT RDPPort([in] long prdpPort);
+		[id(0x0000006c), propget] HRESULT RDPPort([out, retval] long* prdpPort);
+		[id(0x0000006d), propput] HRESULT EnableMouse([in] long penableMouse);
+		[id(0x0000006d), propget] HRESULT EnableMouse([out, retval] long* penableMouse);
+		[id(0x0000006e), propput] HRESULT DisableCtrlAltDel([in] long pdisableCtrlAltDel);
+		[id(0x0000006e), propget] HRESULT DisableCtrlAltDel([out, retval] long* pdisableCtrlAltDel);
+		[id(0x0000006f), propput] HRESULT EnableWindowsKey([in] long penableWindowsKey);
+		[id(0x0000006f), propget] HRESULT EnableWindowsKey([out, retval] long* penableWindowsKey);
+		[id(0x00000070), propput] HRESULT DoubleClickDetect([in] long pdoubleClickDetect);
+		[id(0x00000070), propget] HRESULT DoubleClickDetect([out, retval] long* pdoubleClickDetect);
+		[id(0x00000071), propput] HRESULT MaximizeShell([in] long pmaximizeShell);
+		[id(0x00000071), propget] HRESULT MaximizeShell([out, retval] long* pmaximizeShell);
+		[id(0x00000072), propput] HRESULT HotKeyFullScreen([in] long photKeyFullScreen);
+		[id(0x00000072), propget] HRESULT HotKeyFullScreen([out, retval] long* photKeyFullScreen);
+		[id(0x00000073), propput] HRESULT HotKeyCtrlEsc([in] long photKeyCtrlEsc);
+		[id(0x00000073), propget] HRESULT HotKeyCtrlEsc([out, retval] long* photKeyCtrlEsc);
+		[id(0x00000074), propput] HRESULT HotKeyAltEsc([in] long photKeyAltEsc);
+		[id(0x00000074), propget] HRESULT HotKeyAltEsc([out, retval] long* photKeyAltEsc);
+		[id(0x00000075), propput] HRESULT HotKeyAltTab([in] long photKeyAltTab);
+		[id(0x00000075), propget] HRESULT HotKeyAltTab([out, retval] long* photKeyAltTab);
+		[id(0x00000076), propput] HRESULT HotKeyAltShiftTab([in] long photKeyAltShiftTab);
+		[id(0x00000076), propget] HRESULT HotKeyAltShiftTab([out, retval] long* photKeyAltShiftTab);
+		[id(0x00000077), propput] HRESULT HotKeyAltSpace([in] long photKeyAltSpace);
+		[id(0x00000077), propget] HRESULT HotKeyAltSpace([out, retval] long* photKeyAltSpace);
+		[id(0x00000078), propput] HRESULT HotKeyCtrlAltDel([in] long photKeyCtrlAltDel);
+		[id(0x00000078), propget] HRESULT HotKeyCtrlAltDel([out, retval] long* photKeyCtrlAltDel);
+		[id(0x0000007b), propput] HRESULT orderDrawThreshold([in] long porderDrawThreshold);
+		[id(0x0000007b), propget] HRESULT orderDrawThreshold([out, retval] long* porderDrawThreshold);
+		[id(0x0000007c), propput] HRESULT BitmapCacheSize([in] long pbitmapCacheSize);
+		[id(0x0000007c), propget] HRESULT BitmapCacheSize([out, retval] long* pbitmapCacheSize);
+		[id(0x0000007d), propput] HRESULT BitmapVirtualCacheSize([in] long pbitmapVirtualCacheSize);
+		[id(0x0000007d), propget] HRESULT BitmapVirtualCacheSize([out, retval] long* pbitmapVirtualCacheSize);
+		[id(0x000000af), propput] HRESULT ScaleBitmapCachesByBPP([in] long pbScale);
+		[id(0x000000af), propget] HRESULT ScaleBitmapCachesByBPP([out, retval] long* pbScale);
+		[id(0x0000007e), propput] HRESULT NumBitmapCaches([in] long pnumBitmapCaches);
+		[id(0x0000007e), propget] HRESULT NumBitmapCaches([out, retval] long* pnumBitmapCaches);
+		[id(0x0000007f), propput] HRESULT CachePersistenceActive([in] long pcachePersistenceActive);
+		[id(0x0000007f), propget] HRESULT CachePersistenceActive([out, retval] long* pcachePersistenceActive);
+		[id(0x0000008a), propput] HRESULT PersistCacheDirectory([in] BSTR rhs);
+		[id(0x0000009c), propput] HRESULT brushSupportLevel([in] long pbrushSupportLevel);
+		[id(0x0000009c), propget] HRESULT brushSupportLevel([out, retval] long* pbrushSupportLevel);
+		[id(0x0000009d), propput] HRESULT minInputSendInterval([in] long pminInputSendInterval);
+		[id(0x0000009d), propget] HRESULT minInputSendInterval([out, retval] long* pminInputSendInterval);
+		[id(0x0000009e), propput] HRESULT InputEventsAtOnce([in] long pinputEventsAtOnce);
+		[id(0x0000009e), propget] HRESULT InputEventsAtOnce([out, retval] long* pinputEventsAtOnce);
+		[id(0x0000009f), propput] HRESULT maxEventCount([in] long pmaxEventCount);
+		[id(0x0000009f), propget] HRESULT maxEventCount([out, retval] long* pmaxEventCount);
+		[id(0x000000a0), propput] HRESULT keepAliveInterval([in] long pkeepAliveInterval);
+		[id(0x000000a0), propget] HRESULT keepAliveInterval([out, retval] long* pkeepAliveInterval);
+		[id(0x000000a3), propput] HRESULT shutdownTimeout([in] long pshutdownTimeout);
+		[id(0x000000a3), propget] HRESULT shutdownTimeout([out, retval] long* pshutdownTimeout);
+		[id(0x000000a4), propput] HRESULT overallConnectionTimeout([in] long poverallConnectionTimeout);
+		[id(0x000000a4), propget] HRESULT overallConnectionTimeout([out, retval] long* poverallConnectionTimeout);
+		[id(0x000000a5), propput] HRESULT singleConnectionTimeout([in] long psingleConnectionTimeout);
+		[id(0x000000a5), propget] HRESULT singleConnectionTimeout([out, retval] long* psingleConnectionTimeout);
+		[id(0x000000a6), propput] HRESULT KeyboardType([in] long pkeyboardType);
+		[id(0x000000a6), propget] HRESULT KeyboardType([out, retval] long* pkeyboardType);
+		[id(0x000000a7), propput] HRESULT KeyboardSubType([in] long pkeyboardSubType);
+		[id(0x000000a7), propget] HRESULT KeyboardSubType([out, retval] long* pkeyboardSubType);
+		[id(0x000000a8), propput] HRESULT KeyboardFunctionKey([in] long pkeyboardFunctionKey);
+		[id(0x000000a8), propget] HRESULT KeyboardFunctionKey([out, retval] long* pkeyboardFunctionKey);
+		[id(0x000000a9), propput] HRESULT WinceFixedPalette([in] long pwinceFixedPalette);
+		[id(0x000000a9), propget] HRESULT WinceFixedPalette([out, retval] long* pwinceFixedPalette);
+		[id(0x000000b2), propput] HRESULT ConnectToServerConsole([in] VARIANT_BOOL pConnectToConsole);
+		[id(0x000000b2), propget] HRESULT ConnectToServerConsole([out, retval] VARIANT_BOOL* pConnectToConsole);
+		[id(0x000000b6), propput] HRESULT BitmapPersistence([in] long pbitmapPersistence);
+		[id(0x000000b6), propget] HRESULT BitmapPersistence([out, retval] long* pbitmapPersistence);
+		[id(0x000000b7), propput] HRESULT MinutesToIdleTimeout([in] long pminutesToIdleTimeout);
+		[id(0x000000b7), propget] HRESULT MinutesToIdleTimeout([out, retval] long* pminutesToIdleTimeout);
+		[id(0x000000b8), propput] HRESULT SmartSizing([in] VARIANT_BOOL pfSmartSizing);
+		[id(0x000000b8), propget] HRESULT SmartSizing([out, retval] VARIANT_BOOL* pfSmartSizing);
+		[id(0x000000b9), propput] HRESULT RdpdrLocalPrintingDocName([in] BSTR pLocalPrintingDocName);
+		[id(0x000000b9), propget] HRESULT RdpdrLocalPrintingDocName([out, retval] BSTR* pLocalPrintingDocName);
+		[id(0x000000c9), propput] HRESULT RdpdrClipCleanTempDirString([in] BSTR clipCleanTempDirString);
+		[id(0x000000c9), propget] HRESULT RdpdrClipCleanTempDirString([out, retval] BSTR* clipCleanTempDirString);
+		[id(0x000000ca), propput] HRESULT RdpdrClipPasteInfoString([in] BSTR clipPasteInfoString);
+		[id(0x000000ca), propget] HRESULT RdpdrClipPasteInfoString([out, retval] BSTR* clipPasteInfoString);
+		[id(0x000000ba), propput] HRESULT ClearTextPassword([in] BSTR rhs);
+		[id(0x000000bb), propput] HRESULT DisplayConnectionBar([in] VARIANT_BOOL pDisplayConnectionBar);
+		[id(0x000000bb), propget] HRESULT DisplayConnectionBar([out, retval] VARIANT_BOOL* pDisplayConnectionBar);
+		[id(0x000000bc), propput] HRESULT PinConnectionBar([in] VARIANT_BOOL pPinConnectionBar);
+		[id(0x000000bc), propget] HRESULT PinConnectionBar([out, retval] VARIANT_BOOL* pPinConnectionBar);
+		[id(0x000000bd), propput] HRESULT GrabFocusOnConnect([in] VARIANT_BOOL pfGrabFocusOnConnect);
+		[id(0x000000bd), propget] HRESULT GrabFocusOnConnect([out, retval] VARIANT_BOOL* pfGrabFocusOnConnect);
+		[id(0x000000be), propput] HRESULT LoadBalanceInfo([in] BSTR pLBInfo);
+		[id(0x000000be), propget] HRESULT LoadBalanceInfo([out, retval] BSTR* pLBInfo);
+		[id(0x000000bf), propput] HRESULT RedirectDrives([in] VARIANT_BOOL pRedirectDrives);
+		[id(0x000000bf), propget] HRESULT RedirectDrives([out, retval] VARIANT_BOOL* pRedirectDrives);
+		[id(0x000000c0), propput] HRESULT RedirectPrinters([in] VARIANT_BOOL pRedirectPrinters);
+		[id(0x000000c0), propget] HRESULT RedirectPrinters([out, retval] VARIANT_BOOL* pRedirectPrinters);
+		[id(0x000000c1), propput] HRESULT RedirectPorts([in] VARIANT_BOOL pRedirectPorts);
+		[id(0x000000c1), propget] HRESULT RedirectPorts([out, retval] VARIANT_BOOL* pRedirectPorts);
+		[id(0x000000c2), propput] HRESULT RedirectSmartCards([in] VARIANT_BOOL pRedirectSmartCards);
+		[id(0x000000c2), propget] HRESULT RedirectSmartCards([out, retval] VARIANT_BOOL* pRedirectSmartCards);
+		[id(0x000000c3), propput] HRESULT BitmapVirtualCache16BppSize([in] long pBitmapVirtualCache16BppSize);
+		[id(0x000000c3), propget] HRESULT BitmapVirtualCache16BppSize([out, retval] long* pBitmapVirtualCache16BppSize);
+		[id(0x000000c4), propput] HRESULT BitmapVirtualCache24BppSize([in] long pBitmapVirtualCache24BppSize);
+		[id(0x000000c4), propget] HRESULT BitmapVirtualCache24BppSize([out, retval] long* pBitmapVirtualCache24BppSize);
+		[id(0x000000c8), propput] HRESULT PerformanceFlags([in] long pDisableList);
+		[id(0x000000c8), propget] HRESULT PerformanceFlags([out, retval] long* pDisableList);
+		[id(0x000000cb), propput] HRESULT ConnectWithEndpoint([in] VARIANT* rhs);
+		[id(0x000000cc), propput] HRESULT NotifyTSPublicKey([in] VARIANT_BOOL pfNotify);
+		[id(0x000000cc), propget] HRESULT NotifyTSPublicKey([out, retval] VARIANT_BOOL* pfNotify);
+	};
+
+	[
+		object,
+		uuid(9AC42117-2B76-4320-AA44-0E616AB8437B),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientAdvancedSettings2 : IMsRdpClientAdvancedSettings
+	{
+		[id(0x000000cd), propget] HRESULT CanAutoReconnect([out, retval] VARIANT_BOOL* pfCanAutoReconnect);
+		[id(0x000000ce), propput] HRESULT EnableAutoReconnect([in] VARIANT_BOOL pfEnableAutoReconnect);
+		[id(0x000000ce), propget] HRESULT EnableAutoReconnect([out, retval] VARIANT_BOOL* pfEnableAutoReconnect);
+		[id(0x000000cf), propput] HRESULT MaxReconnectAttempts([in] long pMaxReconnectAttempts);
+		[id(0x000000cf), propget] HRESULT MaxReconnectAttempts([out, retval] long* pMaxReconnectAttempts);
+	};
+
+	[
+		object,
+		uuid(19CD856B-C542-4C53-ACEE-F127E3BE1A59),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientAdvancedSettings3 : IMsRdpClientAdvancedSettings2
+	{
+		[id(0x000000d2), propput] HRESULT ConnectionBarShowMinimizeButton([in] VARIANT_BOOL pfShowMinimize);
+		[id(0x000000d2), propget] HRESULT ConnectionBarShowMinimizeButton([out, retval] VARIANT_BOOL* pfShowMinimize);
+		[id(0x000000d3), propput] HRESULT ConnectionBarShowRestoreButton([in] VARIANT_BOOL pfShowRestore);
+		[id(0x000000d3), propget] HRESULT ConnectionBarShowRestoreButton([out, retval] VARIANT_BOOL* pfShowRestore);
+	};
+
+	[
+		object,
+		uuid(FBA7F64E-7345-4405-AE50-FA4A763DC0DE),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientAdvancedSettings4 : IMsRdpClientAdvancedSettings3
+	{
+		[id(0x000000d4), propput] HRESULT AuthenticationLevel([in] unsigned int puiAuthLevel);
+		[id(0x000000d4), propget] HRESULT AuthenticationLevel([out, retval] unsigned int* puiAuthLevel);
+	};
+
+	[
+		object,
+		uuid(FBA7F64E-6783-4405-DA45-FA4A763DABD0),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientAdvancedSettings5 : IMsRdpClientAdvancedSettings4
+	{
+		[id(0x000000d5), propput] HRESULT RedirectClipboard([in] VARIANT_BOOL pfRedirectClipboard);
+		[id(0x000000d5), propget] HRESULT RedirectClipboard([out, retval] VARIANT_BOOL* pfRedirectClipboard);
+		[id(0x000000d7), propput] HRESULT AudioRedirectionMode([in] unsigned int puiAudioRedirectionMode);
+		[id(0x000000d7), propget] HRESULT AudioRedirectionMode([out, retval] unsigned int* puiAudioRedirectionMode);
+		[id(0x000000d8), propput] HRESULT ConnectionBarShowPinButton([in] VARIANT_BOOL pfShowPin);
+		[id(0x000000d8), propget] HRESULT ConnectionBarShowPinButton([out, retval] VARIANT_BOOL* pfShowPin);
+		[id(0x000000d9), propput] HRESULT PublicMode([in] VARIANT_BOOL pfPublicMode);
+		[id(0x000000d9), propget] HRESULT PublicMode([out, retval] VARIANT_BOOL* pfPublicMode);
+		[id(0x000000da), propput] HRESULT RedirectDevices([in] VARIANT_BOOL pfRedirectPnPDevices);
+		[id(0x000000da), propget] HRESULT RedirectDevices([out, retval] VARIANT_BOOL* pfRedirectPnPDevices);
+		[id(0x000000db), propput] HRESULT RedirectPOSDevices([in] VARIANT_BOOL pfRedirectPOSDevices);
+		[id(0x000000db), propget] HRESULT RedirectPOSDevices([out, retval] VARIANT_BOOL* pfRedirectPOSDevices);
+		[id(0x000000dc), propput] HRESULT BitmapVirtualCache32BppSize([in] long pBitmapVirtualCache32BppSize);
+		[id(0x000000dc), propget] HRESULT BitmapVirtualCache32BppSize([out, retval] long* pBitmapVirtualCache32BppSize);
+	};
+
+	[
+		object,
+		uuid(222C4B5D-45D9-4DF0-A7C6-60CF9089D285),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientAdvancedSettings6 : IMsRdpClientAdvancedSettings5
+	{
+		[id(0x000000dd), propput] HRESULT RelativeMouseMode([in] VARIANT_BOOL pfRelativeMouseMode);
+		[id(0x000000dd), propget] HRESULT RelativeMouseMode([out, retval] VARIANT_BOOL* pfRelativeMouseMode);
+		[id(0x000000de), propget] HRESULT AuthenticationServiceClass([out, retval] BSTR* pbstrAuthServiceClass);
+		[id(0x000000de), propput] HRESULT AuthenticationServiceClass([in] BSTR pbstrAuthServiceClass);
+		[id(0x000000df), propget] HRESULT PCB([out, retval] BSTR* bstrPCB);
+		[id(0x000000df), propput] HRESULT PCB([in] BSTR bstrPCB);
+		[id(0x000000e0), propput] HRESULT HotKeyFocusReleaseLeft([in] long HotKeyFocusReleaseLeft);
+		[id(0x000000e0), propget] HRESULT HotKeyFocusReleaseLeft([out, retval] long* HotKeyFocusReleaseLeft);
+		[id(0x000000e1), propput] HRESULT HotKeyFocusReleaseRight([in] long HotKeyFocusReleaseRight);
+		[id(0x000000e1), propget] HRESULT HotKeyFocusReleaseRight([out, retval] long* HotKeyFocusReleaseRight);
+		[id(0x00000011), propput] HRESULT EnableCredSspSupport([in] VARIANT_BOOL pfEnableSupport);
+		[id(0x00000011), propget] HRESULT EnableCredSspSupport([out, retval] VARIANT_BOOL* pfEnableSupport);
+		[id(0x000000e2), propget] HRESULT AuthenticationType([out, retval] unsigned int* puiAuthType);
+		[id(0x000000e3), propput] HRESULT ConnectToAdministerServer([in] VARIANT_BOOL pConnectToAdministerServer);
+		[id(0x000000e3), propget] HRESULT ConnectToAdministerServer([out, retval] VARIANT_BOOL* pConnectToAdministerServer);
+	};
+
+	[
+		object,
+		uuid(26036036-4010-4578-8091-0DB9A1EDF9C3),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientAdvancedSettings7 : IMsRdpClientAdvancedSettings6
+	{
+		[id(0x000000e4), propput] HRESULT AudioCaptureRedirectionMode([in] VARIANT_BOOL pfRedir);
+		[id(0x000000e4), propget] HRESULT AudioCaptureRedirectionMode([out, retval] VARIANT_BOOL* pfRedir);
+		[id(0x000000e5), propput] HRESULT VideoPlaybackMode([in] unsigned int pVideoPlaybackMode);
+		[id(0x000000e5), propget] HRESULT VideoPlaybackMode([out, retval] unsigned int* pVideoPlaybackMode);
+		[id(0x000000e6), propput] HRESULT EnableSuperPan([in] VARIANT_BOOL pfEnableSuperPan);
+		[id(0x000000e6), propget] HRESULT EnableSuperPan([out, retval] VARIANT_BOOL* pfEnableSuperPan);
+		[id(0x000000e7), propput] HRESULT SuperPanAccelerationFactor([in] unsigned long puAccelFactor);
+		[id(0x000000e7), propget] HRESULT SuperPanAccelerationFactor([out, retval] unsigned long* puAccelFactor);
+		[id(0x000000e8), propput] HRESULT NegotiateSecurityLayer([in] VARIANT_BOOL pfNegotiate);
+		[id(0x000000e8), propget] HRESULT NegotiateSecurityLayer([out, retval] VARIANT_BOOL* pfNegotiate);
+		[id(0x000000e9), propput] HRESULT AudioQualityMode([in] unsigned int pAudioQualityMode);
+		[id(0x000000e9), propget] HRESULT AudioQualityMode([out, retval] unsigned int* pAudioQualityMode);
+		[id(0x000000ea), propput] HRESULT RedirectDirectX([in] VARIANT_BOOL pfRedirectDirectX);
+		[id(0x000000ea), propget] HRESULT RedirectDirectX([out, retval] VARIANT_BOOL* pfRedirectDirectX);
+		[id(0x000000eb), propput] HRESULT NetworkConnectionType([in] unsigned int pConnectionType);
+		[id(0x000000eb), propget] HRESULT NetworkConnectionType([out, retval] unsigned int* pConnectionType);
+	};
+
+	typedef enum
+	{
+		FullMode = 0,
+		ThinClientMode = 1,
+		SmallCacheMode = 2
+	} ClientSpec;
+
+	[
+		object,
+		uuid(89ACB528-2557-4D16-8625-226A30E97E9A),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientAdvancedSettings8 : IMsRdpClientAdvancedSettings7
+	{
+		[id(0x000000ec), propput] HRESULT BandwidthDetection([in] VARIANT_BOOL pfAutodetect);
+		[id(0x000000ec), propget] HRESULT BandwidthDetection([out, retval] VARIANT_BOOL* pfAutodetect);
+		[id(0x000000ed), propput, helpstring("0 - disabled, 1 - 16MB cache, 2 - 16MB and CA 7.1")] HRESULT ClientProtocolSpec([in] ClientSpec pClientMode);
+		[id(0x000000ed), propget, helpstring("0 - disabled, 1 - 16MB cache, 2 - 16MB and CA 7.1")] HRESULT ClientProtocolSpec([out, retval] ClientSpec* pClientMode);
+	};
+
+	// Transport settings.
+	[
+		object,
+		uuid(720298C0-A099-46F5-9F82-96921BAE4701),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientTransportSettings : IDispatch
+	{
+		[id(0x000000d2), propput] HRESULT GatewayHostname([in] BSTR pProxyHostname);
+		[id(0x000000d2), propget] HRESULT GatewayHostname([out, retval] BSTR* pProxyHostname);
+		[id(0x000000d3), propput] HRESULT GatewayUsageMethod([in] unsigned long pulProxyUsageMethod);
+		[id(0x000000d3), propget] HRESULT GatewayUsageMethod([out, retval] unsigned long* pulProxyUsageMethod);
+		[id(0x000000d4), propput] HRESULT GatewayProfileUsageMethod([in] unsigned long pulProxyProfileUsageMethod);
+		[id(0x000000d4), propget] HRESULT GatewayProfileUsageMethod([out, retval] unsigned long* pulProxyProfileUsageMethod);
+		[id(0x000000d5), propput] HRESULT GatewayCredsSource([in] unsigned long pulProxyCredsSource);
+		[id(0x000000d5), propget] HRESULT GatewayCredsSource([out, retval] unsigned long* pulProxyCredsSource);
+		[id(0x000000d8), propput] HRESULT GatewayUserSelectedCredsSource([in] unsigned long pulProxyCredsSource);
+		[id(0x000000d8), propget] HRESULT GatewayUserSelectedCredsSource([out, retval] unsigned long* pulProxyCredsSource);
+		[id(0x000000d6), propget] HRESULT GatewayIsSupported([out, retval] long* pfProxyIsSupported);
+		[id(0x000000d7), propget] HRESULT GatewayDefaultUsageMethod([out, retval] unsigned long* pulProxyDefaultUsageMethod);
+	};
+
+	[
+		object,
+		uuid(67341688-D606-4C73-A5D2-2E0489009319),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientTransportSettings2 : IMsRdpClientTransportSettings
+	{
+		[id(0x000000de), propput] HRESULT GatewayCredSharing([in] unsigned long pulProxyCredSharing);
+		[id(0x000000de), propget] HRESULT GatewayCredSharing([out, retval] unsigned long* pulProxyCredSharing);
+		[id(0x000000d9), propput] HRESULT GatewayPreAuthRequirement([in] unsigned long pulProxyPreAuthRequirement);
+		[id(0x000000d9), propget] HRESULT GatewayPreAuthRequirement([out, retval] unsigned long* pulProxyPreAuthRequirement);
+		[id(0x000000da), propput] HRESULT GatewayPreAuthServerAddr([in] BSTR pbstrProxyPreAuthServerAddr);
+		[id(0x000000da), propget] HRESULT GatewayPreAuthServerAddr([out, retval] BSTR* pbstrProxyPreAuthServerAddr);
+		[id(0x000000db), propput] HRESULT GatewaySupportUrl([in] BSTR pbstrProxySupportUrl);
+		[id(0x000000db), propget] HRESULT GatewaySupportUrl([out, retval] BSTR* pbstrProxySupportUrl);
+		[id(0x000000dc), propput] HRESULT GatewayEncryptedOtpCookie([in] BSTR pbstrEncryptedOtpCookie);
+		[id(0x000000dc), propget] HRESULT GatewayEncryptedOtpCookie([out, retval] BSTR* pbstrEncryptedOtpCookie);
+		[id(0x000000dd), propput] HRESULT GatewayEncryptedOtpCookieSize([in] unsigned long pulEncryptedOtpCookieSize);
+		[id(0x000000dd), propget] HRESULT GatewayEncryptedOtpCookieSize([out, retval] unsigned long* pulEncryptedOtpCookieSize);
+		[id(0x000000df), propput] HRESULT GatewayUsername([in] BSTR pProxyUsername);
+		[id(0x000000df), propget] HRESULT GatewayUsername([out, retval] BSTR* pProxyUsername);
+		[id(0x000000e0), propput] HRESULT GatewayDomain([in] BSTR pProxyDomain);
+		[id(0x000000e0), propget] HRESULT GatewayDomain([out, retval] BSTR* pProxyDomain);
+		[id(0x000000e1), propput] HRESULT GatewayPassword([in] BSTR rhs);
+	};
+
+	[
+		object,
+		uuid(3D5B21AC-748D-41DE-8F30-E15169586BD4),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientTransportSettings3 : IMsRdpClientTransportSettings2
+	{
+		[id(0x000000e2), propput] HRESULT GatewayCredSourceCookie([in] unsigned long pulProxyCredSourceCookie);
+		[id(0x000000e2), propget] HRESULT GatewayCredSourceCookie([out, retval] unsigned long* pulProxyCredSourceCookie);
+		[id(0x000000e3), propput] HRESULT GatewayAuthCookieServerAddr([in] BSTR pbstrProxyAuthCookieServerAddr);
+		[id(0x000000e3), propget] HRESULT GatewayAuthCookieServerAddr([out, retval] BSTR* pbstrProxyAuthCookieServerAddr);
+		[id(0x000000e4), propput] HRESULT GatewayEncryptedAuthCookie([in] BSTR pbstrEncryptedAuthCookie);
+		[id(0x000000e4), propget] HRESULT GatewayEncryptedAuthCookie([out, retval] BSTR* pbstrEncryptedAuthCookie);
+		[id(0x000000e5), propput] HRESULT GatewayEncryptedAuthCookieSize([in] unsigned long pulEncryptedAuthCookieSize);
+		[id(0x000000e5), propget] HRESULT GatewayEncryptedAuthCookieSize([out, retval] unsigned long* pulEncryptedAuthCookieSize);
+		[id(0x000000e6), propput] HRESULT GatewayAuthLoginPage([in] BSTR pbstrProxyAuthLoginPage);
+		[id(0x000000e6), propget] HRESULT GatewayAuthLoginPage([out, retval] BSTR* pbstrProxyAuthLoginPage);
+	};
+
+	[
+		object,
+		uuid(011C3236-4D81-4515-9143-067AB630D299),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientTransportSettings4 : IMsRdpClientTransportSettings3
+	{
+		[id(0x000000e7), propput] HRESULT GatewayBrokeringType([in] unsigned long rhs);
+	};
+
+	// Remote program.
+	[
+		object,
+		uuid(FDD029F9-467A-4C49-8529-64B521DBD1B4),
+		hidden,
+		dual,
+		oleautomation
+	]
+	interface ITSRemoteProgram : IDispatch
+	{
+		[id(0x000000c8), propput] HRESULT RemoteProgramMode([in] VARIANT_BOOL pvboolRemoteProgramMode);
+		[id(0x000000c8), propget] HRESULT RemoteProgramMode([out, retval] VARIANT_BOOL* pvboolRemoteProgramMode);
+		[id(0x000000c9)] HRESULT ServerStartProgram( [in] BSTR bstrExecutablePath, [in] BSTR bstrFilePath, [in] BSTR bstrWorkingDirectory,
+			[in] VARIANT_BOOL vbExpandEnvVarInWorkingDirectoryOnServer, [in] BSTR bstrArguments, [in] VARIANT_BOOL vbExpandEnvVarInArgumentsOnServer);
+	};
+
+	[
+		object,
+		uuid(92C38A7D-241A-418C-9936-099872C9AF20),
+		hidden,
+		dual,
+		oleautomation
+	]
+	interface ITSRemoteProgram2 : ITSRemoteProgram
+	{
+		[id(0x000000ca), propput] HRESULT RemoteApplicationName([in] BSTR rhs);
+		[id(0x000000cb), propput] HRESULT RemoteApplicationProgram([in] BSTR rhs);
+		[id(0x000000cc), propput] HRESULT RemoteApplicationArgs([in] BSTR rhs);
+	};
+
+	// Client shell.
+	[
+		object,
+		uuid(D012AE6D-C19A-4BFE-B367-201F8911F134),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClientShell : IDispatch
+	{
+		[id(0x000000c9)] HRESULT Launch();
+		[id(0x000000ca), propput] HRESULT RdpFileContents([in] BSTR pszRdpFile);
+		[id(0x000000ca), propget] HRESULT RdpFileContents([out, retval] BSTR* pszRdpFile);
+		[id(0x000000cb)] HRESULT SetRdpProperty( [in] BSTR szProperty, [in] VARIANT Value);
+		[id(0x000000cc)] HRESULT GetRdpProperty( [in] BSTR szProperty, [out, retval] VARIANT* pValue);
+		[id(0x000000cd), propget] HRESULT IsRemoteProgramClientInstalled([out, retval] VARIANT_BOOL* pbClientInstalled);
+		[id(0x000000d3), propput] HRESULT PublicMode([in] VARIANT_BOOL pfPublicMode);
+		[id(0x000000d3), propget] HRESULT PublicMode([out, retval] VARIANT_BOOL* pfPublicMode);
+		[id(0x000000d4)] HRESULT ShowTrustedSitesManagementDialog();
+	};
+
+	// Device.
+	[
+		object,
+		uuid(60C3B9C8-9E92-4F5E-A3E7-604A912093EA)
+	]
+	interface IMsRdpDevice : IUnknown
+	{
+		[propget] HRESULT _stdcall DeviceInstanceId([out, retval] BSTR* pDevInstanceId);
+		[propget] HRESULT _stdcall FriendlyName([out, retval] BSTR* pFriendlyName);
+		[propget] HRESULT _stdcall DeviceDescription([out, retval] BSTR* pDeviceDescription);
+		[propput] HRESULT _stdcall RedirectionState([in] VARIANT_BOOL pvboolRedirState);
+		[propget] HRESULT _stdcall RedirectionState([out, retval] VARIANT_BOOL* pvboolRedirState);
+	};
+
+	// Device collection.
+	[
+		object,
+		uuid(56540617-D281-488C-8738-6A8FDF64A118)
+	]
+	interface IMsRdpDeviceCollection : IUnknown
+	{
+		HRESULT _stdcall RescanDevices([in] VARIANT_BOOL vboolDynRedir);
+		[propget] HRESULT _stdcall DeviceByIndex( [in] unsigned long index, [out, retval] IMsRdpDevice** ppDevice);
+		[propget] HRESULT _stdcall DeviceById( [in] BSTR devInstanceId, [out, retval] IMsRdpDevice** ppDevice);
+		[propget] HRESULT _stdcall DeviceCount([out, retval] unsigned long* pDeviceCount);
+	};
+
+	// Drive.
+	[
+		object,
+		uuid(D28B5458-F694-47A8-8E61-40356A767E46)
+	]
+	interface IMsRdpDrive : IUnknown
+	{
+		[propget] HRESULT _stdcall Name([out, retval] BSTR* pName);
+		[propput] HRESULT _stdcall RedirectionState([in] VARIANT_BOOL pvboolRedirState);
+		[propget] HRESULT _stdcall RedirectionState([out, retval] VARIANT_BOOL* pvboolRedirState);
+	};
+
+	// Drive collection.
+	[
+		object,
+		uuid(7FF17599-DA2C-4677-AD35-F60C04FE1585)
+	]
+	interface IMsRdpDriveCollection : IUnknown
+	{
+		HRESULT _stdcall RescanDrives(VARIANT_BOOL vboolDynRedir);
+		[propget] HRESULT _stdcall DriveByIndex( [in] unsigned long index, [out, retval] IMsRdpDrive** ppDevice);
+		[propget] HRESULT _stdcall DriveCount([out, retval] unsigned long* pDriveCount);
+	};
+
+	// Non scriptable.
+	[
+		object,
+		uuid(C1E6743A-41C1-4A74-832A-0DD06C1C7A0E)
+	]
+	interface IMsTscNonScriptable : IUnknown
+	{
+		[propput] HRESULT _stdcall ClearTextPassword([in] BSTR rhs);
+		[propput] HRESULT _stdcall PortablePassword([in] BSTR pPortablePass);
+		[propget] HRESULT _stdcall PortablePassword([out, retval] BSTR* pPortablePass);
+		[propput] HRESULT _stdcall PortableSalt([in] BSTR pPortableSalt);
+		[propget] HRESULT _stdcall PortableSalt([out, retval] BSTR* pPortableSalt);
+		[propput] HRESULT _stdcall BinaryPassword([in] BSTR pBinaryPassword);
+		[propget] HRESULT _stdcall BinaryPassword([out, retval] BSTR* pBinaryPassword);
+		[propput] HRESULT _stdcall BinarySalt([in] BSTR pSalt);
+		[propget] HRESULT _stdcall BinarySalt([out, retval] BSTR* pSalt);
+		HRESULT _stdcall ResetPassword();
+	};
+
+	[
+		object,
+		uuid(2F079C4C-87B2-4AFD-97AB-20CDB43038AE)
+	]
+	interface IMsRdpClientNonScriptable : IMsTscNonScriptable
+	{
+		HRESULT _stdcall NotifyRedirectDeviceChange( [in] UINT_PTR wParam, [in] LONG_PTR lParam);
+		HRESULT _stdcall SendKeys( [in] long numKeys, [in] VARIANT_BOOL* pbArrayKeyUp, [in] long* plKeyData);
+	};
+
+	[
+		object,
+		uuid(17A5E535-4072-4FA4-AF32-C8D0D47345E9)
+	]
+	interface IMsRdpClientNonScriptable2 : IMsRdpClientNonScriptable
+	{
+		[propput] HRESULT _stdcall UIParentWindowHandle([in] wireHWND phwndUIParentWindowHandle);
+		[propget] HRESULT _stdcall UIParentWindowHandle([out, retval] wireHWND* phwndUIParentWindowHandle);
+	};
+
+	[
+		object,
+		uuid(B3378D90-0728-45C7-8ED7-B6159FB92219)
+	]
+	interface IMsRdpClientNonScriptable3 : IMsRdpClientNonScriptable2
+	{
+		[propput] HRESULT _stdcall ShowRedirectionWarningDialog([in] VARIANT_BOOL pfShowRdrDlg);
+		[propget] HRESULT _stdcall ShowRedirectionWarningDialog([out, retval] VARIANT_BOOL* pfShowRdrDlg);
+		[propput] HRESULT _stdcall PromptForCredentials([in] VARIANT_BOOL pfPrompt);
+		[propget] HRESULT _stdcall PromptForCredentials([out, retval] VARIANT_BOOL* pfPrompt);
+		[propput] HRESULT _stdcall NegotiateSecurityLayer([in] VARIANT_BOOL pfNegotiate);
+		[propget] HRESULT _stdcall NegotiateSecurityLayer([out, retval] VARIANT_BOOL* pfNegotiate);
+		[propput] HRESULT _stdcall EnableCredSspSupport([in] VARIANT_BOOL pfEnableSupport);
+		[propget] HRESULT _stdcall EnableCredSspSupport([out, retval] VARIANT_BOOL* pfEnableSupport);
+		[propput] HRESULT _stdcall RedirectDynamicDrives([in] VARIANT_BOOL pfRedirectDynamicDrives);
+		[propget] HRESULT _stdcall RedirectDynamicDrives([out, retval] VARIANT_BOOL* pfRedirectDynamicDrives);
+		[propput] HRESULT _stdcall RedirectDynamicDevices([in] VARIANT_BOOL pfRedirectDynamicDevices);
+		[propget] HRESULT _stdcall RedirectDynamicDevices([out, retval] VARIANT_BOOL* pfRedirectDynamicDevices);
+		[propget] HRESULT _stdcall DeviceCollection([out, retval] IMsRdpDeviceCollection** ppDeviceCollection);
+		[propget] HRESULT _stdcall DriveCollection([out, retval] IMsRdpDriveCollection** ppDeviceCollection);
+		[propput] HRESULT _stdcall WarnAboutSendingCredentials([in] VARIANT_BOOL pfWarn);
+		[propget] HRESULT _stdcall WarnAboutSendingCredentials([out, retval] VARIANT_BOOL* pfWarn);
+		[propput] HRESULT _stdcall WarnAboutClipboardRedirection([in] VARIANT_BOOL pfWarn);
+		[propget] HRESULT _stdcall WarnAboutClipboardRedirection([out, retval] VARIANT_BOOL* pfWarn);
+		[propput] HRESULT _stdcall ConnectionBarText([in] BSTR pConnectionBarText);
+		[propget] HRESULT _stdcall ConnectionBarText([out, retval] BSTR* pConnectionBarText);
+	};
+
+	typedef enum
+	{
+		RedirectionWarningTypeDefault = 0,
+		RedirectionWarningTypeUnsigned = 1,
+		RedirectionWarningTypeUnknown = 2,
+		RedirectionWarningTypeUser = 3,
+		RedirectionWarningTypeThirdPartySigned = 4,
+		RedirectionWarningTypeTrusted = 5,
+		RedirectionWarningTypeMax = 5
+	} RedirectionWarningType;
+
+	[
+		object,
+		uuid(F50FA8AA-1C7D-4F59-B15C-A90CACAE1FCB)
+	]
+	interface IMsRdpClientNonScriptable4 : IMsRdpClientNonScriptable3
+	{
+		[propput] HRESULT _stdcall RedirectionWarningType([in] RedirectionWarningType pWrnType);
+		[propget] HRESULT _stdcall RedirectionWarningType([out, retval] RedirectionWarningType* pWrnType);
+		[propput] HRESULT _stdcall MarkRdpSettingsSecure([in] VARIANT_BOOL pfRdpSecure);
+		[propget] HRESULT _stdcall MarkRdpSettingsSecure([out, retval] VARIANT_BOOL* pfRdpSecure);
+		[propput] HRESULT _stdcall PublisherCertificateChain([in] VARIANT* pVarCert);
+		[propget] HRESULT _stdcall PublisherCertificateChain([out, retval] VARIANT* pVarCert);
+		[propput] HRESULT _stdcall WarnAboutPrinterRedirection([in] VARIANT_BOOL pfWarn);
+		[propget] HRESULT _stdcall WarnAboutPrinterRedirection([out, retval] VARIANT_BOOL* pfWarn);
+		[propput] HRESULT _stdcall AllowCredentialSaving([in] VARIANT_BOOL pfAllowSave);
+		[propget] HRESULT _stdcall AllowCredentialSaving([out, retval] VARIANT_BOOL* pfAllowSave);
+		[propput] HRESULT _stdcall PromptForCredsOnClient([in] VARIANT_BOOL pfPromptForCredsOnClient);
+		[propget] HRESULT _stdcall PromptForCredsOnClient([out, retval] VARIANT_BOOL* pfPromptForCredsOnClient);
+		[propput] HRESULT _stdcall LaunchedViaClientShellInterface([in] VARIANT_BOOL pfLaunchedViaClientShellInterface);
+		[propget] HRESULT _stdcall LaunchedViaClientShellInterface([out, retval] VARIANT_BOOL* pfLaunchedViaClientShellInterface);
+		[propput] HRESULT _stdcall TrustedZoneSite([in] VARIANT_BOOL pfIsTrustedZone);
+		[propget] HRESULT _stdcall TrustedZoneSite([out, retval] VARIANT_BOOL* pfIsTrustedZone);
+	};
+
+	[
+		object,
+		uuid(4F6996D5-D7B1-412C-B0FF-063718566907)
+	]
+	interface IMsRdpClientNonScriptable5 : IMsRdpClientNonScriptable4
+	{
+		[propput] HRESULT _stdcall UseMultimon([in] VARIANT_BOOL pfUseMultimon);
+		[propget] HRESULT _stdcall UseMultimon([out, retval] VARIANT_BOOL* pfUseMultimon);
+		[propget] HRESULT _stdcall RemoteMonitorCount([out, retval] unsigned long* pcRemoteMonitors);
+		HRESULT _stdcall GetRemoteMonitorsBoundingBox( [out] long* pLeft, [out] long* pTop, [out] long* pRight, [out] long* pBottom);
+		[propget] HRESULT _stdcall RemoteMonitorLayoutMatchesLocal([out, retval] VARIANT_BOOL* pfRemoteMatchesLocal);
+		[propput] HRESULT _stdcall DisableConnectionBar([in] VARIANT_BOOL rhs);
+		[propput] HRESULT _stdcall DisableRemoteAppCapsCheck([in] VARIANT_BOOL pfDisableRemoteAppCapsCheck);
+		[propget] HRESULT _stdcall DisableRemoteAppCapsCheck([out, retval] VARIANT_BOOL* pfDisableRemoteAppCapsCheck);
+		[propput] HRESULT _stdcall WarnAboutDirectXRedirection([in] VARIANT_BOOL pfWarn);
+		[propget] HRESULT _stdcall WarnAboutDirectXRedirection([out, retval] VARIANT_BOOL* pfWarn);
+		[propput] HRESULT _stdcall AllowPromptingForCredentials([in] VARIANT_BOOL pfAllow);
+		[propget] HRESULT _stdcall AllowPromptingForCredentials([out, retval] VARIANT_BOOL* pfAllow);
+	};
+
+	// Prefered redirection info.
+	[
+		object,
+		uuid(FDD029F9-9574-4DEF-8529-64B521CCCAA4)
+	]
+	interface IMsRdpPreferredRedirectionInfo : IUnknown
+	{
+		[propput] HRESULT _stdcall UseRedirectionServerName([in] VARIANT_BOOL pVal);
+		[propget] HRESULT _stdcall UseRedirectionServerName([out, retval] VARIANT_BOOL* pVal);
+	};
+
+	// Debugger.
+	[
+		object,
+		uuid(209D0EB9-6254-47B1-9033-A98DAE55BB27),
+		hidden,
+		dual,
+		oleautomation
+	]
+	interface IMsTscDebug : IDispatch
+	{
+		[id(0x000000c8), propput] HRESULT HatchBitmapPDU([in] long phatchBitmapPDU);
+		[id(0x000000c8), propget] HRESULT HatchBitmapPDU([out, retval] long* phatchBitmapPDU);
+		[id(0x000000c9), propput] HRESULT HatchSSBOrder([in] long phatchSSBOrder);
+		[id(0x000000c9), propget] HRESULT HatchSSBOrder([out, retval] long* phatchSSBOrder);
+		[id(0x000000ca), propput] HRESULT HatchMembltOrder([in] long phatchMembltOrder);
+		[id(0x000000ca), propget] HRESULT HatchMembltOrder([out, retval] long* phatchMembltOrder);
+		[id(0x000000cb), propput] HRESULT HatchIndexPDU([in] long phatchIndexPDU);
+		[id(0x000000cb), propget] HRESULT HatchIndexPDU([out, retval] long* phatchIndexPDU);
+		[id(0x000000cc), propput] HRESULT LabelMemblt([in] long plabelMemblt);
+		[id(0x000000cc), propget] HRESULT LabelMemblt([out, retval] long* plabelMemblt);
+		[id(0x000000cd), propput] HRESULT BitmapCacheMonitor([in] long pbitmapCacheMonitor);
+		[id(0x000000cd), propget] HRESULT BitmapCacheMonitor([out, retval] long* pbitmapCacheMonitor);
+		[id(0x000000ce), propput] HRESULT MallocFailuresPercent([in] long pmallocFailuresPercent);
+		[id(0x000000ce), propget] HRESULT MallocFailuresPercent([out, retval] long* pmallocFailuresPercent);
+		[id(0x000000cf), propput] HRESULT MallocHugeFailuresPercent([in] long pmallocHugeFailuresPercent);
+		[id(0x000000cf), propget] HRESULT MallocHugeFailuresPercent([out, retval] long* pmallocHugeFailuresPercent);
+		[id(0x000000d0), propput] HRESULT NetThroughput([in] long NetThroughput);
+		[id(0x000000d0), propget] HRESULT NetThroughput([out, retval] long* NetThroughput);
+		[id(0x000000d1), propput] HRESULT CLXCmdLine([in] BSTR pCLXCmdLine);
+		[id(0x000000d1), propget] HRESULT CLXCmdLine([out, retval] BSTR* pCLXCmdLine);
+		[id(0x000000d2), propput] HRESULT CLXDll([in] BSTR pCLXDll);
+		[id(0x000000d2), propget] HRESULT CLXDll([out, retval] BSTR* pCLXDll);
+		[id(0x000000d3), propput] HRESULT RemoteProgramsHatchVisibleRegion([in] long pcbHatch);
+		[id(0x000000d3), propget] HRESULT RemoteProgramsHatchVisibleRegion([out, retval] long* pcbHatch);
+		[id(0x000000d4), propput] HRESULT RemoteProgramsHatchVisibleNoDataRegion([in] long pcbHatch);
+		[id(0x000000d4), propget] HRESULT RemoteProgramsHatchVisibleNoDataRegion([out, retval] long* pcbHatch);
+		[id(0x000000d5), propput] HRESULT RemoteProgramsHatchNonVisibleRegion([in] long pcbHatch);
+		[id(0x000000d5), propget] HRESULT RemoteProgramsHatchNonVisibleRegion([out, retval] long* pcbHatch);
+		[id(0x000000d6), propput] HRESULT RemoteProgramsHatchWindow([in] long pcbHatch);
+		[id(0x000000d6), propget] HRESULT RemoteProgramsHatchWindow([out, retval] long* pcbHatch);
+		[id(0x000000d7), propput] HRESULT RemoteProgramsStayConnectOnBadCaps([in] long pcbStayConnected);
+		[id(0x000000d7), propget] HRESULT RemoteProgramsStayConnectOnBadCaps([out, retval] long* pcbStayConnected);
+		[id(0x000000d8), propget] HRESULT ControlType([out, retval] unsigned int* pControlType);
+		[id(0x000000d9), propput] HRESULT DecodeGfx([in] VARIANT_BOOL rhs);
+	};
+
+	// Main interface.
+	[
+		object,
+		uuid(327BB5CD-834E-4400-AEF2-B30E15E5D680),
+		dual,
+		oleautomation
+	]
+	interface IMsTscAx_Redist : IDispatch
+	{
+
+	};
+
+	[
+		object,
+		uuid(8C11EFAE-92C3-11D1-BC1E-00C04FA31489),
+		dual,
+		oleautomation
+	]
+	interface IMsTscAx : IMsTscAx_Redist
+	{
+		[id(0x00000001), propput] HRESULT Server([in] BSTR pServer);
+		[id(0x00000001), propget] HRESULT Server([out, retval] BSTR* pServer);
+		[id(0x00000002), propput] HRESULT Domain([in] BSTR pDomain);
+		[id(0x00000002), propget] HRESULT Domain([out, retval] BSTR* pDomain);
+		[id(0x00000003), propput] HRESULT UserName([in] BSTR pUserName);
+		[id(0x00000003), propget] HRESULT UserName([out, retval] BSTR* pUserName);
+		[id(0x00000004), propput] HRESULT DisconnectedText([in] BSTR pDisconnectedText);
+		[id(0x00000004), propget] HRESULT DisconnectedText([out, retval] BSTR* pDisconnectedText);
+		[id(0x00000005), propput] HRESULT ConnectingText([in] BSTR pConnectingText);
+		[id(0x00000005), propget] HRESULT ConnectingText([out, retval] BSTR* pConnectingText);
+		[id(0x00000006), propget] HRESULT Connected([out, retval] short* pIsConnected);
+		[id(0x0000000c), propput] HRESULT DesktopWidth([in] long pVal);
+		[id(0x0000000c), propget] HRESULT DesktopWidth([out, retval] long* pVal);
+		[id(0x0000000d), propput] HRESULT DesktopHeight([in] long pVal);
+		[id(0x0000000d), propget] HRESULT DesktopHeight([out, retval] long* pVal);
+		[id(0x00000010), propput] HRESULT StartConnected([in] long pfStartConnected);
+		[id(0x00000010), propget] HRESULT StartConnected([out, retval] long* pfStartConnected);
+		[id(0x00000011), propget] HRESULT HorizontalScrollBarVisible([out, retval] long* pfHScrollVisible);
+		[id(0x00000012), propget] HRESULT VerticalScrollBarVisible([out, retval] long* pfVScrollVisible);
+		[id(0x00000013), propput] HRESULT FullScreenTitle([in] BSTR rhs);
+		[id(0x00000014), propget] HRESULT CipherStrength([out, retval] long* pCipherStrength);
+		[id(0x00000015), propget] HRESULT Version([out, retval] BSTR* pVersion);
+		[id(0x00000016), propget] HRESULT SecuredSettingsEnabled([out, retval] long* pSecuredSettingsEnabled);
+		[id(0x00000061), propget] HRESULT SecuredSettings([out, retval] IMsTscSecuredSettings** ppSecuredSettings);
+		[id(0x00000062), propget] HRESULT AdvancedSettings([out, retval] IMsTscAdvancedSettings** ppAdvSettings);
+		[id(0x00000063), propget, hidden] HRESULT Debugger([out, retval] IMsTscDebug** ppDebugger);
+
+		[id(0x0000001e)] HRESULT Connect();
+		[id(0x0000001f)] HRESULT Disconnect();
+		[id(0x00000021)] HRESULT CreateVirtualChannels([in] BSTR newVal);
+		[id(0x00000022)] HRESULT SendOnVirtualChannel( [in] BSTR chanName, [in] BSTR ChanData);
+	};
+
+	typedef enum
+	{
+		exDiscReasonNoInfo = 0,
+		exDiscReasonAPIInitiatedDisconnect = 1,
+		exDiscReasonAPIInitiatedLogoff = 2,
+		exDiscReasonServerIdleTimeout = 3,
+		exDiscReasonServerLogonTimeout = 4,
+		exDiscReasonReplacedByOtherConnection = 5,
+		exDiscReasonOutOfMemory = 6,
+		exDiscReasonServerDeniedConnection = 7,
+		exDiscReasonServerDeniedConnectionFips = 8,
+		exDiscReasonServerInsufficientPrivileges = 9,
+		exDiscReasonServerFreshCredsRequired = 10,
+		exDiscReasonRpcInitiatedDisconnectByUser = 11,
+		exDiscReasonLogoffByUser = 12,
+		exDiscReasonLicenseInternal = 256,
+		exDiscReasonLicenseNoLicenseServer = 257,
+		exDiscReasonLicenseNoLicense = 258,
+		exDiscReasonLicenseErrClientMsg = 259,
+		exDiscReasonLicenseHwidDoesntMatchLicense = 260,
+		exDiscReasonLicenseErrClientLicense = 261,
+		exDiscReasonLicenseCantFinishProtocol = 262,
+		exDiscReasonLicenseClientEndedProtocol = 263,
+		exDiscReasonLicenseErrClientEncryption = 264,
+		exDiscReasonLicenseCantUpgradeLicense = 265,
+		exDiscReasonLicenseNoRemoteConnections = 266,
+		exDiscReasonLicenseCreatingLicStoreAccDenied = 267,
+		exDiscReasonRdpEncInvalidCredentials = 768,
+		exDiscReasonProtocolRangeStart = 4096,
+		exDiscReasonProtocolRangeEnd = 32767
+	} ExtendedDisconnectReasonCode;
+
+	typedef enum
+	{
+		controlCloseCanProceed = 0,
+		controlCloseWaitForEvents = 1
+	} ControlCloseStatus;
+
+	[
+		object,
+		uuid(92B4A539-7115-4B7C-A5A9-E5D9EFC2780A),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClient : IMsTscAx
+	{
+		[id(0x00000064), propput] HRESULT ColorDepth([in] long pcolorDepth);
+		[id(0x00000064), propget] HRESULT ColorDepth([out, retval] long* pcolorDepth);
+		[id(0x00000065), propget] HRESULT AdvancedSettings2([out, retval] IMsRdpClientAdvancedSettings** ppAdvSettings);
+		[id(0x00000066), propget] HRESULT SecuredSettings2([out, retval] IMsRdpClientSecuredSettings** ppSecuredSettings);
+		[id(0x00000067), propget] HRESULT ExtendedDisconnectReason([out, retval] ExtendedDisconnectReasonCode* pExtendedDisconnectReason);
+		[id(0x00000068), propput] HRESULT FullScreen([in] VARIANT_BOOL pfFullScreen);
+		[id(0x00000068), propget] HRESULT FullScreen([out, retval] VARIANT_BOOL* pfFullScreen);
+
+		[id(0x00000023)] HRESULT SetVirtualChannelOptions( [in] BSTR chanName, [in] long chanOptions);
+		[id(0x00000024)] HRESULT GetVirtualChannelOptions( [in] BSTR chanName, [out, retval] long* pChanOptions);
+		[id(0x00000025)] HRESULT RequestClose([out, retval] ControlCloseStatus* pCloseStatus);
+	};
+
+	[
+		object,
+		uuid(E7E17DC4-3B71-4BA7-A8E6-281FFADCA28F),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClient2 : IMsRdpClient
+	{
+		[id(0x000000c8), propget] HRESULT AdvancedSettings3([out, retval] IMsRdpClientAdvancedSettings2** ppAdvSettings);
+		[id(0x000000c9), propput] HRESULT ConnectedStatusText([in] BSTR pConnectedStatusText);
+		[id(0x000000c9), propget] HRESULT ConnectedStatusText([out, retval] BSTR* pConnectedStatusText);
+	};
+
+	[
+		object,
+		uuid(91B7CBC5-A72E-4FA0-9300-D647D7E897FF),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClient3 : IMsRdpClient2
+	{
+		[id(0x0000012c), propget] HRESULT AdvancedSettings4([out, retval] IMsRdpClientAdvancedSettings3** ppAdvSettings);
+	};
+
+	[
+		object,
+		uuid(095E0738-D97D-488B-B9F6-DD0E8D66C0DE),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClient4 : IMsRdpClient3
+	{
+		[id(0x00000190), propget] HRESULT AdvancedSettings5([out, retval] IMsRdpClientAdvancedSettings4** ppAdvSettings);
+	};
+
+	[
+		object,
+		uuid(4EB5335B-6429-477D-B922-E06A28ECD8BF),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClient5 : IMsRdpClient4
+	{
+		[id(0x000001f4), propget] HRESULT TransportSettings([out, retval] IMsRdpClientTransportSettings** ppXportSet);
+		[id(0x000001f6), propget] HRESULT AdvancedSettings6([out, retval] IMsRdpClientAdvancedSettings5** ppAdvSettings);
+		[id(0x000001f7)] HRESULT GetErrorDescription( [in] unsigned int disconnectReason, [in] unsigned int ExtendedDisconnectReason, [out, retval] BSTR* pBstrErrorMsg);
+		[id(0x000001f8), propget] HRESULT RemoteProgram([out, retval] ITSRemoteProgram** ppRemoteProgram);
+		[id(0x000001f9), propget] HRESULT MsRdpClientShell([out, retval] IMsRdpClientShell** ppLauncher);
+	};
+
+	[
+		object,
+		uuid(D43B7D80-8517-4B6D-9EAC-96AD6800D7F2),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClient6 : IMsRdpClient5
+	{
+		[id(0x000001fb), propget] HRESULT AdvancedSettings7([out, retval] IMsRdpClientAdvancedSettings6** ppAdvSettings);
+		[id(0x000001fa), propget] HRESULT TransportSettings2([out, retval] IMsRdpClientTransportSettings2** ppXportSet2);
+	};
+
+	[
+		object,
+		uuid(B2A5B5CE-3461-444A-91D4-ADD26D070638),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClient7 : IMsRdpClient6
+	{
+		[id(0x00000258), propget] HRESULT AdvancedSettings8([out, retval] IMsRdpClientAdvancedSettings7** ppAdvSettings);
+		[id(0x00000259), propget] HRESULT TransportSettings3([out, retval] IMsRdpClientTransportSettings3** ppXportSet3);
+		[id(0x0000025a)] HRESULT GetStatusText( [in] unsigned int statusCode, [out, retval] BSTR* pBstrStatusText);
+		[id(0x0000025b), propget] HRESULT SecuredSettings3([out, retval] IMsRdpClientSecuredSettings2** ppSecuredSettings);
+		[id(0x0000025c), propget] HRESULT RemoteProgram2([out, retval] ITSRemoteProgram2** ppRemoteProgram);
+	};
+
+	typedef enum
+	{
+		RemoteSessionActionCharms = 0,
+		RemoteSessionActionAppbar = 1,
+		RemoteSessionActionSnap = 2,
+		RemoteSessionActionStartScreen = 3,
+		RemoteSessionActionAppSwitch = 4
+	} RemoteSessionActionType;
+
+	typedef enum
+	{
+		controlReconnectStarted = 0,
+		controlReconnectBlocked = 1
+	} ControlReconnectStatus;
+
+	[
+		object,
+		uuid(4247E044-9271-43A9-BC49-E2AD9E855D62),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClient8 : IMsRdpClient7
+	{
+		[id(0x000002bc)] HRESULT SendRemoteAction([in] RemoteSessionActionType actionType);
+		[id(0x000002bd), propget] HRESULT AdvancedSettings9([out, retval] IMsRdpClientAdvancedSettings8** ppAdvSettings);
+		[id(0x000002be)] HRESULT Reconnect( [in] unsigned long ulWidth, [in] unsigned long ulHeight, [out, retval] ControlReconnectStatus* pReconnectStatus);
+	};
+
+	[
+		object,
+		uuid(28904001-04B6-436C-A55B-0AF1A0883DC9),
+		dual,
+		oleautomation
+	]
+	interface IMsRdpClient9 : IMsRdpClient8
+	{
+		[id(0x00000320), propget] HRESULT TransportSettings4([out, retval] IMsRdpClientTransportSettings4** ppXportSet4);
+		[id(0x00000321)] HRESULT SyncSessionDisplaySettings();
+		[id(0x00000322)] HRESULT UpdateSessionDisplaySettings(
+			[in] unsigned long ulDesktopWidth,
+			[in] unsigned long ulDesktopHeight,
+			[in] unsigned long ulPhysicalWidth,
+			[in] unsigned long ulPhysicalHeight,
+			[in] unsigned long ulOrientation,
+			[in] unsigned long ulDesktopScaleFactor,
+			[in] unsigned long ulDeviceScaleFactor);
+		[id(0x00000323)] HRESULT attachEvent( [in] BSTR eventName, [in] IDispatch* callback);
+		[id(0x00000324)] HRESULT detachEvent( [in] BSTR eventName, [in] IDispatch* callback);
+	};
+
+	// Main event interface.
+	typedef enum
+	{
+		autoReconnectContinueAutomatic = 0,
+		autoReconnectContinueStop = 1,
+		autoReconnectContinueManual = 2
+	} AutoReconnectContinueState;
+
+	typedef enum
+	{
+		remoteAppResultOk = 0,
+		remoteAppResultLocked = 1,
+		remoteAppResultProtocolError = 2,
+		remoteAppResultNotInWhitelist = 3,
+		remoteAppResultNetworkPathDenied = 4,
+		remoteAppResultFileNotFound = 5,
+		remoteAppResultFailure = 6,
+		remoteAppResultHookNotLoaded = 7
+	} RemoteProgramResult;
+
+	typedef enum
+	{
+		remoteAppWindowNone = 0,
+		remoteAppWindowDisplayed = 1,
+		remoteAppShellIconDisplayed = 2
+	} RemoteWindowDisplayedAttribute;
+
+	[
+		uuid(336D5562-EFA8-482E-8CB3-C5C0FC7A7DB6)
+	]
+	dispinterface IMsTscAxEvents
+	{
+	properties:
+	methods:
+		[id(0x00000001)] void OnConnecting();
+		[id(0x00000002)] void OnConnected();
+		[id(0x00000003)] void OnLoginComplete();
+		[id(0x00000004)] void OnDisconnected([in] long discReason);
+		[id(0x00000005)] void OnEnterFullScreenMode();
+		[id(0x00000006)] void OnLeaveFullScreenMode();
+		[id(0x00000007)] void OnChannelReceivedData( [in] BSTR chanName, [in] BSTR data);
+		[id(0x00000008)] void OnRequestGoFullScreen();
+		[id(0x00000009)] void OnRequestLeaveFullScreen();
+		[id(0x0000000a)] void OnFatalError([in] long errorCode);
+		[id(0x0000000b)] void OnWarning([in] long warningCode);
+		[id(0x0000000c)] void OnRemoteDesktopSizeChange( [in] long width, [in] long height);
+		[id(0x0000000d)] void OnIdleTimeoutNotification();
+		[id(0x0000000e)] void OnRequestContainerMinimize();
+		[id(0x0000000f)] void OnConfirmClose([out, retval] VARIANT_BOOL* pfAllowClose);
+		[id(0x00000010)] void OnReceivedTSPublicKey( [in] BSTR publicKey, [out, retval] VARIANT_BOOL* pfContinueLogon);
+		[id(0x00000011)] void OnAutoReconnecting( [in] long disconnectReason, [in] long attemptCount, [out, retval] AutoReconnectContinueState* pArcContinueStatus);
+		[id(0x00000012)] void OnAuthenticationWarningDisplayed();
+		[id(0x00000013)] void OnAuthenticationWarningDismissed();
+		[id(0x00000014)] void OnRemoteProgramResult( [in] BSTR bstrRemoteProgram, [in] RemoteProgramResult lError, [in] VARIANT_BOOL vbIsExecutable);
+		[id(0x00000015)] void OnRemoteProgramDisplayed( [in] VARIANT_BOOL vbDisplayed, [in] unsigned long uDisplayInformation);
+		[id(0x0000001d)] void OnRemoteWindowDisplayed( [in] VARIANT_BOOL vbDisplayed, [in] wireHWND hwnd, [in] RemoteWindowDisplayedAttribute windowAttribute);
+		[id(0x00000016)] void OnLogonError([in] long lError);
+		[id(0x00000017)] void OnFocusReleased([in] int iDirection);
+		[id(0x00000018)] void OnUserNameAcquired([in] BSTR bstrUserName);
+		[id(0x0000001a)] void OnMouseInputModeChanged([in] VARIANT_BOOL fMouseModeRelative);
+		[id(0x0000001c)] void OnServiceMessageReceived([in] BSTR serviceMessage);
+		[id(0x0000001e)] void OnConnectionBarPullDown();
+		[id(0x00000020)] void OnNetworkStatusChanged( [in] unsigned long qualityLevel, [in] long bandwidth, [in] long rtt);
+		[id(0x00000023)] void OnDevicesButtonPressed();
+		[id(0x00000021)] void OnAutoReconnected();
+		[id(0x00000022)] void OnAutoReconnecting2( [in] long disconnectReason, [in] VARIANT_BOOL networkAvailable, [in] long attemptCount, [in] long maxAttemptCount);
+	};
+
+	//  The Free RDP Control class.
+	[
+		uuid(49052C41-EB70-464F-BA50-8AB2FDB0139B),
+		helpstring("Free RDP Control - version 1"), 
+		control
+	]
+	coclass FreeRdpActivex
+	{
+		interface IMsTscAx_Redist;
+		interface IMsTscAx;
+		interface IMsRdpClient;
+		interface IMsRdpClient2;
+		interface IMsRdpClient3;
+		interface IMsRdpClient4;
+		interface IMsRdpClient5;
+		interface IMsRdpClient6;
+		interface IMsRdpClient7;
+		interface IMsRdpClient8;
+		[default] interface IMsRdpClient9;
+		[default, source] dispinterface IMsTscAxEvents;
+		interface IMsTscNonScriptable;
+		interface IMsRdpClientNonScriptable;
+		interface IMsRdpClientNonScriptable2;
+		interface IMsRdpClientNonScriptable3;
+		interface IMsRdpClientNonScriptable4;
+		interface IMsRdpClientNonScriptable5;
+		interface IMsRdpPreferredRedirectionInfo;
+		dispinterface _DFreeRdpActivex;
+		[source] dispinterface _DFreeRdpActivexEvents;
+	};
+
+};

@@ -761,6 +761,7 @@ DWORD WINAPI wf_client_thread(LPVOID lpParam)
 	freerdp_disconnect(instance);
 	WLog_DBG(TAG, "Main thread exited.");
 
+	wfc->hwnd = NULL;
 	ExitThread(0);
 	return 0;
 }
