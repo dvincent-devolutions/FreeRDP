@@ -65,13 +65,13 @@ if (WIN32)
   set ( ${MODULE_PREFIX}_SRCS ${${MODULE_PREFIX}_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
 endif()
 
-add_definitions(-D_USRDLL -D_AFXDLL -D_UNICODE -DUNICODE)
-set(CMAKE_MFC_FLAG 2)
 add_custom_command(OUTPUT ${INTERFACE_OUTPUTS}
 		DEPENDS FreeRdpInterfaces.idl
 		COMMAND midl /env win32 /h "FreeRdpInterfaces.h" /W1 /char signed /tlb FreeRdpInterfaces.tlb /robust /nologo FreeRdpInterfaces.idl)
 
 add_compile_options(/EHsc /Zl)
+add_definitions(-D_AFXDLL -D_UNICODE -DUNICODE)
+set(CMAKE_MFC_FLAG 2)
 add_library(${MODULE_NAME} MODULE ${${MODULE_PREFIX}_SRCS})
 set_source_files_properties(${INTERFACE_OUTPUTS} PROPERTIES GENERATED 1)
 
