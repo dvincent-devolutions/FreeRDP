@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(MODULE_NAME "activex")
+set(MODULE_NAME "freerdpax")
 set(MODULE_PREFIX "FREERDP_CLIENT_WINDOWS")
 
 include_directories(..)
@@ -47,6 +47,8 @@ set(${MODULE_PREFIX}_SRCS
 	stdafx.h
 	targetver.h)
 
+set(INTERFACE_OUTPUTS FreeRdpInterfaces_i.c FreeRdpInterfaces.h FreeInterfaces.tlb)
+
 # On windows create dll version information.
 # Vendor, product and year are already set in top level CMakeLists.txt
 if (WIN32)
@@ -63,21 +65,16 @@ if (WIN32)
   set ( ${MODULE_PREFIX}_SRCS ${${MODULE_PREFIX}_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
 endif()
 
-set(INTERFACE_OUTPUTS FreeRdpInterfaces_i.c FreeRdpInterfaces.h FreeInterfaces.tlb)
+add_definitions(-D_USRDLL -D_AFXDLL -D_UNICODE -DUNICODE)
+set(CMAKE_MFC_FLAG 2)
 add_custom_command(OUTPUT ${INTERFACE_OUTPUTS}
 		DEPENDS FreeRdpInterfaces.idl
-
 		COMMAND midl /env win32 /h "FreeRdpInterfaces.h" /W1 /char signed /tlb FreeRdpInterfaces.tlb /robust /nologo FreeRdpInterfaces.idl)
-add_custom_target(interfaces DEPENDS ${INTERFACE_OUTPUTS})
 
-
-add_compile_options(/EHsc)
-add_definitions(-D_AFXDLL -D_UNICODE -DUNICODE)
-set(CMAKE_MFC_FLAG 2)
+add_compile_options(/EHsc /Zl)
 add_library(${MODULE_NAME} MODULE ${${MODULE_PREFIX}_SRCS})
 set_source_files_properties(${INTERFACE_OUTPUTS} PROPERTIES GENERATED 1)
 
-set(CMAKE_MFC_FLAG 0)
 add_dependencies(${MODULE_NAME} interfaces)
 
 list(APPEND ${MODULE_PREFIX}_LIBS wfreerdp-client)
