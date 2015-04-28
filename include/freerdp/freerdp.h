@@ -94,7 +94,9 @@ struct rdp_context
 
 	ALIGN64 UINT32 LastError; /* 3 */
 
-	UINT64 paddingA[16 - 4]; /* 4 */
+	ALIGN64 void* pUser; /* 4 */
+
+	UINT64 paddingA[16 - 5]; /* 5 */
 
 	ALIGN64 int argc;	/**< (offset 16)
 				   Number of arguments given to the program at launch time.
@@ -154,9 +156,7 @@ struct rdp_freerdp
 
 	ALIGN64 RDP_CLIENT_ENTRY_POINTS* pClientEntryPoints; /* 1 */
 
-	ALIGN64 void* pUser; /* 2 */
-
-	UINT64 paddingA[16 - 3]; /* 3 */
+	UINT64 paddingA[16 - 2]; /* 2 */
 
 	ALIGN64 rdpInput* input; /* (offset 16)
 						Input handle for the connection.

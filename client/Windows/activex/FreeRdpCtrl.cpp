@@ -5,7 +5,7 @@
 
 extern "C" void ConnectionResultHandler(rdpContext* context, ConnectionResultEventArgs* e)
 {
-	CFreeRdpCtrl& ctrl = *(CFreeRdpCtrl*)(context->instance->pUser);
+	CFreeRdpCtrl& ctrl = *(CFreeRdpCtrl*)(context->pUser);
 	if (!e->result)
 	{
 		ctrl.ChangeToLoginCompleted();
@@ -33,7 +33,7 @@ CFreeRdpCtrl::CFreeRdpCtrl()
 		mSettings = mContext->settings;
 		mSettings->SoftwareGdi = TRUE;
 
-		mContext->instance->pUser = this;
+		mContext->pUser = this;
 		PubSub_SubscribeConnectionResult(mContext->pubSub, (pConnectionResultEventHandler)ConnectionResultHandler);
 	}
 
@@ -297,7 +297,7 @@ LRESULT CFreeRdpCtrl::OnVScroll(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/,
 LRESULT CFreeRdpCtrl::ChildProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	rdpContext* context = (rdpContext*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
-	CFreeRdpCtrl& ctrl = *(CFreeRdpCtrl*)(context->instance->pUser);
+	CFreeRdpCtrl& ctrl = *(CFreeRdpCtrl*)(context->pUser);
 
 	if (msg == WM_RBUTTONDOWN || msg == WM_MBUTTONDOWN || msg == WM_LBUTTONDOWN)
 	{
