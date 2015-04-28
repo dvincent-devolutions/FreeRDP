@@ -1,524 +1,524 @@
 // FreeRdpActivexCtrl.cpp : Implementation of the main RDP client non scriptable interface.
 
 #include "stdafx.h"
-#include "FreeRdpActivexCtrl.h"
+#include "FreeRdpCtrl.h"
 
 
-STDMETHODIMP_(ULONG) CFreeRdpActivexCtrl::XRdpClientNonScriptable::AddRef()
+//STDMETHODIMP_(ULONG) CFreeRdpCtrl::AddRef()
+//{
+//	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+//
+//	return pThis->ExternalAddRef();
+//}
+//
+//
+//STDMETHODIMP_(ULONG) CFreeRdpCtrl::Release()
+//{
+//	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+//
+//	return pThis->ExternalRelease();
+//}
+//
+//
+//STDMETHODIMP CFreeRdpCtrl::QueryInterface(REFIID iid, LPVOID* ppvObj)
+//{
+//	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+//
+//	return pThis->ExternalQueryInterface(&iid, ppvObj);
+//}
+
+
+//STDMETHODIMP CFreeRdpCtrl::put_ClearTextPassword(BSTR rhs)
+//{
+//	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+//
+//	return pThis->SetClearTextPassword(rhs);
+//}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_PortablePassword(BSTR pPortablePass)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return pThis->ExternalAddRef();
-}
-
-
-STDMETHODIMP_(ULONG) CFreeRdpActivexCtrl::XRdpClientNonScriptable::Release()
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return pThis->ExternalRelease();
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::QueryInterface(REFIID iid, LPVOID* ppvObj)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return pThis->ExternalQueryInterface(&iid, ppvObj);
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_ClearTextPassword(BSTR rhs)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return pThis->SetClearTextPassword(rhs);
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_PortablePassword(BSTR pPortablePass)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_PortablePassword(BSTR *pPortablePass)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_PortableSalt(BSTR pPortableSalt)
+STDMETHODIMP CFreeRdpCtrl::get_PortablePassword(BSTR *pPortablePass)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_PortableSalt(BSTR *pPortableSalt)
+STDMETHODIMP CFreeRdpCtrl::put_PortableSalt(BSTR pPortableSalt)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_BinaryPassword(BSTR pBinaryPassword)
+STDMETHODIMP CFreeRdpCtrl::get_PortableSalt(BSTR *pPortableSalt)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_BinaryPassword(BSTR *pBinaryPassword)
+STDMETHODIMP CFreeRdpCtrl::put_BinaryPassword(BSTR pBinaryPassword)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_BinarySalt(BSTR pSalt)
+STDMETHODIMP CFreeRdpCtrl::get_BinaryPassword(BSTR *pBinaryPassword)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_BinarySalt(BSTR *pSalt)
+STDMETHODIMP CFreeRdpCtrl::put_BinarySalt(BSTR pSalt)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::ResetPassword(void)
+STDMETHODIMP CFreeRdpCtrl::get_BinarySalt(BSTR *pSalt)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::NotifyRedirectDeviceChange(UINT_PTR wParam, LONG_PTR lParam)
+STDMETHODIMP CFreeRdpCtrl::ResetPassword(void)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::SendKeys(long numKeys, VARIANT_BOOL *pbArrayKeyUp, long *plKeyData)
+STDMETHODIMP CFreeRdpCtrl::NotifyRedirectDeviceChange(UINT_PTR wParam, LONG_PTR lParam)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_UIParentWindowHandle(wireHWND phwndUIParentWindowHandle)
+STDMETHODIMP CFreeRdpCtrl::SendKeys(long numKeys, VARIANT_BOOL *pbArrayKeyUp, long *plKeyData)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_UIParentWindowHandle(wireHWND *phwndUIParentWindowHandle)
+STDMETHODIMP CFreeRdpCtrl::put_UIParentWindowHandle(wireHWND phwndUIParentWindowHandle)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_ShowRedirectionWarningDialog(VARIANT_BOOL pfShowRdrDlg)
+STDMETHODIMP CFreeRdpCtrl::get_UIParentWindowHandle(wireHWND *phwndUIParentWindowHandle)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_ShowRedirectionWarningDialog(VARIANT_BOOL *pfShowRdrDlg)
+STDMETHODIMP CFreeRdpCtrl::put_ShowRedirectionWarningDialog(VARIANT_BOOL pfShowRdrDlg)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_PromptForCredentials(VARIANT_BOOL pfPrompt)
+STDMETHODIMP CFreeRdpCtrl::get_ShowRedirectionWarningDialog(VARIANT_BOOL *pfShowRdrDlg)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_PromptForCredentials(VARIANT_BOOL *pfPrompt)
+STDMETHODIMP CFreeRdpCtrl::put_PromptForCredentials(VARIANT_BOOL pfPrompt)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_NegotiateSecurityLayer(VARIANT_BOOL pfNegotiate)
+STDMETHODIMP CFreeRdpCtrl::get_PromptForCredentials(VARIANT_BOOL *pfPrompt)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_NegotiateSecurityLayer(VARIANT_BOOL *pfNegotiate)
+STDMETHODIMP CFreeRdpCtrl::put_NegotiateSecurityLayer(VARIANT_BOOL pfNegotiate)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_EnableCredSspSupport(VARIANT_BOOL pfEnableSupport)
+STDMETHODIMP CFreeRdpCtrl::get_NegotiateSecurityLayer(VARIANT_BOOL *pfNegotiate)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_EnableCredSspSupport(VARIANT_BOOL *pfEnableSupport)
+STDMETHODIMP CFreeRdpCtrl::put_EnableCredSspSupport(VARIANT_BOOL pfEnableSupport)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_RedirectDynamicDrives(VARIANT_BOOL pfRedirectDynamicDrives)
+STDMETHODIMP CFreeRdpCtrl::get_EnableCredSspSupport(VARIANT_BOOL *pfEnableSupport)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_RedirectDynamicDrives(VARIANT_BOOL *pfRedirectDynamicDrives)
+STDMETHODIMP CFreeRdpCtrl::put_RedirectDynamicDrives(VARIANT_BOOL pfRedirectDynamicDrives)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_RedirectDynamicDevices(VARIANT_BOOL pfRedirectDynamicDevices)
+STDMETHODIMP CFreeRdpCtrl::get_RedirectDynamicDrives(VARIANT_BOOL *pfRedirectDynamicDrives)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_RedirectDynamicDevices(VARIANT_BOOL *pfRedirectDynamicDevices)
+STDMETHODIMP CFreeRdpCtrl::put_RedirectDynamicDevices(VARIANT_BOOL pfRedirectDynamicDevices)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_DeviceCollection(IMsRdpDeviceCollection **ppDeviceCollection)
+STDMETHODIMP CFreeRdpCtrl::get_RedirectDynamicDevices(VARIANT_BOOL *pfRedirectDynamicDevices)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_DriveCollection(IMsRdpDriveCollection **ppDeviceCollection)
+STDMETHODIMP CFreeRdpCtrl::get_DeviceCollection(IMsRdpDeviceCollection **ppDeviceCollection)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_WarnAboutSendingCredentials(VARIANT_BOOL pfWarn)
+STDMETHODIMP CFreeRdpCtrl::get_DriveCollection(IMsRdpDriveCollection **ppDeviceCollection)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_WarnAboutSendingCredentials(VARIANT_BOOL *pfWarn)
+STDMETHODIMP CFreeRdpCtrl::put_WarnAboutSendingCredentials(VARIANT_BOOL pfWarn)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_WarnAboutClipboardRedirection(VARIANT_BOOL pfWarn)
+STDMETHODIMP CFreeRdpCtrl::get_WarnAboutSendingCredentials(VARIANT_BOOL *pfWarn)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_WarnAboutClipboardRedirection(VARIANT_BOOL *pfWarn)
+STDMETHODIMP CFreeRdpCtrl::put_WarnAboutClipboardRedirection(VARIANT_BOOL pfWarn)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_ConnectionBarText(BSTR pConnectionBarText)
+STDMETHODIMP CFreeRdpCtrl::get_WarnAboutClipboardRedirection(VARIANT_BOOL *pfWarn)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_ConnectionBarText(BSTR *pConnectionBarText)
+STDMETHODIMP CFreeRdpCtrl::put_ConnectionBarText(BSTR pConnectionBarText)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_RedirectionWarningType(RedirectionWarningType pWrnType)
+STDMETHODIMP CFreeRdpCtrl::get_ConnectionBarText(BSTR *pConnectionBarText)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_RedirectionWarningType(RedirectionWarningType *pWrnType)
+STDMETHODIMP CFreeRdpCtrl::put_RedirectionWarningType(RedirectionWarningType pWrnType)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_MarkRdpSettingsSecure(VARIANT_BOOL pfRdpSecure)
+STDMETHODIMP CFreeRdpCtrl::get_RedirectionWarningType(RedirectionWarningType *pWrnType)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_MarkRdpSettingsSecure(VARIANT_BOOL *pfRdpSecure)
+STDMETHODIMP CFreeRdpCtrl::put_MarkRdpSettingsSecure(VARIANT_BOOL pfRdpSecure)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_PublisherCertificateChain(VARIANT *pVarCert)
+STDMETHODIMP CFreeRdpCtrl::get_MarkRdpSettingsSecure(VARIANT_BOOL *pfRdpSecure)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_PublisherCertificateChain(VARIANT *pVarCert)
+STDMETHODIMP CFreeRdpCtrl::put_PublisherCertificateChain(VARIANT *pVarCert)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_WarnAboutPrinterRedirection(VARIANT_BOOL pfWarn)
+STDMETHODIMP CFreeRdpCtrl::get_PublisherCertificateChain(VARIANT *pVarCert)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_WarnAboutPrinterRedirection(VARIANT_BOOL *pfWarn)
+STDMETHODIMP CFreeRdpCtrl::put_WarnAboutPrinterRedirection(VARIANT_BOOL pfWarn)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_AllowCredentialSaving(VARIANT_BOOL pfAllowSave)
+STDMETHODIMP CFreeRdpCtrl::get_WarnAboutPrinterRedirection(VARIANT_BOOL *pfWarn)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_AllowCredentialSaving(VARIANT_BOOL *pfAllowSave)
+STDMETHODIMP CFreeRdpCtrl::put_AllowCredentialSaving(VARIANT_BOOL pfAllowSave)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_PromptForCredsOnClient(VARIANT_BOOL pfPromptForCredsOnClient)
+STDMETHODIMP CFreeRdpCtrl::get_AllowCredentialSaving(VARIANT_BOOL *pfAllowSave)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_PromptForCredsOnClient(VARIANT_BOOL *pfPromptForCredsOnClient)
+STDMETHODIMP CFreeRdpCtrl::put_PromptForCredsOnClient(VARIANT_BOOL pfPromptForCredsOnClient)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_LaunchedViaClientShellInterface(VARIANT_BOOL pfLaunchedViaClientShellInterface)
+STDMETHODIMP CFreeRdpCtrl::get_PromptForCredsOnClient(VARIANT_BOOL *pfPromptForCredsOnClient)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_LaunchedViaClientShellInterface(VARIANT_BOOL *pfLaunchedViaClientShellInterface)
+STDMETHODIMP CFreeRdpCtrl::put_LaunchedViaClientShellInterface(VARIANT_BOOL pfLaunchedViaClientShellInterface)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_TrustedZoneSite(VARIANT_BOOL pfIsTrustedZone)
+STDMETHODIMP CFreeRdpCtrl::get_LaunchedViaClientShellInterface(VARIANT_BOOL *pfLaunchedViaClientShellInterface)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_TrustedZoneSite(VARIANT_BOOL *pfIsTrustedZone)
+STDMETHODIMP CFreeRdpCtrl::put_TrustedZoneSite(VARIANT_BOOL pfIsTrustedZone)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_UseMultimon(VARIANT_BOOL pfUseMultimon)
+STDMETHODIMP CFreeRdpCtrl::get_TrustedZoneSite(VARIANT_BOOL *pfIsTrustedZone)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_UseMultimon(VARIANT_BOOL *pfUseMultimon)
+STDMETHODIMP CFreeRdpCtrl::put_UseMultimon(VARIANT_BOOL pfUseMultimon)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_RemoteMonitorCount(unsigned long *pcRemoteMonitors)
+STDMETHODIMP CFreeRdpCtrl::get_UseMultimon(VARIANT_BOOL *pfUseMultimon)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::GetRemoteMonitorsBoundingBox(long *pLeft, long *pTop, long *pRight, long *pBottom)
+STDMETHODIMP CFreeRdpCtrl::get_RemoteMonitorCount(unsigned long *pcRemoteMonitors)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_RemoteMonitorLayoutMatchesLocal(VARIANT_BOOL *pfRemoteMatchesLocal)
+STDMETHODIMP CFreeRdpCtrl::GetRemoteMonitorsBoundingBox(long *pLeft, long *pTop, long *pRight, long *pBottom)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_DisableConnectionBar(VARIANT_BOOL rhs)
+STDMETHODIMP CFreeRdpCtrl::get_RemoteMonitorLayoutMatchesLocal(VARIANT_BOOL *pfRemoteMatchesLocal)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_DisableRemoteAppCapsCheck(VARIANT_BOOL pfDisableRemoteAppCapsCheck)
+STDMETHODIMP CFreeRdpCtrl::put_DisableConnectionBar(VARIANT_BOOL rhs)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_DisableRemoteAppCapsCheck(VARIANT_BOOL *pfDisableRemoteAppCapsCheck)
+STDMETHODIMP CFreeRdpCtrl::put_DisableRemoteAppCapsCheck(VARIANT_BOOL pfDisableRemoteAppCapsCheck)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_WarnAboutDirectXRedirection(VARIANT_BOOL pfWarn)
+STDMETHODIMP CFreeRdpCtrl::get_DisableRemoteAppCapsCheck(VARIANT_BOOL *pfDisableRemoteAppCapsCheck)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_WarnAboutDirectXRedirection(VARIANT_BOOL *pfWarn)
+STDMETHODIMP CFreeRdpCtrl::put_WarnAboutDirectXRedirection(VARIANT_BOOL pfWarn)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::put_AllowPromptingForCredentials(VARIANT_BOOL pfAllow)
+STDMETHODIMP CFreeRdpCtrl::get_WarnAboutDirectXRedirection(VARIANT_BOOL *pfWarn)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientNonScriptable::get_AllowPromptingForCredentials(VARIANT_BOOL *pfAllow)
+STDMETHODIMP CFreeRdpCtrl::put_AllowPromptingForCredentials(VARIANT_BOOL pfAllow)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_AllowPromptingForCredentials(VARIANT_BOOL *pfAllow)
+{
+	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
 
 	return E_NOTIMPL;
 }

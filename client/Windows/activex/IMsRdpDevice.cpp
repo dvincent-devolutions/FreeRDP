@@ -1,68 +1,68 @@
 // Implementation of the RDP device interface.
 
 #include "stdafx.h"
-#include "FreeRdpActivexCtrl.h"
+#include "FreeRdpCtrl.h"
 
 
-STDMETHODIMP_(ULONG) CFreeRdpActivexCtrl::XRdpDevice::AddRef()
+//STDMETHODIMP_(ULONG) CFreeRdpCtrl::AddRef()
+//{
+//	//(CFreeRdpActivexCtrl, RdpDevice);
+//
+//	return pThis->ExternalAddRef();
+//}
+//
+//
+//STDMETHODIMP_(ULONG) CFreeRdpCtrl::Release()
+//{
+//	//(CFreeRdpActivexCtrl, RdpDevice);
+//
+//	return pThis->ExternalRelease();
+//}
+//
+//
+//STDMETHODIMP CFreeRdpCtrl::QueryInterface(REFIID iid, LPVOID* ppvObj)
+//{
+//	//(CFreeRdpActivexCtrl, RdpDevice);
+//
+//	return pThis->ExternalQueryInterface(&iid, ppvObj);
+//}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_DeviceInstanceId(BSTR *pDevInstanceId)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpDevice);
-
-	return pThis->ExternalAddRef();
-}
-
-
-STDMETHODIMP_(ULONG) CFreeRdpActivexCtrl::XRdpDevice::Release()
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpDevice);
-
-	return pThis->ExternalRelease();
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpDevice::QueryInterface(REFIID iid, LPVOID* ppvObj)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpDevice);
-
-	return pThis->ExternalQueryInterface(&iid, ppvObj);
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpDevice::get_DeviceInstanceId(BSTR *pDevInstanceId)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpDevice);
+	//(CFreeRdpActivexCtrl, RdpDevice);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpDevice::get_FriendlyName(BSTR *pFriendlyName)
+STDMETHODIMP CFreeRdpCtrl::get_FriendlyName(BSTR *pFriendlyName)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpDevice);
+	//(CFreeRdpActivexCtrl, RdpDevice);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpDevice::get_DeviceDescription(BSTR *pDeviceDescription)
+STDMETHODIMP CFreeRdpCtrl::get_DeviceDescription(BSTR *pDeviceDescription)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpDevice);
+	//(CFreeRdpActivexCtrl, RdpDevice);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpDevice::put_RedirectionState(VARIANT_BOOL pvboolRedirState)
+STDMETHODIMP CFreeRdpCtrl::put_RedirectionState(VARIANT_BOOL pvboolRedirState)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpDevice);
+	//(CFreeRdpActivexCtrl, RdpDevice);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpDevice::get_RedirectionState(VARIANT_BOOL *pvboolRedirState)
+STDMETHODIMP CFreeRdpCtrl::get_RedirectionState(VARIANT_BOOL *pvboolRedirState)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpDevice);
+	//(CFreeRdpActivexCtrl, RdpDevice);
 
 	return E_NOTIMPL;
 }

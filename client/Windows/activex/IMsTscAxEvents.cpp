@@ -1,7 +1,7 @@
 // Implementation of the main RDP event interface.
 
 #include "stdafx.h"
-#include "FreeRdpActivexCtrl.h"
+#include "FreeRdpCtrl.h"
 #include <thread>
 
 enum EventDispid
@@ -41,102 +41,44 @@ enum EventDispid
 };
 
 
-void CFreeRdpActivexCtrl::FireRdpEventV(DISPID dispid, BYTE* pbParams, va_list argList)
+DWORD WINAPI CFreeRdpCtrl::TerminationMonitoringThread(LPVOID parameters)
 {
-	COleDispatchDriver driver;
-
-	POSITION pos = m_xMsTscEvents.GetStartPosition();
-	LPDISPATCH pDispatch;
-	while (pos != NULL)
-	{
-		pDispatch = (LPDISPATCH)m_xMsTscEvents.GetNextConnection(pos);
-		if (pDispatch != NULL)
-		{
-			driver.AttachDispatch(pDispatch, FALSE);
-			TRY
-				driver.InvokeHelperV(dispid, DISPATCH_METHOD, VT_EMPTY, NULL, pbParams, argList);
-			END_TRY
-			driver.DetachDispatch();
-		}
-	}
-}
-
-
-void AFX_CDECL CFreeRdpActivexCtrl::FireRdpEvent(DISPID dispid, BYTE* pbParams, ...)
-{
-	va_list argList;
-	va_start(argList, pbParams);
-	FireRdpEventV(dispid, pbParams, argList);
-	va_end(argList);
-}
-
-
-void CFreeRdpActivexCtrl::FireOnConnecting()
-{
-	mConnectionState = CONNECTING;
-	FireRdpEvent(dispidOnConnecting, EVENT_PARAM(VTS_NONE));
-}
-
-
-void CFreeRdpActivexCtrl::FireOnConnected()
-{
-	mConnectionState = CONNECTED;
-	FireRdpEvent(dispidOnConnected, EVENT_PARAM(VTS_NONE));
-}
-
-
-void CFreeRdpActivexCtrl::FireOnLoginCompleted()
-{
-	mConnectionState = CONNECTED;
-	FireRdpEvent(dispidOnLoginComplete, EVENT_PARAM(VTS_NONE));
-}
-
-
-void CFreeRdpActivexCtrl::FireOnDisconnected(LONG reason)
-{
-	mConnectionState = NOT_CONNECTED;
-	FireRdpEvent(dispidOnDisconnected, EVENT_PARAM(VTS_I4), reason);
-}
-
-
-DWORD WINAPI CFreeRdpActivexCtrl::TerminationMonitoringThread(LPVOID parameters)
-{
-	CFreeRdpActivexCtrl& rThis = *(CFreeRdpActivexCtrl*)parameters;
+	CFreeRdpCtrl& rThis = *(CFreeRdpCtrl*)parameters;
 	WaitForSingleObject(rThis.mFreeRdpThread, INFINITE);
 
 	freerdp_client_stop(rThis.mContext);
 	rThis.mFreeRdpThread = NULL; // The handle is closed in freerdp_client_stop();
 
-	rThis.FireOnDisconnected(0);
+	rThis.ChangeToDisconnected(0);
 
 	return 0;
 }
 
 
-extern "C" void FireOnConnected(void* handle)
-{
-	((CFreeRdpActivexCtrl*)handle)->FireOnConnected();
-}
-
-
-extern "C" void ConnectionResultHandler(rdpContext* context, ConnectionResultEventArgs* e)
-{
-	CFreeRdpActivexCtrl* pThis = (CFreeRdpActivexCtrl*)(context->instance->pUser);
-	if (!e->result)
-	{
-		pThis->FireOnLoginCompleted();
-	}
-	else
-	{
-		pThis->FireOnDisconnected(0);
-	}
-}
-
-
-extern "C" void TerminateHandler(rdpContext* context, TerminateEventArgs* e)
-{
-	CFreeRdpActivexCtrl* pThis = (CFreeRdpActivexCtrl*)(context->instance->pUser);
-	pThis->FireOnDisconnected(0);
-}
-
-
+//extern "C" void FireOnConnected(void* handle)
+//{
+//	((CFreeRdpActivexCtrl*)handle)->FireOnConnected();
+//}
+//
+//
+//extern "C" void ConnectionResultHandler(rdpContext* context, ConnectionResultEventArgs* e)
+//{
+//	CFreeRdpActivexCtrl* pThis = (CFreeRdpActivexCtrl*)(context->instance->pUser);
+//	if (!e->result)
+//	{
+//		pThis->FireOnLoginCompleted();
+//	}
+//	else
+//	{
+//		pThis->FireOnDisconnected(0);
+//	}
+//}
+//
+//
+//extern "C" void TerminateHandler(rdpContext* context, TerminateEventArgs* e)
+//{
+//	CFreeRdpActivexCtrl* pThis = (CFreeRdpActivexCtrl*)(context->instance->pUser);
+//	pThis->FireOnDisconnected(0);
+//}
+//
+//

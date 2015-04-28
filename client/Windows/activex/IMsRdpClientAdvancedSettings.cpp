@@ -1,1617 +1,1479 @@
 // Implementation of the main RDP client interface.
 
 #include "stdafx.h"
-#include "FreeRdpActivexCtrl.h"
+#include "FreeRdpCtrl.h"
 
 
-STDMETHODIMP_(ULONG) CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::AddRef()
+STDMETHODIMP CFreeRdpCtrl::put_Compress(long pcompress)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return pThis->ExternalAddRef();
+	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP_(ULONG) CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::Release()
+STDMETHODIMP CFreeRdpCtrl::get_Compress(long *pcompress)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return pThis->ExternalRelease();
+	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::QueryInterface(REFIID iid, LPVOID* ppvObj)
+STDMETHODIMP CFreeRdpCtrl::put_BitmapPeristence(long pbitmapPeristence)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return pThis->ExternalQueryInterface(&iid, ppvObj);
+	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::GetTypeInfoCount(UINT* pCount)
+STDMETHODIMP CFreeRdpCtrl::get_BitmapPeristence(long *pbitmapPeristence)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	*pCount = 1;
-
-	return S_OK;
+	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::GetTypeInfo(UINT info, LCID lcid, ITypeInfo** pInfo)
+STDMETHODIMP CFreeRdpCtrl::put_allowBackgroundInput(long pallowBackgroundInput)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	return E_NOTIMPL;
+}
 
-	if (info != 0)
+
+STDMETHODIMP CFreeRdpCtrl::get_allowBackgroundInput(long *pallowBackgroundInput)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_KeyBoardLayoutStr(BSTR rhs)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_PluginDlls(BSTR rhs)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_IconFile(BSTR rhs)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_IconIndex(long rhs)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_ContainerHandledFullScreen(long pContainerHandledFullScreen)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_ContainerHandledFullScreen(long *pContainerHandledFullScreen)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_DisableRdpdr(long pDisableRdpdr)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_DisableRdpdr(long *pDisableRdpdr)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_SmoothScroll(long psmoothScroll)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_SmoothScroll(long *psmoothScroll)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_AcceleratorPassthrough(long pacceleratorPassthrough)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_AcceleratorPassthrough(long *pacceleratorPassthrough)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_ShadowBitmap(long pshadowBitmap)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_ShadowBitmap(long *pshadowBitmap)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_TransportType(long ptransportType)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_TransportType(long *ptransportType)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_SasSequence(long psasSequence)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_SasSequence(long *psasSequence)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_EncryptionEnabled(long pencryptionEnabled)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_EncryptionEnabled(long *pencryptionEnabled)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_DedicatedTerminal(long pdedicatedTerminal)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_DedicatedTerminal(long *pdedicatedTerminal)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_RDPPort(long prdpPort)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_RDPPort(long *prdpPort)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_EnableMouse(long penableMouse)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_EnableMouse(long *penableMouse)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_DisableCtrlAltDel(long pdisableCtrlAltDel)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_DisableCtrlAltDel(long *pdisableCtrlAltDel)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_EnableWindowsKey(long penableWindowsKey)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_EnableWindowsKey(long *penableWindowsKey)
+{
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_DoubleClickDetect(long pdoubleClickDetect)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_DoubleClickDetect(long *pdoubleClickDetect)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_MaximizeShell(long pmaximizeShell)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_MaximizeShell(long *pmaximizeShell)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_HotKeyFullScreen(long photKeyFullScreen)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_HotKeyFullScreen(long *photKeyFullScreen)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_HotKeyCtrlEsc(long photKeyCtrlEsc)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_HotKeyCtrlEsc(long *photKeyCtrlEsc)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_HotKeyAltEsc(long photKeyAltEsc)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_HotKeyAltEsc(long *photKeyAltEsc)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_HotKeyAltTab(long photKeyAltTab)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_HotKeyAltTab(long *photKeyAltTab)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_HotKeyAltShiftTab(long photKeyAltShiftTab)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_HotKeyAltShiftTab(long *photKeyAltShiftTab)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_HotKeyAltSpace(long photKeyAltSpace)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_HotKeyAltSpace(long *photKeyAltSpace)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_HotKeyCtrlAltDel(long photKeyCtrlAltDel)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_HotKeyCtrlAltDel(long *photKeyCtrlAltDel)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_orderDrawThreshold(long porderDrawThreshold)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_orderDrawThreshold(long *porderDrawThreshold)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_BitmapCacheSize(long pbitmapCacheSize)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_BitmapCacheSize(long *pbitmapCacheSize)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_BitmapVirtualCacheSize(long pbitmapVirtualCacheSize)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_BitmapVirtualCacheSize(long *pbitmapVirtualCacheSize)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_ScaleBitmapCachesByBPP(long pbScale)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_ScaleBitmapCachesByBPP(long *pbScale)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_NumBitmapCaches(long pnumBitmapCaches)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_NumBitmapCaches(long *pnumBitmapCaches)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_CachePersistenceActive(long pcachePersistenceActive)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_CachePersistenceActive(long *pcachePersistenceActive)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_PersistCacheDirectory(BSTR rhs)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_brushSupportLevel(long pbrushSupportLevel)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_brushSupportLevel(long *pbrushSupportLevel)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_minInputSendInterval(long pminInputSendInterval)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_minInputSendInterval(long *pminInputSendInterval)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_InputEventsAtOnce(long pinputEventsAtOnce)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_InputEventsAtOnce(long *pinputEventsAtOnce)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_maxEventCount(long pmaxEventCount)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_maxEventCount(long *pmaxEventCount)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_keepAliveInterval(long pkeepAliveInterval)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_keepAliveInterval(long *pkeepAliveInterval)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_shutdownTimeout(long pshutdownTimeout)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_shutdownTimeout(long *pshutdownTimeout)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_overallConnectionTimeout(long poverallConnectionTimeout)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_overallConnectionTimeout(long *poverallConnectionTimeout)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_singleConnectionTimeout(long psingleConnectionTimeout)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_singleConnectionTimeout(long *psingleConnectionTimeout)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_KeyboardType(long pkeyboardType)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_KeyboardType(long *pkeyboardType)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_KeyboardSubType(long pkeyboardSubType)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_KeyboardSubType(long *pkeyboardSubType)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_KeyboardFunctionKey(long pkeyboardFunctionKey)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_KeyboardFunctionKey(long *pkeyboardFunctionKey)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_WinceFixedPalette(long pwinceFixedPalette)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_WinceFixedPalette(long *pwinceFixedPalette)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_ConnectToServerConsole(VARIANT_BOOL pConnectToConsole)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_ConnectToServerConsole(VARIANT_BOOL *pConnectToConsole)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_BitmapPersistence(long pbitmapPersistence)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_BitmapPersistence(long *pbitmapPersistence)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_MinutesToIdleTimeout(long pminutesToIdleTimeout)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_MinutesToIdleTimeout(long *pminutesToIdleTimeout)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_SmartSizing(VARIANT_BOOL pfSmartSizing)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_SmartSizing(VARIANT_BOOL *pfSmartSizing)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_RdpdrLocalPrintingDocName(BSTR pLocalPrintingDocName)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_RdpdrLocalPrintingDocName(BSTR *pLocalPrintingDocName)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_RdpdrClipCleanTempDirString(BSTR clipCleanTempDirString)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_RdpdrClipCleanTempDirString(BSTR *clipCleanTempDirString)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_RdpdrClipPasteInfoString(BSTR clipPasteInfoString)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::get_RdpdrClipPasteInfoString(BSTR *clipPasteInfoString)
+{
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+
+	return E_NOTIMPL;
+}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_ClearTextPassword(BSTR rhs)
+{
+	USES_CONVERSION;
+
+	if (mConnectionState != NOT_CONNECTED)
 	{
-		return DISP_E_BADINDEX;
+		return E_FAIL;
 	}
 
-	if (pThis->mRdpClientAdvancedSettingsTypeInfo == NULL)
+	try
 	{
-		HRESULT result = pThis->GetTypeInfoOfGuid(lcid, IID_IMsRdpClientAdvancedSettings8, &pThis->mRdpClientAdvancedSettingsTypeInfo);
-		if (FAILED(result))
+		CComBSTR password(rhs);
+		mSettings->Password = _strdup(OLE2A(password.m_str));
+		if (!mSettings->Password)
 		{
-			pThis->mRdpClientAdvancedSettingsTypeInfo = NULL;
-			return result;
+			return E_OUTOFMEMORY;
 		}
 	}
-	pThis->mRdpClientAdvancedSettingsTypeInfo->AddRef();
-	*pInfo = pThis->mRdpClientAdvancedSettingsTypeInfo;
+	catch (...)
+	{
+		return E_OUTOFMEMORY;
+	}
 
 	return S_OK;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames, LCID lcid, DISPID* rgdispid)
+STDMETHODIMP CFreeRdpCtrl::put_DisplayConnectionBar(VARIANT_BOOL pDisplayConnectionBar)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
-	if (pThis->mRdpClientAdvancedSettingsTypeInfo == NULL)
-	{
-		return E_FAIL;
-	}
-
-	return DispGetIDsOfNames(pThis->mRdpClientAdvancedSettingsTypeInfo, rgszNames, cNames, rgdispid);
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD flags, DISPPARAMS* pParams, VARIANT* pResult, EXCEPINFO* pExcep, UINT* pErr)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	if (pThis->mRdpClientAdvancedSettingsTypeInfo == NULL)
-	{
-		return E_FAIL;
-	}
-
-	return DispInvoke(this, pThis->mRdpClientAdvancedSettingsTypeInfo, dispid, flags, pParams, pResult, pExcep, pErr);
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_Compress(long pcompress)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_Compress(long *pcompress)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_BitmapPeristence(long pbitmapPeristence)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_BitmapPeristence(long *pbitmapPeristence)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_allowBackgroundInput(long pallowBackgroundInput)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_allowBackgroundInput(long *pallowBackgroundInput)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_KeyBoardLayoutStr(BSTR rhs)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_PluginDlls(BSTR rhs)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_IconFile(BSTR rhs)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_IconIndex(long rhs)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_ContainerHandledFullScreen(long pContainerHandledFullScreen)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_ContainerHandledFullScreen(long *pContainerHandledFullScreen)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_DisableRdpdr(long pDisableRdpdr)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_DisableRdpdr(long *pDisableRdpdr)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_SmoothScroll(long psmoothScroll)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_SmoothScroll(long *psmoothScroll)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_AcceleratorPassthrough(long pacceleratorPassthrough)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_AcceleratorPassthrough(long *pacceleratorPassthrough)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_ShadowBitmap(long pshadowBitmap)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_ShadowBitmap(long *pshadowBitmap)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_TransportType(long ptransportType)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_TransportType(long *ptransportType)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_SasSequence(long psasSequence)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_SasSequence(long *psasSequence)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_EncryptionEnabled(long pencryptionEnabled)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_EncryptionEnabled(long *pencryptionEnabled)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_DedicatedTerminal(long pdedicatedTerminal)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_DedicatedTerminal(long *pdedicatedTerminal)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_RDPPort(long prdpPort)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_RDPPort(long *prdpPort)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_EnableMouse(long penableMouse)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_EnableMouse(long *penableMouse)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_DisableCtrlAltDel(long pdisableCtrlAltDel)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_DisableCtrlAltDel(long *pdisableCtrlAltDel)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_EnableWindowsKey(long penableWindowsKey)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_EnableWindowsKey(long *penableWindowsKey)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_DoubleClickDetect(long pdoubleClickDetect)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_DoubleClickDetect(long *pdoubleClickDetect)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_MaximizeShell(long pmaximizeShell)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_MaximizeShell(long *pmaximizeShell)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_HotKeyFullScreen(long photKeyFullScreen)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_HotKeyFullScreen(long *photKeyFullScreen)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_HotKeyCtrlEsc(long photKeyCtrlEsc)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_HotKeyCtrlEsc(long *photKeyCtrlEsc)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_HotKeyAltEsc(long photKeyAltEsc)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_HotKeyAltEsc(long *photKeyAltEsc)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_HotKeyAltTab(long photKeyAltTab)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_HotKeyAltTab(long *photKeyAltTab)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_HotKeyAltShiftTab(long photKeyAltShiftTab)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_HotKeyAltShiftTab(long *photKeyAltShiftTab)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_HotKeyAltSpace(long photKeyAltSpace)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_HotKeyAltSpace(long *photKeyAltSpace)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_HotKeyCtrlAltDel(long photKeyCtrlAltDel)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_HotKeyCtrlAltDel(long *photKeyCtrlAltDel)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_orderDrawThreshold(long porderDrawThreshold)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_orderDrawThreshold(long *porderDrawThreshold)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_BitmapCacheSize(long pbitmapCacheSize)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_BitmapCacheSize(long *pbitmapCacheSize)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_BitmapVirtualCacheSize(long pbitmapVirtualCacheSize)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_BitmapVirtualCacheSize(long *pbitmapVirtualCacheSize)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_ScaleBitmapCachesByBPP(long pbScale)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_ScaleBitmapCachesByBPP(long *pbScale)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_NumBitmapCaches(long pnumBitmapCaches)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_NumBitmapCaches(long *pnumBitmapCaches)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_CachePersistenceActive(long pcachePersistenceActive)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_CachePersistenceActive(long *pcachePersistenceActive)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_PersistCacheDirectory(BSTR rhs)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_brushSupportLevel(long pbrushSupportLevel)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_brushSupportLevel(long *pbrushSupportLevel)
+STDMETHODIMP CFreeRdpCtrl::get_DisplayConnectionBar(VARIANT_BOOL *pDisplayConnectionBar)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_minInputSendInterval(long pminInputSendInterval)
+STDMETHODIMP CFreeRdpCtrl::put_PinConnectionBar(VARIANT_BOOL pPinConnectionBar)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_minInputSendInterval(long *pminInputSendInterval)
+STDMETHODIMP CFreeRdpCtrl::get_PinConnectionBar(VARIANT_BOOL *pPinConnectionBar)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_InputEventsAtOnce(long pinputEventsAtOnce)
+STDMETHODIMP CFreeRdpCtrl::put_GrabFocusOnConnect(VARIANT_BOOL pfGrabFocusOnConnect)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_InputEventsAtOnce(long *pinputEventsAtOnce)
+STDMETHODIMP CFreeRdpCtrl::get_GrabFocusOnConnect(VARIANT_BOOL *pfGrabFocusOnConnect)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_maxEventCount(long pmaxEventCount)
+STDMETHODIMP CFreeRdpCtrl::put_LoadBalanceInfo(BSTR pLBInfo)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_maxEventCount(long *pmaxEventCount)
+STDMETHODIMP CFreeRdpCtrl::get_LoadBalanceInfo(BSTR *pLBInfo)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_keepAliveInterval(long pkeepAliveInterval)
+STDMETHODIMP CFreeRdpCtrl::put_RedirectDrives(VARIANT_BOOL pRedirectDrives)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_keepAliveInterval(long *pkeepAliveInterval)
+STDMETHODIMP CFreeRdpCtrl::get_RedirectDrives(VARIANT_BOOL *pRedirectDrives)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_shutdownTimeout(long pshutdownTimeout)
+STDMETHODIMP CFreeRdpCtrl::put_RedirectPrinters(VARIANT_BOOL pRedirectPrinters)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_shutdownTimeout(long *pshutdownTimeout)
+STDMETHODIMP CFreeRdpCtrl::get_RedirectPrinters(VARIANT_BOOL *pRedirectPrinters)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_overallConnectionTimeout(long poverallConnectionTimeout)
+STDMETHODIMP CFreeRdpCtrl::put_RedirectPorts(VARIANT_BOOL pRedirectPorts)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_overallConnectionTimeout(long *poverallConnectionTimeout)
+STDMETHODIMP CFreeRdpCtrl::get_RedirectPorts(VARIANT_BOOL *pRedirectPorts)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_singleConnectionTimeout(long psingleConnectionTimeout)
+STDMETHODIMP CFreeRdpCtrl::put_RedirectSmartCards(VARIANT_BOOL pRedirectSmartCards)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_singleConnectionTimeout(long *psingleConnectionTimeout)
+STDMETHODIMP CFreeRdpCtrl::get_RedirectSmartCards(VARIANT_BOOL *pRedirectSmartCards)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_KeyboardType(long pkeyboardType)
+STDMETHODIMP CFreeRdpCtrl::put_BitmapVirtualCache16BppSize(long pBitmapVirtualCache16BppSize)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_KeyboardType(long *pkeyboardType)
+STDMETHODIMP CFreeRdpCtrl::get_BitmapVirtualCache16BppSize(long *pBitmapVirtualCache16BppSize)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_KeyboardSubType(long pkeyboardSubType)
+STDMETHODIMP CFreeRdpCtrl::put_BitmapVirtualCache24BppSize(long pBitmapVirtualCache24BppSize)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_KeyboardSubType(long *pkeyboardSubType)
+STDMETHODIMP CFreeRdpCtrl::get_BitmapVirtualCache24BppSize(long *pBitmapVirtualCache24BppSize)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_KeyboardFunctionKey(long pkeyboardFunctionKey)
+STDMETHODIMP CFreeRdpCtrl::put_PerformanceFlags(long pDisableList)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_KeyboardFunctionKey(long *pkeyboardFunctionKey)
+STDMETHODIMP CFreeRdpCtrl::get_PerformanceFlags(long *pDisableList)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_WinceFixedPalette(long pwinceFixedPalette)
+STDMETHODIMP CFreeRdpCtrl::put_ConnectWithEndpoint(VARIANT *rhs)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_WinceFixedPalette(long *pwinceFixedPalette)
+STDMETHODIMP CFreeRdpCtrl::put_NotifyTSPublicKey(VARIANT_BOOL pfNotify)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_ConnectToServerConsole(VARIANT_BOOL pConnectToConsole)
+STDMETHODIMP CFreeRdpCtrl::get_NotifyTSPublicKey(VARIANT_BOOL *pfNotify)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_ConnectToServerConsole(VARIANT_BOOL *pConnectToConsole)
+STDMETHODIMP CFreeRdpCtrl::get_CanAutoReconnect(VARIANT_BOOL *pfCanAutoReconnect)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_BitmapPersistence(long pbitmapPersistence)
+STDMETHODIMP CFreeRdpCtrl::put_EnableAutoReconnect(VARIANT_BOOL pfEnableAutoReconnect)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_BitmapPersistence(long *pbitmapPersistence)
+STDMETHODIMP CFreeRdpCtrl::get_EnableAutoReconnect(VARIANT_BOOL *pfEnableAutoReconnect)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_MinutesToIdleTimeout(long pminutesToIdleTimeout)
+STDMETHODIMP CFreeRdpCtrl::put_MaxReconnectAttempts(long pMaxReconnectAttempts)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_MinutesToIdleTimeout(long *pminutesToIdleTimeout)
+STDMETHODIMP CFreeRdpCtrl::get_MaxReconnectAttempts(long *pMaxReconnectAttempts)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_SmartSizing(VARIANT_BOOL pfSmartSizing)
+STDMETHODIMP CFreeRdpCtrl::put_ConnectionBarShowMinimizeButton(VARIANT_BOOL pfShowMinimize)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_SmartSizing(VARIANT_BOOL *pfSmartSizing)
+STDMETHODIMP CFreeRdpCtrl::get_ConnectionBarShowMinimizeButton(VARIANT_BOOL *pfShowMinimize)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_RdpdrLocalPrintingDocName(BSTR pLocalPrintingDocName)
+STDMETHODIMP CFreeRdpCtrl::put_ConnectionBarShowRestoreButton(VARIANT_BOOL pfShowRestore)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_RdpdrLocalPrintingDocName(BSTR *pLocalPrintingDocName)
+STDMETHODIMP CFreeRdpCtrl::get_ConnectionBarShowRestoreButton(VARIANT_BOOL *pfShowRestore)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_RdpdrClipCleanTempDirString(BSTR clipCleanTempDirString)
+STDMETHODIMP CFreeRdpCtrl::put_AuthenticationLevel(unsigned int puiAuthLevel)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_RdpdrClipCleanTempDirString(BSTR *clipCleanTempDirString)
+STDMETHODIMP CFreeRdpCtrl::get_AuthenticationLevel(unsigned int *puiAuthLevel)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_RdpdrClipPasteInfoString(BSTR clipPasteInfoString)
+STDMETHODIMP CFreeRdpCtrl::put_RedirectClipboard(VARIANT_BOOL pfRedirectClipboard)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_RdpdrClipPasteInfoString(BSTR *clipPasteInfoString)
+STDMETHODIMP CFreeRdpCtrl::get_RedirectClipboard(VARIANT_BOOL *pfRedirectClipboard)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_ClearTextPassword(BSTR rhs)
+STDMETHODIMP CFreeRdpCtrl::put_AudioRedirectionMode(unsigned int puiAudioRedirectionMode)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
-	return pThis->SetClearTextPassword(rhs);
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_DisplayConnectionBar(VARIANT_BOOL pDisplayConnectionBar)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_DisplayConnectionBar(VARIANT_BOOL *pDisplayConnectionBar)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_PinConnectionBar(VARIANT_BOOL pPinConnectionBar)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_PinConnectionBar(VARIANT_BOOL *pPinConnectionBar)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_GrabFocusOnConnect(VARIANT_BOOL pfGrabFocusOnConnect)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_GrabFocusOnConnect(VARIANT_BOOL *pfGrabFocusOnConnect)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_LoadBalanceInfo(BSTR pLBInfo)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_LoadBalanceInfo(BSTR *pLBInfo)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_RedirectDrives(VARIANT_BOOL pRedirectDrives)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_RedirectDrives(VARIANT_BOOL *pRedirectDrives)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_RedirectPrinters(VARIANT_BOOL pRedirectPrinters)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_RedirectPrinters(VARIANT_BOOL *pRedirectPrinters)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_RedirectPorts(VARIANT_BOOL pRedirectPorts)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_RedirectPorts(VARIANT_BOOL *pRedirectPorts)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_RedirectSmartCards(VARIANT_BOOL pRedirectSmartCards)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_RedirectSmartCards(VARIANT_BOOL *pRedirectSmartCards)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_BitmapVirtualCache16BppSize(long pBitmapVirtualCache16BppSize)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_BitmapVirtualCache16BppSize(long *pBitmapVirtualCache16BppSize)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_BitmapVirtualCache24BppSize(long pBitmapVirtualCache24BppSize)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_BitmapVirtualCache24BppSize(long *pBitmapVirtualCache24BppSize)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_PerformanceFlags(long pDisableList)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_PerformanceFlags(long *pDisableList)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_ConnectWithEndpoint(VARIANT *rhs)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_NotifyTSPublicKey(VARIANT_BOOL pfNotify)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_NotifyTSPublicKey(VARIANT_BOOL *pfNotify)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_CanAutoReconnect(VARIANT_BOOL *pfCanAutoReconnect)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_EnableAutoReconnect(VARIANT_BOOL pfEnableAutoReconnect)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_EnableAutoReconnect(VARIANT_BOOL *pfEnableAutoReconnect)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_MaxReconnectAttempts(long pMaxReconnectAttempts)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_MaxReconnectAttempts(long *pMaxReconnectAttempts)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_ConnectionBarShowMinimizeButton(VARIANT_BOOL pfShowMinimize)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_ConnectionBarShowMinimizeButton(VARIANT_BOOL *pfShowMinimize)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_ConnectionBarShowRestoreButton(VARIANT_BOOL pfShowRestore)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_ConnectionBarShowRestoreButton(VARIANT_BOOL *pfShowRestore)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_AuthenticationLevel(unsigned int puiAuthLevel)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_AuthenticationLevel(unsigned int *puiAuthLevel)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_RedirectClipboard(VARIANT_BOOL pfRedirectClipboard)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_RedirectClipboard(VARIANT_BOOL *pfRedirectClipboard)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_AudioRedirectionMode(unsigned int puiAudioRedirectionMode)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_AudioRedirectionMode(unsigned int *puiAudioRedirectionMode)
+STDMETHODIMP CFreeRdpCtrl::get_AudioRedirectionMode(unsigned int *puiAudioRedirectionMode)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_ConnectionBarShowPinButton(VARIANT_BOOL pfShowPin)
+STDMETHODIMP CFreeRdpCtrl::put_ConnectionBarShowPinButton(VARIANT_BOOL pfShowPin)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_ConnectionBarShowPinButton(VARIANT_BOOL *pfShowPin)
+STDMETHODIMP CFreeRdpCtrl::get_ConnectionBarShowPinButton(VARIANT_BOOL *pfShowPin)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_PublicMode(VARIANT_BOOL pfPublicMode)
+STDMETHODIMP CFreeRdpCtrl::put_PublicMode(VARIANT_BOOL pfPublicMode)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_PublicMode(VARIANT_BOOL *pfPublicMode)
+STDMETHODIMP CFreeRdpCtrl::get_PublicMode(VARIANT_BOOL *pfPublicMode)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_RedirectDevices(VARIANT_BOOL pfRedirectPnPDevices)
+STDMETHODIMP CFreeRdpCtrl::put_RedirectDevices(VARIANT_BOOL pfRedirectPnPDevices)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_RedirectDevices(VARIANT_BOOL *pfRedirectPnPDevices)
+STDMETHODIMP CFreeRdpCtrl::get_RedirectDevices(VARIANT_BOOL *pfRedirectPnPDevices)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_RedirectPOSDevices(VARIANT_BOOL pfRedirectPOSDevices)
+STDMETHODIMP CFreeRdpCtrl::put_RedirectPOSDevices(VARIANT_BOOL pfRedirectPOSDevices)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_RedirectPOSDevices(VARIANT_BOOL *pfRedirectPOSDevices)
+STDMETHODIMP CFreeRdpCtrl::get_RedirectPOSDevices(VARIANT_BOOL *pfRedirectPOSDevices)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_BitmapVirtualCache32BppSize(long pBitmapVirtualCache32BppSize)
+STDMETHODIMP CFreeRdpCtrl::put_BitmapVirtualCache32BppSize(long pBitmapVirtualCache32BppSize)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_BitmapVirtualCache32BppSize(long *pBitmapVirtualCache32BppSize)
+STDMETHODIMP CFreeRdpCtrl::get_BitmapVirtualCache32BppSize(long *pBitmapVirtualCache32BppSize)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_RelativeMouseMode(VARIANT_BOOL pfRelativeMouseMode)
+STDMETHODIMP CFreeRdpCtrl::put_RelativeMouseMode(VARIANT_BOOL pfRelativeMouseMode)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_RelativeMouseMode(VARIANT_BOOL *pfRelativeMouseMode)
+STDMETHODIMP CFreeRdpCtrl::get_RelativeMouseMode(VARIANT_BOOL *pfRelativeMouseMode)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_AuthenticationServiceClass(BSTR *pbstrAuthServiceClass)
+STDMETHODIMP CFreeRdpCtrl::get_AuthenticationServiceClass(BSTR *pbstrAuthServiceClass)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_AuthenticationServiceClass(BSTR pbstrAuthServiceClass)
+STDMETHODIMP CFreeRdpCtrl::put_AuthenticationServiceClass(BSTR pbstrAuthServiceClass)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_PCB(BSTR *bstrPCB)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
-	return E_NOTIMPL;
-}
 
+//STDMETHODIMP CFreeRdpCtrl::get_PCB(BSTR *bstrPCB)
+//{
+//	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+//
+//	return E_NOTIMPL;
+//}
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_PCB(BSTR bstrPCB)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
-	return E_NOTIMPL;
-}
+//STDMETHODIMP CFreeRdpCtrl::put_PCB(BSTR bstrPCB)
+//{
+//	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+//
+//	return E_NOTIMPL;
+//}
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_HotKeyFocusReleaseLeft(long HotKeyFocusReleaseLeft)
+STDMETHODIMP CFreeRdpCtrl::put_HotKeyFocusReleaseLeft(long HotKeyFocusReleaseLeft)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_HotKeyFocusReleaseLeft(long *HotKeyFocusReleaseLeft)
+STDMETHODIMP CFreeRdpCtrl::get_HotKeyFocusReleaseLeft(long *HotKeyFocusReleaseLeft)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_HotKeyFocusReleaseRight(long HotKeyFocusReleaseRight)
+STDMETHODIMP CFreeRdpCtrl::put_HotKeyFocusReleaseRight(long HotKeyFocusReleaseRight)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_HotKeyFocusReleaseRight(long *HotKeyFocusReleaseRight)
+STDMETHODIMP CFreeRdpCtrl::get_HotKeyFocusReleaseRight(long *HotKeyFocusReleaseRight)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_EnableCredSspSupport(VARIANT_BOOL pfEnableSupport)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
-	return E_NOTIMPL;
-}
 
+//STDMETHODIMP CFreeRdpCtrl::put_EnableCredSspSupport(VARIANT_BOOL pfEnableSupport)
+//{
+//	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+//
+//	return E_NOTIMPL;
+//}
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_EnableCredSspSupport(VARIANT_BOOL *pfEnableSupport)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
-	return E_NOTIMPL;
-}
+//STDMETHODIMP CFreeRdpCtrl::get_EnableCredSspSupport(VARIANT_BOOL *pfEnableSupport)
+//{
+//	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+//
+//	return E_NOTIMPL;
+//}
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_AuthenticationType(unsigned int *puiAuthType)
+STDMETHODIMP CFreeRdpCtrl::get_AuthenticationType(unsigned int *puiAuthType)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_ConnectToAdministerServer(VARIANT_BOOL pConnectToAdministerServer)
+STDMETHODIMP CFreeRdpCtrl::put_ConnectToAdministerServer(VARIANT_BOOL pConnectToAdministerServer)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_ConnectToAdministerServer(VARIANT_BOOL *pConnectToAdministerServer)
+STDMETHODIMP CFreeRdpCtrl::get_ConnectToAdministerServer(VARIANT_BOOL *pConnectToAdministerServer)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_AudioCaptureRedirectionMode(VARIANT_BOOL pfRedir)
+STDMETHODIMP CFreeRdpCtrl::put_AudioCaptureRedirectionMode(VARIANT_BOOL pfRedir)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_AudioCaptureRedirectionMode(VARIANT_BOOL *pfRedir)
+STDMETHODIMP CFreeRdpCtrl::get_AudioCaptureRedirectionMode(VARIANT_BOOL *pfRedir)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_VideoPlaybackMode(unsigned int pVideoPlaybackMode)
+STDMETHODIMP CFreeRdpCtrl::put_VideoPlaybackMode(unsigned int pVideoPlaybackMode)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_VideoPlaybackMode(unsigned int *pVideoPlaybackMode)
+STDMETHODIMP CFreeRdpCtrl::get_VideoPlaybackMode(unsigned int *pVideoPlaybackMode)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_EnableSuperPan(VARIANT_BOOL pfEnableSuperPan)
+STDMETHODIMP CFreeRdpCtrl::put_EnableSuperPan(VARIANT_BOOL pfEnableSuperPan)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_EnableSuperPan(VARIANT_BOOL *pfEnableSuperPan)
+STDMETHODIMP CFreeRdpCtrl::get_EnableSuperPan(VARIANT_BOOL *pfEnableSuperPan)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_SuperPanAccelerationFactor(unsigned long puAccelFactor)
+STDMETHODIMP CFreeRdpCtrl::put_SuperPanAccelerationFactor(unsigned long puAccelFactor)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_SuperPanAccelerationFactor(unsigned long *puAccelFactor)
+STDMETHODIMP CFreeRdpCtrl::get_SuperPanAccelerationFactor(unsigned long *puAccelFactor)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_NegotiateSecurityLayer(VARIANT_BOOL pfNegotiate)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
-	return E_NOTIMPL;
-}
 
+//STDMETHODIMP CFreeRdpCtrl::put_NegotiateSecurityLayer(VARIANT_BOOL pfNegotiate)
+//{
+//	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+//
+//	return E_NOTIMPL;
+//}
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_NegotiateSecurityLayer(VARIANT_BOOL *pfNegotiate)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
-	return E_NOTIMPL;
-}
+//STDMETHODIMP CFreeRdpCtrl::get_NegotiateSecurityLayer(VARIANT_BOOL *pfNegotiate)
+//{
+//	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+//
+//	return E_NOTIMPL;
+//}
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_AudioQualityMode(unsigned int pAudioQualityMode)
+STDMETHODIMP CFreeRdpCtrl::put_AudioQualityMode(unsigned int pAudioQualityMode)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_AudioQualityMode(unsigned int *pAudioQualityMode)
+STDMETHODIMP CFreeRdpCtrl::get_AudioQualityMode(unsigned int *pAudioQualityMode)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_RedirectDirectX(VARIANT_BOOL pfRedirectDirectX)
+STDMETHODIMP CFreeRdpCtrl::put_RedirectDirectX(VARIANT_BOOL pfRedirectDirectX)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_RedirectDirectX(VARIANT_BOOL *pfRedirectDirectX)
+STDMETHODIMP CFreeRdpCtrl::get_RedirectDirectX(VARIANT_BOOL *pfRedirectDirectX)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_NetworkConnectionType(unsigned int pConnectionType)
+STDMETHODIMP CFreeRdpCtrl::put_NetworkConnectionType(unsigned int pConnectionType)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_NetworkConnectionType(unsigned int *pConnectionType)
+STDMETHODIMP CFreeRdpCtrl::get_NetworkConnectionType(unsigned int *pConnectionType)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_BandwidthDetection(VARIANT_BOOL pfAutodetect)
+STDMETHODIMP CFreeRdpCtrl::put_BandwidthDetection(VARIANT_BOOL pfAutodetect)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_BandwidthDetection(VARIANT_BOOL *pfAutodetect)
+STDMETHODIMP CFreeRdpCtrl::get_BandwidthDetection(VARIANT_BOOL *pfAutodetect)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::put_ClientProtocolSpec(ClientSpec pClientMode)
+STDMETHODIMP CFreeRdpCtrl::put_ClientProtocolSpec(ClientSpec pClientMode)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XRdpClientAdvancedSettings::get_ClientProtocolSpec(ClientSpec *pClientMode)
+STDMETHODIMP CFreeRdpCtrl::get_ClientProtocolSpec(ClientSpec *pClientMode)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
 
 	return E_NOTIMPL;
 }

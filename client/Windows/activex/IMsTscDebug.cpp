@@ -1,361 +1,361 @@
 // Implementation of the main RDP client interface.
 
 #include "stdafx.h"
-#include "FreeRdpActivexCtrl.h"
+#include "FreeRdpCtrl.h"
 
 
-STDMETHODIMP_(ULONG) CFreeRdpActivexCtrl::XTscDebug::AddRef()
+//STDMETHODIMP_(ULONG) CFreeRdpCtrl::AddRef()
+//{
+//	//(CFreeRdpActivexCtrl, TscDebug);
+//
+//	return pThis->ExternalAddRef();
+//}
+//
+//
+//STDMETHODIMP_(ULONG) CFreeRdpCtrl::Release()
+//{
+//	//(CFreeRdpActivexCtrl, TscDebug);
+//
+//	return pThis->ExternalRelease();
+//}
+//
+//
+//STDMETHODIMP CFreeRdpCtrl::QueryInterface(REFIID iid, LPVOID* ppvObj)
+//{
+//	//(CFreeRdpActivexCtrl, TscDebug);
+//
+//	return pThis->ExternalQueryInterface(&iid, ppvObj);
+//}
+//
+//
+//STDMETHODIMP CFreeRdpCtrl::GetTypeInfoCount(UINT* pCount)
+//{
+//	//(CFreeRdpActivexCtrl, TscDebug);
+//
+//	*pCount = 1;
+//
+//	return S_OK;
+//}
+//
+//
+//STDMETHODIMP CFreeRdpCtrl::GetTypeInfo(UINT info, LCID lcid, ITypeInfo** pInfo)
+//{
+//	//(CFreeRdpActivexCtrl, TscDebug);
+//
+//	if (info != 0)
+//	{
+//		return DISP_E_BADINDEX;
+//	}
+//
+//	if (pThis->mTscDebugTypeInfo == NULL)
+//	{
+//		HRESULT result = pThis->GetTypeInfoOfGuid(lcid, IID_IMsTscDebug, &pThis->mTscDebugTypeInfo);
+//		if (FAILED(result))
+//		{
+//			pThis->mTscDebugTypeInfo = NULL;
+//			return result;
+//		}
+//	}
+//	pThis->mTscDebugTypeInfo->AddRef();
+//	*pInfo = pThis->mTscDebugTypeInfo;
+//
+//	return S_OK;
+//}
+//
+//
+//STDMETHODIMP CFreeRdpCtrl::GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames, LCID lcid, DISPID* rgdispid)
+//{
+//	//(CFreeRdpActivexCtrl, TscDebug);
+//
+//	if (pThis->mTscDebugTypeInfo == NULL)
+//	{
+//		return E_FAIL;
+//	}
+//
+//	return DispGetIDsOfNames(pThis->mTscDebugTypeInfo, rgszNames, cNames, rgdispid);
+//}
+//
+//
+//STDMETHODIMP CFreeRdpCtrl::Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD flags, DISPPARAMS* pParams, VARIANT* pResult, EXCEPINFO* pExcep, UINT* pErr)
+//{
+//	//(CFreeRdpActivexCtrl, TscDebug);
+//
+//	if (pThis->mTscDebugTypeInfo == NULL)
+//	{
+//		return E_FAIL;
+//	}
+//
+//	return DispInvoke(this, pThis->mTscDebugTypeInfo, dispid, flags, pParams, pResult, pExcep, pErr);
+//}
+
+
+STDMETHODIMP CFreeRdpCtrl::put_HatchBitmapPDU(long phatchBitmapPDU)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
-
-	return pThis->ExternalAddRef();
-}
-
-
-STDMETHODIMP_(ULONG) CFreeRdpActivexCtrl::XTscDebug::Release()
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
-
-	return pThis->ExternalRelease();
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::QueryInterface(REFIID iid, LPVOID* ppvObj)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
-
-	return pThis->ExternalQueryInterface(&iid, ppvObj);
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::GetTypeInfoCount(UINT* pCount)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
-
-	*pCount = 1;
-
-	return S_OK;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::GetTypeInfo(UINT info, LCID lcid, ITypeInfo** pInfo)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
-
-	if (info != 0)
-	{
-		return DISP_E_BADINDEX;
-	}
-
-	if (pThis->mTscDebugTypeInfo == NULL)
-	{
-		HRESULT result = pThis->GetTypeInfoOfGuid(lcid, IID_IMsTscDebug, &pThis->mTscDebugTypeInfo);
-		if (FAILED(result))
-		{
-			pThis->mTscDebugTypeInfo = NULL;
-			return result;
-		}
-	}
-	pThis->mTscDebugTypeInfo->AddRef();
-	*pInfo = pThis->mTscDebugTypeInfo;
-
-	return S_OK;
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames, LCID lcid, DISPID* rgdispid)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
-
-	if (pThis->mTscDebugTypeInfo == NULL)
-	{
-		return E_FAIL;
-	}
-
-	return DispGetIDsOfNames(pThis->mTscDebugTypeInfo, rgszNames, cNames, rgdispid);
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD flags, DISPPARAMS* pParams, VARIANT* pResult, EXCEPINFO* pExcep, UINT* pErr)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
-
-	if (pThis->mTscDebugTypeInfo == NULL)
-	{
-		return E_FAIL;
-	}
-
-	return DispInvoke(this, pThis->mTscDebugTypeInfo, dispid, flags, pParams, pResult, pExcep, pErr);
-}
-
-
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_HatchBitmapPDU(long phatchBitmapPDU)
-{
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_HatchBitmapPDU(long *phatchBitmapPDU)
+STDMETHODIMP CFreeRdpCtrl::get_HatchBitmapPDU(long *phatchBitmapPDU)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_HatchSSBOrder(long phatchSSBOrder)
+STDMETHODIMP CFreeRdpCtrl::put_HatchSSBOrder(long phatchSSBOrder)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_HatchSSBOrder(long *phatchSSBOrder)
+STDMETHODIMP CFreeRdpCtrl::get_HatchSSBOrder(long *phatchSSBOrder)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_HatchMembltOrder(long phatchMembltOrder)
+STDMETHODIMP CFreeRdpCtrl::put_HatchMembltOrder(long phatchMembltOrder)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_HatchMembltOrder(long *phatchMembltOrder)
+STDMETHODIMP CFreeRdpCtrl::get_HatchMembltOrder(long *phatchMembltOrder)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_HatchIndexPDU(long phatchIndexPDU)
+STDMETHODIMP CFreeRdpCtrl::put_HatchIndexPDU(long phatchIndexPDU)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_HatchIndexPDU(long *phatchIndexPDU)
+STDMETHODIMP CFreeRdpCtrl::get_HatchIndexPDU(long *phatchIndexPDU)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_LabelMemblt(long plabelMemblt)
+STDMETHODIMP CFreeRdpCtrl::put_LabelMemblt(long plabelMemblt)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_LabelMemblt(long *plabelMemblt)
+STDMETHODIMP CFreeRdpCtrl::get_LabelMemblt(long *plabelMemblt)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_BitmapCacheMonitor(long pbitmapCacheMonitor)
+STDMETHODIMP CFreeRdpCtrl::put_BitmapCacheMonitor(long pbitmapCacheMonitor)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_BitmapCacheMonitor(long *pbitmapCacheMonitor)
+STDMETHODIMP CFreeRdpCtrl::get_BitmapCacheMonitor(long *pbitmapCacheMonitor)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_MallocFailuresPercent(long pmallocFailuresPercent)
+STDMETHODIMP CFreeRdpCtrl::put_MallocFailuresPercent(long pmallocFailuresPercent)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_MallocFailuresPercent(long *pmallocFailuresPercent)
+STDMETHODIMP CFreeRdpCtrl::get_MallocFailuresPercent(long *pmallocFailuresPercent)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_MallocHugeFailuresPercent(long pmallocHugeFailuresPercent)
+STDMETHODIMP CFreeRdpCtrl::put_MallocHugeFailuresPercent(long pmallocHugeFailuresPercent)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_MallocHugeFailuresPercent(long *pmallocHugeFailuresPercent)
+STDMETHODIMP CFreeRdpCtrl::get_MallocHugeFailuresPercent(long *pmallocHugeFailuresPercent)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_NetThroughput(long NetThroughput)
+STDMETHODIMP CFreeRdpCtrl::put_NetThroughput(long NetThroughput)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_NetThroughput(long *NetThroughput)
+STDMETHODIMP CFreeRdpCtrl::get_NetThroughput(long *NetThroughput)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_CLXCmdLine(BSTR pCLXCmdLine)
+STDMETHODIMP CFreeRdpCtrl::put_CLXCmdLine(BSTR pCLXCmdLine)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_CLXCmdLine(BSTR *pCLXCmdLine)
+STDMETHODIMP CFreeRdpCtrl::get_CLXCmdLine(BSTR *pCLXCmdLine)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_CLXDll(BSTR pCLXDll)
+STDMETHODIMP CFreeRdpCtrl::put_CLXDll(BSTR pCLXDll)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_CLXDll(BSTR *pCLXDll)
+STDMETHODIMP CFreeRdpCtrl::get_CLXDll(BSTR *pCLXDll)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_RemoteProgramsHatchVisibleRegion(long pcbHatch)
+STDMETHODIMP CFreeRdpCtrl::put_RemoteProgramsHatchVisibleRegion(long pcbHatch)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_RemoteProgramsHatchVisibleRegion(long *pcbHatch)
+STDMETHODIMP CFreeRdpCtrl::get_RemoteProgramsHatchVisibleRegion(long *pcbHatch)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_RemoteProgramsHatchVisibleNoDataRegion(long pcbHatch)
+STDMETHODIMP CFreeRdpCtrl::put_RemoteProgramsHatchVisibleNoDataRegion(long pcbHatch)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_RemoteProgramsHatchVisibleNoDataRegion(long *pcbHatch)
+STDMETHODIMP CFreeRdpCtrl::get_RemoteProgramsHatchVisibleNoDataRegion(long *pcbHatch)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_RemoteProgramsHatchNonVisibleRegion(long pcbHatch)
+STDMETHODIMP CFreeRdpCtrl::put_RemoteProgramsHatchNonVisibleRegion(long pcbHatch)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_RemoteProgramsHatchNonVisibleRegion(long *pcbHatch)
+STDMETHODIMP CFreeRdpCtrl::get_RemoteProgramsHatchNonVisibleRegion(long *pcbHatch)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_RemoteProgramsHatchWindow(long pcbHatch)
+STDMETHODIMP CFreeRdpCtrl::put_RemoteProgramsHatchWindow(long pcbHatch)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_RemoteProgramsHatchWindow(long *pcbHatch)
+STDMETHODIMP CFreeRdpCtrl::get_RemoteProgramsHatchWindow(long *pcbHatch)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_RemoteProgramsStayConnectOnBadCaps(long pcbStayConnected)
+STDMETHODIMP CFreeRdpCtrl::put_RemoteProgramsStayConnectOnBadCaps(long pcbStayConnected)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_RemoteProgramsStayConnectOnBadCaps(long *pcbStayConnected)
+STDMETHODIMP CFreeRdpCtrl::get_RemoteProgramsStayConnectOnBadCaps(long *pcbStayConnected)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::get_ControlType(unsigned int *pControlType)
+STDMETHODIMP CFreeRdpCtrl::get_ControlType(unsigned int *pControlType)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }
 
 
-STDMETHODIMP CFreeRdpActivexCtrl::XTscDebug::put_DecodeGfx(VARIANT_BOOL rhs)
+STDMETHODIMP CFreeRdpCtrl::put_DecodeGfx(VARIANT_BOOL rhs)
 {
-	METHOD_PROLOGUE(CFreeRdpActivexCtrl, TscDebug);
+	//(CFreeRdpActivexCtrl, TscDebug);
 
 	return E_NOTIMPL;
 }

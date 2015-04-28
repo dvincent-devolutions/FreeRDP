@@ -21,14 +21,16 @@ set(MODULE_PREFIX "FREERDP_CLIENT_WINDOWS")
 include_directories(..)
 
 set(${MODULE_PREFIX}_SRCS
-	FreeRdpActivex.cpp
-	FreeRdpActivex.h
-	FreeRdpActivex.rc
-	FreeRdpActivex.def
-	FreeRdpInterfaces_i.c
-	FreeRdpActivexCtrl.cpp
-	FreeRdpActivexCtrl.h
-	FreeRdpInterfaces.h
+	FreeRdpAx_i.c
+	_IFreeRdpCtrlEvents_CP.h
+	dllmain.h
+	FreeRdpCtrl.h
+	IMsTscAxEvents_CP.h
+	stdafx.h
+	targetver.h
+	dllMain.cpp
+	FreeRdpAx.cpp
+	FreeRdpCtrl.cpp
 	IMsRdpClient.cpp
 	IMsRdpClientAdvancedSettings.cpp
 	IMsRdpClientNonScriptable.cpp
@@ -43,11 +45,12 @@ set(${MODULE_PREFIX}_SRCS
 	IMsTscAxEvents.cpp
 	IMsTscDebug.cpp
 	ITsRemoteProgram.cpp
-	Resource.h
-	stdafx.h
-	targetver.h)
+	FreeRdpAx.def
+	FreeRdpAx.rc
+	FreeRdpAx.rgs
+	FreeRdpCtrl.rgs)
 
-set(INTERFACE_OUTPUTS FreeRdpInterfaces_i.c FreeRdpInterfaces.h FreeInterfaces.tlb)
+set(INTERFACE_OUTPUTS FreeRdpAx_i.c FreeRdpAx_i.h FreeRdpAx.tlb)
 
 # On windows create dll version information.
 # Vendor, product and year are already set in top level CMakeLists.txt
@@ -66,15 +69,15 @@ if (WIN32)
 endif()
 
 add_custom_command(OUTPUT ${INTERFACE_OUTPUTS}
-		DEPENDS FreeRdpInterfaces.idl
-		COMMAND midl /env win32 /h "FreeRdpInterfaces.h" /W1 /char signed /tlb FreeRdpInterfaces.tlb /robust /nologo FreeRdpInterfaces.idl)
+		DEPENDS FreeRdpAx.idl
+		COMMAND midl /env win32 /iid "FreeRdpAx_i.c" /h "FreeRdpAx_i.h" /W1 /char signed /tlb FreeRdpAx.tlb /robust /nologo FreeRdpAx.idl)
 
-add_compile_options(/EHsc /Zl)
-add_definitions(-D_AFXDLL -D_UNICODE -DUNICODE)
-set(CMAKE_MFC_FLAG 2)
+add_compile_options(/EHsc)
+add_definitions(-D_UNICODE -DUNICODE)
 add_library(${MODULE_NAME} MODULE ${${MODULE_PREFIX}_SRCS})
 set_source_files_properties(${INTERFACE_OUTPUTS} PROPERTIES GENERATED 1)
 
+add_custom_target(interfaces DEPENDS ${INTERFACE_OUTPUTS})
 add_dependencies(${MODULE_NAME} interfaces)
 
 list(APPEND ${MODULE_PREFIX}_LIBS wfreerdp-client)
@@ -87,3 +90,4 @@ if(VENDOR MATCHES "FreeRDP")
 endif()
 
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Client/Windows")
+set_property(TARGET interfaces PROPERTY FOLDER "Client/Windows")

@@ -1,46 +1,43 @@
-// FreeRdpActivex.idl : type library source for ActiveX Control project.
+// FreeRdpAx.idl : IDL source for FreeRdpAx
+//
 
-// This file will be processed by the MIDL compiler tool to
-// produce the type library (FreeRdpActivex.tlb) that will become a resource in
-// FreeRdpActivex.ocx.
+// This file will be processed by the MIDL tool to
+// produce the type library (FreeRdpAx.tlb) and marshalling code.
 
-#include <olectl.h>
-#include <idispids.h>
-
-midl_pragma warning(disable: 2362)
+#include "olectl.h"
+import "oaidl.idl";
+import "ocidl.idl";
 
 [
-	uuid(1B209E0F-1D4F-4A97-BB6B-24CF335EB8FD),
+	uuid(14E98B9B-EBB6-45EF-A133-DEB30CEF6BA0),
 	version(1.0),
-	helpstring("Free RDP Control Type Library")
 ]
-library FreeRdpActivex
+library FreeRdpAxLib
 {
-	importlib(STDOLE_TLB);
+	importlib("stdole2.tlb");
 
-	//  Primary dispatch interface for CFreeRdpActivexCtrl
-	[ 
-		uuid(FEC3E2EA-695D-48F7-9CB6-ADCAD050C7EC)	
+	[
+		object,
+		uuid(FAFB60C8-92C9-49FC-8E80-238BEBBB3F39),
+		dual,
+		nonextensible,
+		pointer_default(unique)
 	]
-	dispinterface _DFreeRdpActivex
+	interface IFreeRdpCtrl : IDispatch
+	{
+
+	};
+
+	[
+		uuid(04EA05A7-7369-4D17-9270-0AC1AABD788F)		
+	]
+	dispinterface _IFreeRdpCtrlEvents
 	{
 		properties:
 		methods:
-			[id(0x10)] void Method1();
 	};
 
-	//  Event dispatch interface for CFreeRdpActivexCtrl
-	[ 
-		uuid(740FC5CD-B2CD-495B-9628-9CC8351CC13A)	
-	]
-	dispinterface _DFreeRdpActivexEvents
-	{
-		properties:
-		methods:
-			[id(1)] void Test();
-	};
-
-	// Compatibility interfaces.
+	// MsTscAx compatibility interfaces.
 
 	// Secured settings.
 	[
@@ -467,7 +464,7 @@ library FreeRdpActivex
 	{
 		[id(0x000000c8), propput] HRESULT RemoteProgramMode([in] VARIANT_BOOL pvboolRemoteProgramMode);
 		[id(0x000000c8), propget] HRESULT RemoteProgramMode([out, retval] VARIANT_BOOL* pvboolRemoteProgramMode);
-		[id(0x000000c9)] HRESULT ServerStartProgram( [in] BSTR bstrExecutablePath, [in] BSTR bstrFilePath, [in] BSTR bstrWorkingDirectory,
+		[id(0x000000c9)] HRESULT ServerStartProgram([in] BSTR bstrExecutablePath, [in] BSTR bstrFilePath, [in] BSTR bstrWorkingDirectory,
 			[in] VARIANT_BOOL vbExpandEnvVarInWorkingDirectoryOnServer, [in] BSTR bstrArguments, [in] VARIANT_BOOL vbExpandEnvVarInArgumentsOnServer);
 	};
 
@@ -497,8 +494,8 @@ library FreeRdpActivex
 		[id(0x000000c9)] HRESULT Launch();
 		[id(0x000000ca), propput] HRESULT RdpFileContents([in] BSTR pszRdpFile);
 		[id(0x000000ca), propget] HRESULT RdpFileContents([out, retval] BSTR* pszRdpFile);
-		[id(0x000000cb)] HRESULT SetRdpProperty( [in] BSTR szProperty, [in] VARIANT Value);
-		[id(0x000000cc)] HRESULT GetRdpProperty( [in] BSTR szProperty, [out, retval] VARIANT* pValue);
+		[id(0x000000cb)] HRESULT SetRdpProperty([in] BSTR szProperty, [in] VARIANT Value);
+		[id(0x000000cc)] HRESULT GetRdpProperty([in] BSTR szProperty, [out, retval] VARIANT* pValue);
 		[id(0x000000cd), propget] HRESULT IsRemoteProgramClientInstalled([out, retval] VARIANT_BOOL* pbClientInstalled);
 		[id(0x000000d3), propput] HRESULT PublicMode([in] VARIANT_BOOL pfPublicMode);
 		[id(0x000000d3), propget] HRESULT PublicMode([out, retval] VARIANT_BOOL* pfPublicMode);
@@ -527,8 +524,8 @@ library FreeRdpActivex
 	interface IMsRdpDeviceCollection : IUnknown
 	{
 		HRESULT _stdcall RescanDevices([in] VARIANT_BOOL vboolDynRedir);
-		[propget] HRESULT _stdcall DeviceByIndex( [in] unsigned long index, [out, retval] IMsRdpDevice** ppDevice);
-		[propget] HRESULT _stdcall DeviceById( [in] BSTR devInstanceId, [out, retval] IMsRdpDevice** ppDevice);
+		[propget] HRESULT _stdcall DeviceByIndex([in] unsigned long index, [out, retval] IMsRdpDevice** ppDevice);
+		[propget] HRESULT _stdcall DeviceById([in] BSTR devInstanceId, [out, retval] IMsRdpDevice** ppDevice);
 		[propget] HRESULT _stdcall DeviceCount([out, retval] unsigned long* pDeviceCount);
 	};
 
@@ -552,7 +549,7 @@ library FreeRdpActivex
 	interface IMsRdpDriveCollection : IUnknown
 	{
 		HRESULT _stdcall RescanDrives(VARIANT_BOOL vboolDynRedir);
-		[propget] HRESULT _stdcall DriveByIndex( [in] unsigned long index, [out, retval] IMsRdpDrive** ppDevice);
+		[propget] HRESULT _stdcall DriveByIndex([in] unsigned long index, [out, retval] IMsRdpDrive** ppDevice);
 		[propget] HRESULT _stdcall DriveCount([out, retval] unsigned long* pDriveCount);
 	};
 
@@ -581,8 +578,8 @@ library FreeRdpActivex
 	]
 	interface IMsRdpClientNonScriptable : IMsTscNonScriptable
 	{
-		HRESULT _stdcall NotifyRedirectDeviceChange( [in] UINT_PTR wParam, [in] LONG_PTR lParam);
-		HRESULT _stdcall SendKeys( [in] long numKeys, [in] VARIANT_BOOL* pbArrayKeyUp, [in] long* plKeyData);
+		HRESULT _stdcall NotifyRedirectDeviceChange([in] UINT_PTR wParam, [in] LONG_PTR lParam);
+		HRESULT _stdcall SendKeys([in] long numKeys, [in] VARIANT_BOOL* pbArrayKeyUp, [in] long* plKeyData);
 	};
 
 	[
@@ -667,7 +664,7 @@ library FreeRdpActivex
 		[propput] HRESULT _stdcall UseMultimon([in] VARIANT_BOOL pfUseMultimon);
 		[propget] HRESULT _stdcall UseMultimon([out, retval] VARIANT_BOOL* pfUseMultimon);
 		[propget] HRESULT _stdcall RemoteMonitorCount([out, retval] unsigned long* pcRemoteMonitors);
-		HRESULT _stdcall GetRemoteMonitorsBoundingBox( [out] long* pLeft, [out] long* pTop, [out] long* pRight, [out] long* pBottom);
+		HRESULT _stdcall GetRemoteMonitorsBoundingBox([out] long* pLeft, [out] long* pTop, [out] long* pRight, [out] long* pBottom);
 		[propget] HRESULT _stdcall RemoteMonitorLayoutMatchesLocal([out, retval] VARIANT_BOOL* pfRemoteMatchesLocal);
 		[propput] HRESULT _stdcall DisableConnectionBar([in] VARIANT_BOOL rhs);
 		[propput] HRESULT _stdcall DisableRemoteAppCapsCheck([in] VARIANT_BOOL pfDisableRemoteAppCapsCheck);
@@ -785,7 +782,7 @@ library FreeRdpActivex
 		[id(0x0000001e)] HRESULT Connect();
 		[id(0x0000001f)] HRESULT Disconnect();
 		[id(0x00000021)] HRESULT CreateVirtualChannels([in] BSTR newVal);
-		[id(0x00000022)] HRESULT SendOnVirtualChannel( [in] BSTR chanName, [in] BSTR ChanData);
+		[id(0x00000022)] HRESULT SendOnVirtualChannel([in] BSTR chanName, [in] BSTR ChanData);
 	};
 
 	typedef enum
@@ -842,8 +839,8 @@ library FreeRdpActivex
 		[id(0x00000068), propput] HRESULT FullScreen([in] VARIANT_BOOL pfFullScreen);
 		[id(0x00000068), propget] HRESULT FullScreen([out, retval] VARIANT_BOOL* pfFullScreen);
 
-		[id(0x00000023)] HRESULT SetVirtualChannelOptions( [in] BSTR chanName, [in] long chanOptions);
-		[id(0x00000024)] HRESULT GetVirtualChannelOptions( [in] BSTR chanName, [out, retval] long* pChanOptions);
+		[id(0x00000023)] HRESULT SetVirtualChannelOptions([in] BSTR chanName, [in] long chanOptions);
+		[id(0x00000024)] HRESULT GetVirtualChannelOptions([in] BSTR chanName, [out, retval] long* pChanOptions);
 		[id(0x00000025)] HRESULT RequestClose([out, retval] ControlCloseStatus* pCloseStatus);
 	};
 
@@ -892,7 +889,7 @@ library FreeRdpActivex
 	{
 		[id(0x000001f4), propget] HRESULT TransportSettings([out, retval] IMsRdpClientTransportSettings** ppXportSet);
 		[id(0x000001f6), propget] HRESULT AdvancedSettings6([out, retval] IMsRdpClientAdvancedSettings5** ppAdvSettings);
-		[id(0x000001f7)] HRESULT GetErrorDescription( [in] unsigned int disconnectReason, [in] unsigned int ExtendedDisconnectReason, [out, retval] BSTR* pBstrErrorMsg);
+		[id(0x000001f7)] HRESULT GetErrorDescription([in] unsigned int disconnectReason, [in] unsigned int ExtendedDisconnectReason, [out, retval] BSTR* pBstrErrorMsg);
 		[id(0x000001f8), propget] HRESULT RemoteProgram([out, retval] ITSRemoteProgram** ppRemoteProgram);
 		[id(0x000001f9), propget] HRESULT MsRdpClientShell([out, retval] IMsRdpClientShell** ppLauncher);
 	};
@@ -919,7 +916,7 @@ library FreeRdpActivex
 	{
 		[id(0x00000258), propget] HRESULT AdvancedSettings8([out, retval] IMsRdpClientAdvancedSettings7** ppAdvSettings);
 		[id(0x00000259), propget] HRESULT TransportSettings3([out, retval] IMsRdpClientTransportSettings3** ppXportSet3);
-		[id(0x0000025a)] HRESULT GetStatusText( [in] unsigned int statusCode, [out, retval] BSTR* pBstrStatusText);
+		[id(0x0000025a)] HRESULT GetStatusText([in] unsigned int statusCode, [out, retval] BSTR* pBstrStatusText);
 		[id(0x0000025b), propget] HRESULT SecuredSettings3([out, retval] IMsRdpClientSecuredSettings2** ppSecuredSettings);
 		[id(0x0000025c), propget] HRESULT RemoteProgram2([out, retval] ITSRemoteProgram2** ppRemoteProgram);
 	};
@@ -949,7 +946,7 @@ library FreeRdpActivex
 	{
 		[id(0x000002bc)] HRESULT SendRemoteAction([in] RemoteSessionActionType actionType);
 		[id(0x000002bd), propget] HRESULT AdvancedSettings9([out, retval] IMsRdpClientAdvancedSettings8** ppAdvSettings);
-		[id(0x000002be)] HRESULT Reconnect( [in] unsigned long ulWidth, [in] unsigned long ulHeight, [out, retval] ControlReconnectStatus* pReconnectStatus);
+		[id(0x000002be)] HRESULT Reconnect([in] unsigned long ulWidth, [in] unsigned long ulHeight, [out, retval] ControlReconnectStatus* pReconnectStatus);
 	};
 
 	[
@@ -970,8 +967,8 @@ library FreeRdpActivex
 			[in] unsigned long ulOrientation,
 			[in] unsigned long ulDesktopScaleFactor,
 			[in] unsigned long ulDeviceScaleFactor);
-		[id(0x00000323)] HRESULT attachEvent( [in] BSTR eventName, [in] IDispatch* callback);
-		[id(0x00000324)] HRESULT detachEvent( [in] BSTR eventName, [in] IDispatch* callback);
+		[id(0x00000323)] HRESULT attachEvent([in] BSTR eventName, [in] IDispatch* callback);
+		[id(0x00000324)] HRESULT detachEvent([in] BSTR eventName, [in] IDispatch* callback);
 	};
 
 	// Main event interface.
@@ -1014,41 +1011,40 @@ library FreeRdpActivex
 		[id(0x00000004)] void OnDisconnected([in] long discReason);
 		[id(0x00000005)] void OnEnterFullScreenMode();
 		[id(0x00000006)] void OnLeaveFullScreenMode();
-		[id(0x00000007)] void OnChannelReceivedData( [in] BSTR chanName, [in] BSTR data);
+		[id(0x00000007)] void OnChannelReceivedData([in] BSTR chanName, [in] BSTR data);
 		[id(0x00000008)] void OnRequestGoFullScreen();
 		[id(0x00000009)] void OnRequestLeaveFullScreen();
 		[id(0x0000000a)] void OnFatalError([in] long errorCode);
 		[id(0x0000000b)] void OnWarning([in] long warningCode);
-		[id(0x0000000c)] void OnRemoteDesktopSizeChange( [in] long width, [in] long height);
+		[id(0x0000000c)] void OnRemoteDesktopSizeChange([in] long width, [in] long height);
 		[id(0x0000000d)] void OnIdleTimeoutNotification();
 		[id(0x0000000e)] void OnRequestContainerMinimize();
 		[id(0x0000000f)] void OnConfirmClose([out, retval] VARIANT_BOOL* pfAllowClose);
-		[id(0x00000010)] void OnReceivedTSPublicKey( [in] BSTR publicKey, [out, retval] VARIANT_BOOL* pfContinueLogon);
-		[id(0x00000011)] void OnAutoReconnecting( [in] long disconnectReason, [in] long attemptCount, [out, retval] AutoReconnectContinueState* pArcContinueStatus);
+		[id(0x00000010)] void OnReceivedTSPublicKey([in] BSTR publicKey, [out, retval] VARIANT_BOOL* pfContinueLogon);
+		[id(0x00000011)] void OnAutoReconnecting([in] long disconnectReason, [in] long attemptCount, [out, retval] AutoReconnectContinueState* pArcContinueStatus);
 		[id(0x00000012)] void OnAuthenticationWarningDisplayed();
 		[id(0x00000013)] void OnAuthenticationWarningDismissed();
-		[id(0x00000014)] void OnRemoteProgramResult( [in] BSTR bstrRemoteProgram, [in] RemoteProgramResult lError, [in] VARIANT_BOOL vbIsExecutable);
-		[id(0x00000015)] void OnRemoteProgramDisplayed( [in] VARIANT_BOOL vbDisplayed, [in] unsigned long uDisplayInformation);
-		[id(0x0000001d)] void OnRemoteWindowDisplayed( [in] VARIANT_BOOL vbDisplayed, [in] wireHWND hwnd, [in] RemoteWindowDisplayedAttribute windowAttribute);
+		[id(0x00000014)] void OnRemoteProgramResult([in] BSTR bstrRemoteProgram, [in] RemoteProgramResult lError, [in] VARIANT_BOOL vbIsExecutable);
+		[id(0x00000015)] void OnRemoteProgramDisplayed([in] VARIANT_BOOL vbDisplayed, [in] unsigned long uDisplayInformation);
+		[id(0x0000001d)] void OnRemoteWindowDisplayed([in] VARIANT_BOOL vbDisplayed, [in] wireHWND hwnd, [in] RemoteWindowDisplayedAttribute windowAttribute);
 		[id(0x00000016)] void OnLogonError([in] long lError);
 		[id(0x00000017)] void OnFocusReleased([in] int iDirection);
 		[id(0x00000018)] void OnUserNameAcquired([in] BSTR bstrUserName);
 		[id(0x0000001a)] void OnMouseInputModeChanged([in] VARIANT_BOOL fMouseModeRelative);
 		[id(0x0000001c)] void OnServiceMessageReceived([in] BSTR serviceMessage);
 		[id(0x0000001e)] void OnConnectionBarPullDown();
-		[id(0x00000020)] void OnNetworkStatusChanged( [in] unsigned long qualityLevel, [in] long bandwidth, [in] long rtt);
+		[id(0x00000020)] void OnNetworkStatusChanged([in] unsigned long qualityLevel, [in] long bandwidth, [in] long rtt);
 		[id(0x00000023)] void OnDevicesButtonPressed();
 		[id(0x00000021)] void OnAutoReconnected();
-		[id(0x00000022)] void OnAutoReconnecting2( [in] long disconnectReason, [in] VARIANT_BOOL networkAvailable, [in] long attemptCount, [in] long maxAttemptCount);
+		[id(0x00000022)] void OnAutoReconnecting2([in] long disconnectReason, [in] VARIANT_BOOL networkAvailable, [in] long attemptCount, [in] long maxAttemptCount);
 	};
 
 	//  The Free RDP Control class.
 	[
-		uuid(49052C41-EB70-464F-BA50-8AB2FDB0139B),
-		helpstring("Free RDP Control - version 1"), 
+		uuid(70736B4A-ACB7-4EAA-9EFF-2E18A6B86CDE),		
 		control
 	]
-	coclass FreeRdpActivex
+	coclass FreeRdpCtrl
 	{
 		interface IMsTscAx_Redist;
 		interface IMsTscAx;
@@ -1069,8 +1065,8 @@ library FreeRdpActivex
 		interface IMsRdpClientNonScriptable4;
 		interface IMsRdpClientNonScriptable5;
 		interface IMsRdpPreferredRedirectionInfo;
-		dispinterface _DFreeRdpActivex;
-		[source] dispinterface _DFreeRdpActivexEvents;
+		interface IFreeRdpCtrl;
+		[source] dispinterface _IFreeRdpCtrlEvents;
 	};
-
 };
+
