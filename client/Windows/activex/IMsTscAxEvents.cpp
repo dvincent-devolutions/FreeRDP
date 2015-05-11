@@ -50,35 +50,17 @@ DWORD WINAPI CFreeRdpCtrl::TerminationMonitoringThread(LPVOID parameters)
 	rThis.mFreeRdpThread = NULL; // The handle is closed in freerdp_client_stop();
 
 	rThis.ChangeToDisconnected(0);
+	if (rThis.m_hWnd != NULL)
+	{
+		rThis.Invalidate();
+		if (rThis.mIdleTimer != 0)
+		{
+			rThis.KillTimer(rThis.mIdleTimer);
+			rThis.mIdleTimer = 0;
+		}
+	}
 
 	return 0;
 }
 
 
-//extern "C" void FireOnConnected(void* handle)
-//{
-//	((CFreeRdpActivexCtrl*)handle)->FireOnConnected();
-//}
-//
-//
-//extern "C" void ConnectionResultHandler(rdpContext* context, ConnectionResultEventArgs* e)
-//{
-//	CFreeRdpActivexCtrl* pThis = (CFreeRdpActivexCtrl*)(context->instance->pUser);
-//	if (!e->result)
-//	{
-//		pThis->FireOnLoginCompleted();
-//	}
-//	else
-//	{
-//		pThis->FireOnDisconnected(0);
-//	}
-//}
-//
-//
-//extern "C" void TerminateHandler(rdpContext* context, TerminateEventArgs* e)
-//{
-//	CFreeRdpActivexCtrl* pThis = (CFreeRdpActivexCtrl*)(context->instance->pUser);
-//	pThis->FireOnDisconnected(0);
-//}
-//
-//

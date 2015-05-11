@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "FreeRdpCtrl.h"
 
+extern HINSTANCE hModuleInstance;
 
 extern "C" void ConnectionResultHandler(rdpContext* context, ConnectionResultEventArgs* e)
 {
@@ -21,6 +22,22 @@ extern "C" void ConnectionResultHandler(rdpContext* context, ConnectionResultEve
 
 CFreeRdpCtrl::CFreeRdpCtrl()
 {
+	mContext = NULL;
+	mSettings = NULL;
+
+	mConnectionState = NOT_CONNECTED;
+	mFullScreen = FALSE;
+	mMinutesToIdleTimeout = 0;
+
+	mFreeRdpThread = NULL;
+	mTerminationMonitoringThread = NULL;
+	mDisableScrollbars = TRUE;
+	mHasFocus = FALSE;
+}
+
+
+HRESULT CFreeRdpCtrl::FinalConstruct()
+{
 	ZeroMemory(&mClientEntryPoints, sizeof(RDP_CLIENT_ENTRY_POINTS));
 	mClientEntryPoints.Size = sizeof(RDP_CLIENT_ENTRY_POINTS);
 	mClientEntryPoints.Version = RDP_CLIENT_INTERFACE_VERSION;
@@ -28,21 +45,56 @@ CFreeRdpCtrl::CFreeRdpCtrl()
 	RdpClientEntry(&mClientEntryPoints);
 
 	mContext = freerdp_client_context_new(&mClientEntryPoints);
-	if (mContext)
+	if (mContext == NULL)
 	{
-		mSettings = mContext->settings;
-		mSettings->SoftwareGdi = TRUE;
-
-		mContext->pUser = this;
-		PubSub_SubscribeConnectionResult(mContext->pubSub, (pConnectionResultEventHandler)ConnectionResultHandler);
+		return E_OUTOFMEMORY;
 	}
 
-	mConnectionState = NOT_CONNECTED;
+	mSettings = mContext->settings;
+	mSettings->SoftwareGdi = TRUE;
 
-	mFreeRdpThread = NULL;
-	mTerminationMonitoringThread = NULL;
-	mDisableScrollbars = TRUE;
-	mHasFocus = FALSE;
+	mContext->pUser = this;
+	PubSub_SubscribeConnectionResult(mContext->pubSub, (pConnectionResultEventHandler)ConnectionResultHandler);
+
+	mDeffered.BitmapCacheEnabled = mSettings->BitmapCacheEnabled;
+	mDeffered.BitmapPersistenceEnabled = mSettings->BitmapCachePersistEnabled;
+	mDeffered.CompressionEnabled = mSettings->CompressionEnabled;
+	mDeffered.KeyboardLayout = mSettings->KeyboardLayout;
+	mDeffered.ClipBoardPrinterRedirectionEnabled = mSettings->RedirectClipboard;
+	mDeffered.SmartSizing = mSettings->SmartSizing;
+
+	if (instances.GetSize() == 0)
+	{
+		WNDCLASSW windowClass;
+		windowClass.style = 0;
+		windowClass.lpfnWndProc = (WNDPROC)FullScreenProc;
+		windowClass.cbClsExtra = 0;
+		windowClass.cbWndExtra = 0;
+		windowClass.hInstance = hModuleInstance;
+		windowClass.hIcon = NULL;
+		windowClass.hCursor = NULL;
+		windowClass.hbrBackground = NULL;
+		windowClass.lpszMenuName = NULL;
+		windowClass.lpszClassName = _T("FreeRdpFullScreen");
+		ATOM atom = RegisterClass(&windowClass);
+	}
+
+	instances.Add(this);
+
+	return S_OK;
+}
+
+
+void CFreeRdpCtrl::FinalRelease()
+{
+	for (int i = 0; i < instances.GetSize(); i++)
+	{
+		if (instances[i] == this)
+		{
+			instances.RemoveAt(i);
+			break;
+		}
+	}
 }
 
 
@@ -76,16 +128,33 @@ HRESULT CFreeRdpCtrl::OnDrawAdvanced(ATL_DRAWINFO& di)
 		bSelectOldRgn = (SelectClipRgn(di.hdcDraw, hRgnNew) != ERROR);
 	}
 
-	HBRUSH blackBrunsh = CreateSolidBrush(COLORREF(0));
-	SelectObject(di.hdcDraw, blackBrunsh);
+	HBRUSH blackBrush = CreateSolidBrush(RGB(0, 0, 0));
+	SelectObject(di.hdcDraw, blackBrush);
 	Rectangle(di.hdcDraw, rc.left, rc.top, rc.right, rc.bottom);
+
+	LPCTSTR text = NULL;
+	if (mConnectionState == NOT_CONNECTED)
+	{
+		text = mDisconnectedText;
+	}
+	else if (mConnectionState == CONNECTING)
+	{
+		text = mConnectingText;
+	}
+	if (text != NULL)
+	{
+		SetTextAlign(di.hdcDraw, TA_CENTER | TA_BASELINE);
+		SetTextColor(di.hdcDraw, RGB(255, 255, 255));
+		SetBkColor(di.hdcDraw, RGB(0, 0, 0));
+		TextOut(di.hdcDraw, (rc.left + rc.right) / 2, (rc.top + rc.bottom) / 2, text, lstrlen(text));
+	}
 
 	if (bSelectOldRgn)
 	{
 		SelectClipRgn(di.hdcDraw, hRgnOld);
 	}
 
-	DeleteObject(blackBrunsh);
+	DeleteObject(blackBrush);
 	DeleteObject(hRgnNew);
 
 	return S_OK;
@@ -95,10 +164,20 @@ HRESULT CFreeRdpCtrl::OnDrawAdvanced(ATL_DRAWINFO& di)
 LRESULT CFreeRdpCtrl::OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
 	mHasFocus = TRUE;
-	CWindow child = CWindow::GetWindow(GW_CHILD);
-	if (child)
+	if (mFullScreen == FALSE)
 	{
-		child.SetFocus();
+		CWindow child = CWindow::GetWindow(GW_CHILD);
+		if (child)
+		{
+			child.SetFocus();
+		}
+	}
+	else
+	{
+		if (mFullScreenWindow != NULL)
+		{
+			::SetFocus(mFullScreenWindow);
+		}
 	}
 
 	return 0;
@@ -107,6 +186,11 @@ LRESULT CFreeRdpCtrl::OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPar
 
 void CFreeRdpCtrl::SetupScrollBars(int clientWidth, int clientHeight)
 {
+	if (mSettings == NULL)
+	{
+		return;
+	}
+
 	int desktopWidth = clientWidth;
 	int desktopHeight = clientHeight;
 
@@ -160,7 +244,41 @@ LRESULT CFreeRdpCtrl::OnSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BO
 {
 	int cx = LOWORD(lParam);
 	int cy = HIWORD(lParam);
-	SetupScrollBars(cx, cy);
+	if (mDeffered.SmartSizing == FALSE)
+	{
+		SetupScrollBars(cx, cy);
+	}
+	else
+	{
+		if ((HWND)mFreeRdpWindow != NULL)
+		{
+			mFreeRdpWindow.SetWindowPos(NULL, 0, 0, cx, cy, SWP_NOZORDER);
+		}
+	}
+
+	return 0;
+}
+
+
+LRESULT CFreeRdpCtrl::OnUserInput(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+{
+	if (mMinutesToIdleTimeout > 0 && mConnectionState == CONNECTED)
+	{
+		SetTimer(mIdleTimer, mMinutesToIdleTimeout, NULL);
+	}
+
+	return 0;
+}
+
+
+LRESULT CFreeRdpCtrl::OnTimer(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+{
+	if (wParam == mIdleTimer)
+	{
+		KillTimer(mIdleTimer);
+		mIdleTimer = 0;
+		Disconnect();
+	}
 
 	return 0;
 }
@@ -294,23 +412,51 @@ LRESULT CFreeRdpCtrl::OnVScroll(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/,
 }
 
 
-LRESULT CFreeRdpCtrl::ChildProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CFreeRdpCtrl::InterceptProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	rdpContext* context = (rdpContext*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
-	CFreeRdpCtrl& ctrl = *(CFreeRdpCtrl*)(context->pUser);
+	if (context == NULL)
+	{
+		return 0;
+	}
+	CFreeRdpCtrl& parentCtrl = *(CFreeRdpCtrl*)(context->pUser);
+
+	if (parentCtrl.mMinutesToIdleTimeout > 0)
+	{
+		if (msg >= WM_MOUSEFIRST && msg <= WM_MOUSELAST || msg >= WM_KEYFIRST && msg <= WM_KEYLAST)
+		{
+			parentCtrl.SetTimer(parentCtrl.mIdleTimer, parentCtrl.mMinutesToIdleTimeout, NULL);
+		}
+	}
 
 	if (msg == WM_RBUTTONDOWN || msg == WM_MBUTTONDOWN || msg == WM_LBUTTONDOWN)
 	{
-		if (ctrl.mHasFocus == FALSE)
+		if (parentCtrl.mHasFocus == FALSE)
 		{
-			ctrl.SetFocus();
+			if (parentCtrl.mFullScreen == FALSE)
+			{
+				parentCtrl.SetFocus();
+			}
+			else
+			{
+				parentCtrl.mFullScreenWindow.SetFocus();
+			}
 		}
 	}
 	else if (msg == WM_KILLFOCUS)
 	{
-		ctrl.mHasFocus = FALSE;
+		parentCtrl.mHasFocus = FALSE;
 	}
-	return CallWindowProc((WNDPROC)ctrl.mChildProc, hwnd, msg, wParam, lParam);
+	else if (msg == WM_DESTROY)
+	{
+		parentCtrl.mFreeRdpWindow.Detach();
+	}
+	else if (msg == WM_AX_TRANSFERDEFERRED)
+	{
+		parentCtrl.TransferDefferedProperties();
+	}
+
+	return CallWindowProc((WNDPROC)parentCtrl.mChildProc, hwnd, msg, wParam, lParam);
 }
 
 
@@ -320,11 +466,10 @@ LRESULT CFreeRdpCtrl::OnParentNotify(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lPar
 	if (message == WM_CREATE)
 	{
 		mDisableScrollbars = FALSE;
-		CWindow child = CWindow::GetWindow(GW_CHILD);
-		if (child)
+		mFreeRdpWindow = CWindow::GetWindow(GW_CHILD);
+		if ((HWND)mFreeRdpWindow != NULL)
 		{
-			mChildProc = child.GetWindowLongPtr(GWLP_WNDPROC);
-			child.SetWindowLongPtr(GWLP_WNDPROC, (LONG_PTR)CFreeRdpCtrl::ChildProc);
+			mChildProc = mFreeRdpWindow.SetWindowLongPtr(GWLP_WNDPROC, (LONG_PTR)CFreeRdpCtrl::InterceptProc);
 
 			mHorizontalPos = 0;
 			mVerticalPos = 0;
@@ -356,17 +501,43 @@ LRESULT CFreeRdpCtrl::OnParentNotify(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lPar
 			{
 				PostMessage(WM_SETFOCUS);
 			}
+
+			if (mMinutesToIdleTimeout > 0)
+			{
+				mIdleTimer = SetTimer(mIdleTimer, mMinutesToIdleTimeout, NULL);
+			}
 		}
 	}
 	else if (message == WM_DESTROY)
 	{
 		mDisableScrollbars = TRUE;
 		ShowScrollBar(SB_BOTH, FALSE);
+		mFreeRdpWindow.Detach();
 	}
 
 	return 0;
 }
 
+
+void CFreeRdpCtrl::PostTransferMessage()
+{
+	if (mFreeRdpWindow != NULL)
+	{
+		mFreeRdpWindow.PostMessage(WM_AX_TRANSFERDEFERRED);
+	}
+}
+
+
+void CFreeRdpCtrl::TransferDefferedProperties()
+{
+	mSettings->BitmapCacheEnabled = mDeffered.BitmapCacheEnabled;
+	mSettings->BitmapCachePersistEnabled = mDeffered.BitmapPersistenceEnabled;
+	mSettings->CompressionEnabled = mDeffered.CompressionEnabled;
+	mSettings->KeyboardLayout = mDeffered.KeyboardLayout;
+	mSettings->RedirectClipboard = mDeffered.ClipBoardPrinterRedirectionEnabled;
+	mSettings->RedirectPrinters = mDeffered.ClipBoardPrinterRedirectionEnabled;
+	mSettings->SmartSizing = mDeffered.SmartSizing;
+}
 
 void CFreeRdpCtrl::ChangeToConnecting()
 {
@@ -378,6 +549,10 @@ void CFreeRdpCtrl::ChangeToConnecting()
 void CFreeRdpCtrl::ChangeToConnected()
 {
 	mConnectionState = CONNECTED;
+	if (mFullScreen == TRUE && mFullScreenWindow == NULL && m_hWnd != NULL)
+	{
+		PostMessage(WM_AX_STARTFULLSCREEN, 0, 0);
+	}
 	Fire_OnConnected();
 }
 
@@ -385,6 +560,10 @@ void CFreeRdpCtrl::ChangeToConnected()
 void CFreeRdpCtrl::ChangeToLoginCompleted()
 {
 	mConnectionState = CONNECTED;
+	if (mFullScreen == TRUE && mFullScreenWindow == NULL && m_hWnd != NULL)
+	{
+		PostMessage(WM_AX_STARTFULLSCREEN, 0, 0);
+	}
 	Fire_OnLoginComplete();
 }
 
@@ -392,7 +571,26 @@ void CFreeRdpCtrl::ChangeToLoginCompleted()
 void CFreeRdpCtrl::ChangeToDisconnected(long reason)
 {
 	mConnectionState = NOT_CONNECTED;
+	if (mFullScreen == TRUE && mFullScreenWindow != NULL && m_hWnd != NULL)
+	{
+		PostMessage(WM_AX_ENDFULLSCREEN, 0, 0);
+	}
 	Fire_OnDisconnected(reason);
 }
+
+
+LRESULT CFreeRdpCtrl::OnStartFullScreen(UINT, WPARAM, LPARAM, BOOL&)
+{
+	StartFullScreen();
+	return 0;
+}
+
+
+LRESULT CFreeRdpCtrl::OnEndFullScreen(UINT, WPARAM, LPARAM, BOOL&)
+{
+	EndFullScreen();
+	return 0;
+}
+
 
 

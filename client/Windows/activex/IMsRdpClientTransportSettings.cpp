@@ -4,120 +4,71 @@
 #include "FreeRdpCtrl.h"
 
 
-//STDMETHODIMP_(ULONG) CFreeRdpCtrl::AddRef()
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
-//
-//	return pThis->ExternalAddRef();
-//}
-//
-//
-//STDMETHODIMP_(ULONG) CFreeRdpCtrl::Release()
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
-//
-//	return pThis->ExternalRelease();
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::QueryInterface(REFIID iid, LPVOID* ppvObj)
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
-//
-//	return pThis->ExternalQueryInterface(&iid, ppvObj);
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::GetTypeInfoCount(UINT* pCount)
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
-//
-//	*pCount = 1;
-//
-//	return S_OK;
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::GetTypeInfo(UINT info, LCID lcid, ITypeInfo** pInfo)
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
-//
-//	if (info != 0)
-//	{
-//		return DISP_E_BADINDEX;
-//	}
-//
-//	if (pThis->mRdpClientTransportSettingsTypeInfo == NULL)
-//	{
-//		HRESULT result = pThis->GetTypeInfoOfGuid(lcid, IID_IMsRdpClient9, &pThis->mRdpClientTransportSettingsTypeInfo);
-//		if (FAILED(result))
-//		{
-//			pThis->mRdpClientTransportSettingsTypeInfo = NULL;
-//			return result;
-//		}
-//	}
-//	pThis->mRdpClientTransportSettingsTypeInfo->AddRef();
-//	*pInfo = pThis->mRdpClientTransportSettingsTypeInfo;
-//
-//	return S_OK;
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames, LCID lcid, DISPID* rgdispid)
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
-//
-//	if (pThis->mRdpClientTransportSettingsTypeInfo == NULL)
-//	{
-//		return E_FAIL;
-//	}
-//
-//	return DispGetIDsOfNames(pThis->mRdpClientTransportSettingsTypeInfo, rgszNames, cNames, rgdispid);
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD flags, DISPPARAMS* pParams, VARIANT* pResult, EXCEPINFO* pExcep, UINT* pErr)
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
-//
-//	if (pThis->mRdpClientTransportSettingsTypeInfo == NULL)
-//	{
-//		return E_FAIL;
-//	}
-//
-//	return DispInvoke(this, pThis->mRdpClientTransportSettingsTypeInfo, dispid, flags, pParams, pResult, pExcep, pErr);
-//}
-
-
 STDMETHODIMP CFreeRdpCtrl::put_GatewayHostname(BSTR pProxyHostname)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
+	USES_CONVERSION;
 
-	return E_NOTIMPL;
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	mSettings->GatewayHostname = _strdup(OLE2A(pProxyHostname));
+	if (!mSettings->GatewayHostname)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_GatewayHostname(BSTR *pProxyHostname)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
 
-	return E_NOTIMPL;
+	try
+	{
+		CComBSTR string(mSettings->GatewayHostname);
+		string.CopyTo(pProxyHostname);
+	}
+	catch (...)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_GatewayUsageMethod(unsigned long pulProxyUsageMethod)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	freerdp_set_gateway_usage_method(mSettings, pulProxyUsageMethod);
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_GatewayUsageMethod(unsigned long *pulProxyUsageMethod)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
-
-	return E_NOTIMPL;
+	*pulProxyUsageMethod = mSettings->GatewayUsageMethod;
+	return S_OK;
 }
 
 
@@ -171,17 +122,15 @@ STDMETHODIMP CFreeRdpCtrl::get_GatewayUserSelectedCredsSource(unsigned long *pul
 
 STDMETHODIMP CFreeRdpCtrl::get_GatewayIsSupported(long *pfProxyIsSupported)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
-
-	return E_NOTIMPL;
+	*pfProxyIsSupported = TRUE;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_GatewayDefaultUsageMethod(unsigned long *pulProxyDefaultUsageMethod)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
-
-	return E_NOTIMPL;
+	*pulProxyDefaultUsageMethod = 0;
+	return S_OK;
 }
 
 
@@ -283,41 +232,112 @@ STDMETHODIMP CFreeRdpCtrl::get_GatewayEncryptedOtpCookieSize(unsigned long *pulE
 
 STDMETHODIMP CFreeRdpCtrl::put_GatewayUsername(BSTR pProxyUsername)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
+	USES_CONVERSION;
 
-	return E_NOTIMPL;
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	mSettings->GatewayUsername = _strdup(OLE2A(pProxyUsername));
+	if (!mSettings->GatewayUsername)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_GatewayUsername(BSTR *pProxyUsername)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
 
-	return E_NOTIMPL;
+	try
+	{
+		CComBSTR string(mSettings->GatewayUsername);
+		string.CopyTo(pProxyUsername);
+	}
+	catch (...)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_GatewayDomain(BSTR pProxyDomain)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
+	USES_CONVERSION;
 
-	return E_NOTIMPL;
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	mSettings->GatewayDomain = _strdup(OLE2A(pProxyDomain));
+	if (!mSettings->GatewayDomain)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_GatewayDomain(BSTR *pProxyDomain)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
 
-	return E_NOTIMPL;
+	try
+	{
+		CComBSTR string(mSettings->GatewayDomain);
+		string.CopyTo(pProxyDomain);
+	}
+	catch (...)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_GatewayPassword(BSTR rhs)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
+	USES_CONVERSION;
 
-	return E_NOTIMPL;
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	mSettings->GatewayPassword = _strdup(OLE2A(rhs));
+	if (!mSettings->GatewayPassword)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 

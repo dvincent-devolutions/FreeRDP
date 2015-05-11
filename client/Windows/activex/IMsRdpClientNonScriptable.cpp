@@ -174,17 +174,25 @@ STDMETHODIMP CFreeRdpCtrl::get_PromptForCredentials(VARIANT_BOOL *pfPrompt)
 
 STDMETHODIMP CFreeRdpCtrl::put_NegotiateSecurityLayer(VARIANT_BOOL pfNegotiate)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	mSettings->NegotiateSecurityLayer = (pfNegotiate == FALSE ? FALSE : TRUE);
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_NegotiateSecurityLayer(VARIANT_BOOL *pfNegotiate)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	*pfNegotiate = (mSettings->NegotiateSecurityLayer == FALSE ? FALSE : -1);
+	return S_OK;
 }
 
 

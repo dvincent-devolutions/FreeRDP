@@ -31,6 +31,7 @@ set(${MODULE_PREFIX}_SRCS
 	dllMain.cpp
 	FreeRdpAx.cpp
 	FreeRdpCtrl.cpp
+	FullScreen.cpp
 	IMsRdpClient.cpp
 	IMsRdpClientAdvancedSettings.cpp
 	IMsRdpClientNonScriptable.cpp
@@ -45,6 +46,7 @@ set(${MODULE_PREFIX}_SRCS
 	IMsTscAxEvents.cpp
 	IMsTscDebug.cpp
 	ITsRemoteProgram.cpp
+	VirtualChannels.cpp
 	FreeRdpAx.def
 	FreeRdpAx.rc
 	FreeRdpAx.rgs

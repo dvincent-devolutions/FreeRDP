@@ -4,136 +4,121 @@
 #include "FreeRdpCtrl.h"
 
 
-//STDMETHODIMP_(ULONG) CFreeRdpCtrl::AddRef()
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
-//
-//	return pThis->ExternalAddRef();
-//}
-//
-//
-//STDMETHODIMP_(ULONG) CFreeRdpCtrl::Release()
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
-//
-//	return pThis->ExternalRelease();
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::QueryInterface(REFIID iid, LPVOID* ppvObj)
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
-//
-//	return pThis->ExternalQueryInterface(&iid, ppvObj);
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::GetTypeInfoCount(UINT* pCount)
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
-//
-//	*pCount = 1;
-//
-//	return S_OK;
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::GetTypeInfo(UINT info, LCID lcid, ITypeInfo** pInfo)
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
-//
-//	if (info != 0)
-//	{
-//		return DISP_E_BADINDEX;
-//	}
-//
-//	if (pThis->mRdpClientSecuredSettingsTypeInfo == NULL)
-//	{
-//		HRESULT result = pThis->GetTypeInfoOfGuid(lcid, IID_IMsRdpClientSecuredSettings2, &pThis->mRdpClientSecuredSettingsTypeInfo);
-//		if (FAILED(result))
-//		{
-//			pThis->mRdpClientSecuredSettingsTypeInfo = NULL;
-//			return result;
-//		}
-//	}
-//	pThis->mRdpClientSecuredSettingsTypeInfo->AddRef();
-//	*pInfo = pThis->mRdpClientSecuredSettingsTypeInfo;
-//
-//	return S_OK;
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames, LCID lcid, DISPID* rgdispid)
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
-//
-//	if (pThis->mRdpClientSecuredSettingsTypeInfo == NULL)
-//	{
-//		return E_FAIL;
-//	}
-//
-//	return DispGetIDsOfNames(pThis->mRdpClientSecuredSettingsTypeInfo, rgszNames, cNames, rgdispid);
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD flags, DISPPARAMS* pParams, VARIANT* pResult, EXCEPINFO* pExcep, UINT* pErr)
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
-//
-//	if (pThis->mRdpClientSecuredSettingsTypeInfo == NULL)
-//	{
-//		return E_FAIL;
-//	}
-//
-//	return DispInvoke(this, pThis->mRdpClientSecuredSettingsTypeInfo, dispid, flags, pParams, pResult, pExcep, pErr);
-//}
-
-
 STDMETHODIMP CFreeRdpCtrl::put_StartProgram(BSTR pStartProgram)
 {
-	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
+	USES_CONVERSION;
 
-	return E_NOTIMPL;
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	mSettings->RemoteApplicationProgram = _strdup(OLE2A(pStartProgram));
+	if (!mSettings->RemoteApplicationProgram)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_StartProgram(BSTR *pStartProgram)
 {
-	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
 
-	return E_NOTIMPL;
+	try
+	{
+		CComBSTR string(mSettings->RemoteApplicationProgram);
+		string.CopyTo(pStartProgram);
+	}
+	catch (...)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_WorkDir(BSTR pWorkDir)
 {
-	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
+	USES_CONVERSION;
 
-	return E_NOTIMPL;
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	mSettings->ShellWorkingDirectory = _strdup(OLE2A(pWorkDir));
+	if (!mSettings->RemoteApplicationProgram)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_WorkDir(BSTR *pWorkDir)
 {
-	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
 
-	return E_NOTIMPL;
+	try
+	{
+		CComBSTR string(mSettings->ShellWorkingDirectory);
+		string.CopyTo(pWorkDir);
+	}
+	catch (...)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_FullScreen(long pfFullScreen)
 {
-	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
+	if (pfFullScreen == FALSE && mFullScreen == TRUE)
+	{
+		mFullScreen = FALSE;
+		if (mConnectionState != NOT_CONNECTED)
+		{
+			EndFullScreen();
+		}
+	}
+	else if (pfFullScreen != FALSE && mFullScreen == FALSE)
+	{
+		mFullScreen = TRUE;
+		if (mConnectionState != NOT_CONNECTED)
+		{
+			StartFullScreen();
+		}
+	}
 
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_FullScreen(long *pfFullScreen)
 {
-	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
-
-	return E_NOTIMPL;
+	*pfFullScreen = mFullScreen;
+	return S_OK;
 }
 
 
@@ -171,17 +156,45 @@ STDMETHODIMP CFreeRdpCtrl::get_AudioRedirectionMode(long *pAudioRedirectionMode)
 
 STDMETHODIMP CFreeRdpCtrl::get_PCB(BSTR *bstrPCB)
 {
-	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
 
-	return E_NOTIMPL;
+	try
+	{
+		CComBSTR string(mSettings->PreconnectionBlob);
+		string.CopyTo(bstrPCB);
+	}
+	catch (...)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_PCB(BSTR bstrPCB)
 {
-	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
+	USES_CONVERSION;
 
-	return E_NOTIMPL;
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	mSettings->PreconnectionBlob = _strdup(OLE2A(bstrPCB));
+	if (!mSettings->PreconnectionBlob)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 

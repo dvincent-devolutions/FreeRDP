@@ -2,7 +2,10 @@
 #pragma once
 #include "resource.h"       // main symbols
 #include <freerdp/freerdp.h>
+#include <freerdp/svc.h>
+#include <atlcoll.h>
 #include <atlctl.h>
+#include <atlstr.h>
 #include "FreeRdpAx_i.h"
 #include "_IFreeRdpCtrlEvents_CP.h"
 #include "IMsTscAxEvents_CP.H"
@@ -12,6 +15,10 @@ extern "C" FREERDP_API int RdpClientEntry(RDP_CLIENT_ENTRY_POINTS* pEntryPoints)
 #if defined(_WIN32_WCE) && !defined(_CE_DCOM) && !defined(_CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA)
 #error "Single-threaded COM objects are not properly supported on Windows CE platform, such as the Windows Mobile platforms that do not include full DCOM support. Define _CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA to force ATL to support creating single-thread COM object's and allow use of it's single-threaded COM object implementations. The threading model in your rgs file was set to 'Free' as that is the only threading model supported in non DCOM Windows CE platforms."
 #endif
+
+#define WM_AX_TRANSFERDEFERRED (WM_USER + 500)
+#define WM_AX_STARTFULLSCREEN (WM_USER + 501)
+#define WM_AX_ENDFULLSCREEN (WM_USER + 502)
 
 using namespace ATL;
 
@@ -51,8 +58,6 @@ class ATL_NO_VTABLE CFreeRdpCtrl :
 	public CProxyIMsTscAxEvents<CFreeRdpCtrl>
 {
 public:
-
-
 	CFreeRdpCtrl();
 	~CFreeRdpCtrl();
 
@@ -158,11 +163,16 @@ END_CONNECTION_POINT_MAP()
 
 BEGIN_MSG_MAP(CFreeRdpCtrl)
 	CHAIN_MSG_MAP(CComControl<CFreeRdpCtrl>)
+	MESSAGE_RANGE_HANDLER(WM_MOUSEFIRST, WM_MOUSELAST, OnUserInput)
+	MESSAGE_RANGE_HANDLER(WM_KEYFIRST, WM_KEYLAST, OnUserInput)
 	MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocus)
 	MESSAGE_HANDLER(WM_SIZE, OnSize)
 	MESSAGE_HANDLER(WM_HSCROLL, OnHScroll)
 	MESSAGE_HANDLER(WM_VSCROLL, OnVScroll)
 	MESSAGE_HANDLER(WM_PARENTNOTIFY, OnParentNotify)
+	MESSAGE_HANDLER(WM_AX_STARTFULLSCREEN, OnStartFullScreen)
+	MESSAGE_HANDLER(WM_AX_ENDFULLSCREEN, OnEndFullScreen)
+	MESSAGE_HANDLER(WM_TIMER, OnTimer)
 	DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
 
@@ -181,21 +191,42 @@ public:
 	LRESULT OnSetFocus(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnKillFocus(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnUserInput(UINT, WPARAM wParam, LPARAM, BOOL&);
+	LRESULT OnTimer(UINT, WPARAM, LPARAM lParam, BOOL&);
 	LRESULT OnHScroll(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnVScroll(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	static LRESULT ChildProc(HWND, UINT, WPARAM, LPARAM);
+	static LRESULT InterceptProc(HWND, UINT, WPARAM, LPARAM);
 	LRESULT OnParentNotify(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	void PostTransferMessage();
+	LRESULT OnStartFullScreen(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnEndFullScreen(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	static LRESULT FullScreenProc(HWND, UINT, WPARAM, LPARAM);
 
+	void TransferDefferedProperties();
+	void StartFullScreen();
+	void EndFullScreen();
+	static INT_PTR FullScreenBarProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	void ChangeToConnecting();
+	void ChangeToConnected();
+	void ChangeToLoginCompleted();
+	void ChangeToDisconnected(long reason);
+	static DWORD __stdcall TerminationMonitoringThread(LPVOID parameters);
+
+	void ClearVirtualChannels();
+	static CFreeRdpCtrl& GetInstanceFromVirtualInitHandle(LPVOID handle);
+	static CFreeRdpCtrl& GetInstanceFromVirtualOpenHandle(DWORD handle);
+	static void VCAPITYPE VirtualChannelOpenEvent(DWORD openHandle, UINT event, LPVOID pData, UINT32 dataLength, UINT32 totalLength, UINT32 dataFlags);
+	static void VCAPITYPE VirtualChannelInitEvent(LPVOID pInitHandle, UINT event, LPVOID pData, UINT dataLength);
+	static BOOL VCAPITYPE VirtualChannelEntry(PCHANNEL_ENTRY_POINTS pEntryPoints);
+	HRESULT CreateVirtualChannels();
+	HRESULT CreateVirtualChannels(CComBSTR& channelList);
+	HRESULT SendOnVirtualChannel(CComBSTR& channel, BYTE* data, UINT dataSize);
+	HRESULT SetVirtualChannelOptions(CStringA& chanName, long chanOptions);
+	HRESULT GetVirtualChannelOptions(CStringA& chanName, long* pChanOptions);
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-	HRESULT FinalConstruct()
-	{
-		return S_OK;
-	}
-
-	void FinalRelease()
-	{
-	}
+	HRESULT FinalConstruct();
+	void FinalRelease();
 
 	// Members.
 	enum ConnectionState
@@ -205,23 +236,49 @@ public:
 		CONNECTING = 2,
 	};
 
-	rdpContext* mContext;
-	rdpSettings* mSettings;
-	SHORT mConnectionState;
-	HANDLE mTerminationMonitoringThread;
-	HANDLE mFreeRdpThread;
-	RDP_CLIENT_ENTRY_POINTS mClientEntryPoints;
+	struct ReadChannelBuffer
+	{
+		BYTE* buffer;
+		UINT32 dataSize;
+	};
+
+	struct
+	{
+		BOOL BitmapCacheEnabled;
+		BOOL BitmapPersistenceEnabled;
+		BOOL CompressionEnabled;
+		UINT32 KeyboardLayout;
+		BOOL ClipBoardPrinterRedirectionEnabled;
+		BOOL SmartSizing;
+	} mDeffered;
 
 	int mHorizontalPos;
 	int mVerticalPos;
+	BOOL mFullScreen;
+	SHORT mConnectionState;
+	CString mConnectingText;
+	CString mDisconnectedText;
+	CString mFullScreenTitle;
+	CSimpleArray<CHANNEL_DEF> mVirtualChannels;
+	LONG mMinutesToIdleTimeout;
+
+	rdpContext* mContext;
+	rdpSettings* mSettings;
+	UINT_PTR mIdleTimer;
+	HANDLE mTerminationMonitoringThread;
+	HANDLE mFreeRdpThread;
+	RDP_CLIENT_ENTRY_POINTS mClientEntryPoints;
+	CHANNEL_ENTRY_POINTS_FREERDP mVirtualChannelEntryPoints;
+	LPVOID mVirtualChannelHandle;
+	CSimpleArray<DWORD> mOpenedChannelHandles;
+	CSimpleArray<ReadChannelBuffer> mReadChannelBuffers;
+	HANDLE mOpenedChannelsEvent;
+	static CSimpleArray<CFreeRdpCtrl*> instances;
 	BOOL mDisableScrollbars;
 	BOOL mHasFocus;
 	LONG_PTR mChildProc;
-	void ChangeToConnecting();
-	void ChangeToConnected();
-	void ChangeToLoginCompleted();
-	void ChangeToDisconnected(long reason);
-	static DWORD __stdcall TerminationMonitoringThread(LPVOID parameters);
+	CWindow mFreeRdpWindow;
+	CWindow mFullScreenWindow;
 
 	// IMsRdpClient9 interfaces methods.
 	STDMETHOD(put_Server)(BSTR serverName);
