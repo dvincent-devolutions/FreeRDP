@@ -25,6 +25,7 @@ set(${MODULE_PREFIX}_SRCS
 	_IFreeRdpCtrlEvents_CP.h
 	dllmain.h
 	FreeRdpCtrl.h
+	IMsRdpDevice.h
 	IMsTscAxEvents_CP.h
 	stdafx.h
 	targetver.h
@@ -79,8 +80,8 @@ add_definitions(-D_UNICODE -DUNICODE)
 add_library(${MODULE_NAME} MODULE ${${MODULE_PREFIX}_SRCS})
 set_source_files_properties(${INTERFACE_OUTPUTS} PROPERTIES GENERATED 1)
 
-add_custom_target(interfaces DEPENDS ${INTERFACE_OUTPUTS})
-add_dependencies(${MODULE_NAME} interfaces)
+#add_custom_target(interfaces DEPENDS ${INTERFACE_OUTPUTS})
+#add_dependencies(${MODULE_NAME} interfaces)
 
 list(APPEND ${MODULE_PREFIX}_LIBS wfreerdp-client)
 list(APPEND ${MODULE_PREFIX}_LIBS version)
@@ -92,4 +93,4 @@ if(VENDOR MATCHES "FreeRDP")
 endif()
 
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Client/Windows")
-set_property(TARGET interfaces PROPERTY FOLDER "Client/Windows")
+#set_property(TARGET interfaces PROPERTY FOLDER "Client/Windows")

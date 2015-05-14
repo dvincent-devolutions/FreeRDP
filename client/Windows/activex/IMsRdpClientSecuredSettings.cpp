@@ -17,6 +17,7 @@ STDMETHODIMP CFreeRdpCtrl::put_StartProgram(BSTR pStartProgram)
 		return E_FAIL;
 	}
 
+	free(mSettings->RemoteApplicationProgram);
 	mSettings->RemoteApplicationProgram = _strdup(OLE2A(pStartProgram));
 	if (!mSettings->RemoteApplicationProgram)
 	{
@@ -61,6 +62,7 @@ STDMETHODIMP CFreeRdpCtrl::put_WorkDir(BSTR pWorkDir)
 		return E_FAIL;
 	}
 
+	free(mSettings->ShellWorkingDirectory);
 	mSettings->ShellWorkingDirectory = _strdup(OLE2A(pWorkDir));
 	if (!mSettings->RemoteApplicationProgram)
 	{
@@ -140,17 +142,55 @@ STDMETHODIMP CFreeRdpCtrl::get_KeyboardHookMode(long *pkeyboardHookMode)
 
 STDMETHODIMP CFreeRdpCtrl::put_AudioRedirectionMode(long pAudioRedirectionMode)
 {
-	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	if (pAudioRedirectionMode == 0)
+	{
+		mSettings->AudioPlayback = TRUE;
+		mSettings->RemoteConsoleAudio = FALSE;
+	}
+	else if (pAudioRedirectionMode == 1)
+	{
+		mSettings->AudioPlayback = FALSE;
+		mSettings->RemoteConsoleAudio = TRUE;
+	}
+	else if (pAudioRedirectionMode == 2)
+	{
+		mSettings->AudioPlayback = FALSE;
+		mSettings->RemoteConsoleAudio = FALSE;
+	}
+	else
+	{
+		return E_INVALIDARG;
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_AudioRedirectionMode(long *pAudioRedirectionMode)
 {
-	//(CFreeRdpActivexCtrl, RdpClientSecuredSettings);
+	if (mSettings->AudioPlayback == FALSE && mSettings->RemoteConsoleAudio == FALSE)
+	{
+		*pAudioRedirectionMode = 2;
+	}
+	else if (mSettings->AudioPlayback == TRUE)
+	{
+		*pAudioRedirectionMode = 0;
+	}
+	else
+	{
+		*pAudioRedirectionMode = 1;
+	}
 
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 
@@ -188,6 +228,7 @@ STDMETHODIMP CFreeRdpCtrl::put_PCB(BSTR bstrPCB)
 		return E_FAIL;
 	}
 
+	free(mSettings->PreconnectionBlob);
 	mSettings->PreconnectionBlob = _strdup(OLE2A(bstrPCB));
 	if (!mSettings->PreconnectionBlob)
 	{

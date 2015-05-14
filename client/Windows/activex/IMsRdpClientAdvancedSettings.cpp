@@ -6,36 +6,48 @@
 
 STDMETHODIMP CFreeRdpCtrl::put_Compress(long pcompress)
 {
-	if (mDeffered.CompressionEnabled != pcompress)
+	if (mSettings == NULL)
 	{
-		mDeffered.CompressionEnabled = pcompress;
-		PostTransferMessage();
+		return E_OUTOFMEMORY;
 	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	mSettings->CompressionEnabled = pcompress;
+
 	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_Compress(long *pcompress)
 {
-	*pcompress = mDeffered.CompressionEnabled;
+	*pcompress = mSettings->CompressionEnabled;
 	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_BitmapPeristence(long pbitmapPeristence)
 {
-	if (mDeffered.BitmapCacheEnabled != pbitmapPeristence)
+	if (mSettings == NULL)
 	{
-		mDeffered.BitmapCacheEnabled = pbitmapPeristence;
-		PostTransferMessage();
+		return E_OUTOFMEMORY;
 	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	mSettings->BitmapCachePersistEnabled = pbitmapPeristence;
+
 	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_BitmapPeristence(long *pbitmapPeristence)
 {
-	*pbitmapPeristence = mDeffered.BitmapCacheEnabled;
+	*pbitmapPeristence = mSettings->BitmapCachePersistEnabled;
 	return S_OK;
 }
 
@@ -55,12 +67,17 @@ STDMETHODIMP CFreeRdpCtrl::get_allowBackgroundInput(long *pallowBackgroundInput)
 
 STDMETHODIMP CFreeRdpCtrl::put_KeyBoardLayoutStr(BSTR rhs)
 {
-	UINT32 keyboardLayout = StrToIntW(rhs);
-	if (mDeffered.KeyboardLayout != keyboardLayout)
+	if (mSettings == NULL)
 	{
-		mDeffered.KeyboardLayout = keyboardLayout;
-		PostTransferMessage();
+		return E_OUTOFMEMORY;
 	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	UINT32 keyboardLayout = StrToIntW(rhs);
+	mSettings->KeyboardLayout = keyboardLayout;
 	return S_OK;
 }
 
@@ -110,44 +127,53 @@ STDMETHODIMP CFreeRdpCtrl::put_IconIndex(long rhs)
 
 STDMETHODIMP CFreeRdpCtrl::put_ContainerHandledFullScreen(long pContainerHandledFullScreen)
 {
-	return E_NOTIMPL;
+	mContainerHandledFullScreen = (pContainerHandledFullScreen == 0 ? FALSE : TRUE);
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_ContainerHandledFullScreen(long *pContainerHandledFullScreen)
 {
-	return E_NOTIMPL;
+	*pContainerHandledFullScreen = mContainerHandledFullScreen;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_DisableRdpdr(long pDisableRdpdr)
 {
-	BOOL enableRdpdr = !pDisableRdpdr;
-	if (mDeffered.ClipBoardPrinterRedirectionEnabled != enableRdpdr)
+	if (mSettings == NULL)
 	{
-		mDeffered.ClipBoardPrinterRedirectionEnabled = enableRdpdr;
-		PostTransferMessage();
+		return E_OUTOFMEMORY;
 	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	BOOL enableRdpdr = !pDisableRdpdr;
+	mSettings->RedirectPrinters = enableRdpdr;
+	mSettings->RedirectClipboard = enableRdpdr;
+
 	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_DisableRdpdr(long *pDisableRdpdr)
 {
-	*pDisableRdpdr = !mDeffered.ClipBoardPrinterRedirectionEnabled;
+	*pDisableRdpdr = !mSettings->RedirectPrinters;
 	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_SmoothScroll(long psmoothScroll)
 {
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_SmoothScroll(long *psmoothScroll)
 {
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
@@ -165,61 +191,66 @@ STDMETHODIMP CFreeRdpCtrl::get_AcceleratorPassthrough(long *pacceleratorPassthro
 
 STDMETHODIMP CFreeRdpCtrl::put_ShadowBitmap(long pshadowBitmap)
 {
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_ShadowBitmap(long *pshadowBitmap)
 {
-	return E_NOTIMPL;
+	*pshadowBitmap = 1;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_TransportType(long ptransportType)
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_TransportType(long *ptransportType)
 {
-	return E_NOTIMPL;
+	*ptransportType = 0;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_SasSequence(long psasSequence)
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_SasSequence(long *psasSequence)
 {
-	return E_NOTIMPL;
+	*psasSequence = 0xAA03;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_EncryptionEnabled(long pencryptionEnabled)
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_EncryptionEnabled(long *pencryptionEnabled)
 {
-	return E_NOTIMPL;
+	*pencryptionEnabled = 1;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_DedicatedTerminal(long pdedicatedTerminal)
 {
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_DedicatedTerminal(long *pdedicatedTerminal)
 {
-	return E_NOTIMPL;
+	*pdedicatedTerminal = 0;
+	return S_OK;
 }
 
 
@@ -253,85 +284,102 @@ STDMETHODIMP CFreeRdpCtrl::get_RDPPort(long *prdpPort)
 
 STDMETHODIMP CFreeRdpCtrl::put_EnableMouse(long penableMouse)
 {
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_EnableMouse(long *penableMouse)
 {
-	return E_NOTIMPL;
+	*penableMouse = 1;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_DisableCtrlAltDel(long pdisableCtrlAltDel)
 {
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_DisableCtrlAltDel(long *pdisableCtrlAltDel)
 {
-	return E_NOTIMPL;
+	*pdisableCtrlAltDel = 0;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_EnableWindowsKey(long penableWindowsKey)
 {
-	return E_NOTIMPL;
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	mSettings->EnableWindowsKey = penableWindowsKey;
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_EnableWindowsKey(long *penableWindowsKey)
 {
+	*penableWindowsKey = mSettings->EnableWindowsKey;
 	return E_NOTIMPL;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_DoubleClickDetect(long pdoubleClickDetect)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_DoubleClickDetect(long *pdoubleClickDetect)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pdoubleClickDetect = 0;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_MaximizeShell(long pmaximizeShell)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	mSettings->MaximizeShell = pmaximizeShell;
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_MaximizeShell(long *pmaximizeShell)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pmaximizeShell = mSettings->MaximizeShell;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_HotKeyFullScreen(long photKeyFullScreen)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	mFullScreenKey = photKeyFullScreen;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_HotKeyFullScreen(long *photKeyFullScreen)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*photKeyFullScreen = mFullScreenKey;
+	return S_OK;
 }
 
 
@@ -433,185 +481,195 @@ STDMETHODIMP CFreeRdpCtrl::get_HotKeyCtrlAltDel(long *photKeyCtrlAltDel)
 
 STDMETHODIMP CFreeRdpCtrl::put_orderDrawThreshold(long porderDrawThreshold)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_orderDrawThreshold(long *porderDrawThreshold)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*porderDrawThreshold = 0;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_BitmapCacheSize(long pbitmapCacheSize)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_BitmapCacheSize(long *pbitmapCacheSize)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pbitmapCacheSize = 0;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_BitmapVirtualCacheSize(long pbitmapVirtualCacheSize)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_BitmapVirtualCacheSize(long *pbitmapVirtualCacheSize)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pbitmapVirtualCacheSize = 0;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_ScaleBitmapCachesByBPP(long pbScale)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_ScaleBitmapCachesByBPP(long *pbScale)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pbScale = 0;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_NumBitmapCaches(long pnumBitmapCaches)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_NumBitmapCaches(long *pnumBitmapCaches)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pnumBitmapCaches = 0;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_CachePersistenceActive(long pcachePersistenceActive)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	mSettings->BitmapCachePersistEnabled = (pcachePersistenceActive == FALSE ? FALSE : TRUE);
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_CachePersistenceActive(long *pcachePersistenceActive)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pcachePersistenceActive = mSettings->BitmapCachePersistEnabled;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_PersistCacheDirectory(BSTR rhs)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_brushSupportLevel(long pbrushSupportLevel)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_brushSupportLevel(long *pbrushSupportLevel)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pbrushSupportLevel = 0;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_minInputSendInterval(long pminInputSendInterval)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	mMinInputSendInterval = pminInputSendInterval;
+	if ((HWND)mFreeRdpWindow != NULL)
+	{
+		if (mMinInputSendInterval == 0)
+		{
+			mFreeRdpWindow.KillTimer(TIMER_INPUT_SEND_INTERVAL);
+			mHoldingMouse = FALSE;
+			if (mLastInput.dirty != FALSE)
+			{
+				mLastInput.dirty = FALSE;
+				mFreeRdpWindow.SendMessage(WM_MOUSEMOVE, mLastInput.wParam, mLastInput.lParam);
+			}
+		}
+	}
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_minInputSendInterval(long *pminInputSendInterval)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pminInputSendInterval = mMinInputSendInterval;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_InputEventsAtOnce(long pinputEventsAtOnce)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_InputEventsAtOnce(long *pinputEventsAtOnce)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pinputEventsAtOnce = 0;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_maxEventCount(long pmaxEventCount)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_maxEventCount(long *pmaxEventCount)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pmaxEventCount = 0;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_keepAliveInterval(long pkeepAliveInterval)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	mKeepAliveInterval = pkeepAliveInterval;
+	if (mKeepAliveInterval < 10000)
+	{
+		mKeepAliveInterval = 0;
+	}
+	else if (mKeepAliveInterval > 3600000)
+	{
+		mKeepAliveInterval = 3600000;
+	}
+	if ((HWND)mFreeRdpWindow != NULL)
+	{
+		if (mKeepAliveInterval == 0)
+		{
+			mFreeRdpWindow.KillTimer(TIMER_KEEP_ALIVE);
+		}
+		else
+		{
+			mFreeRdpWindow.SetTimer(TIMER_KEEP_ALIVE, mKeepAliveInterval);
+		}
+	}
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_keepAliveInterval(long *pkeepAliveInterval)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pkeepAliveInterval = mKeepAliveInterval;
+	return S_OK;
 }
 
 
@@ -665,92 +723,88 @@ STDMETHODIMP CFreeRdpCtrl::get_singleConnectionTimeout(long *psingleConnectionTi
 
 STDMETHODIMP CFreeRdpCtrl::put_KeyboardType(long pkeyboardType)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_KeyboardType(long *pkeyboardType)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_KeyboardSubType(long pkeyboardSubType)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_KeyboardSubType(long *pkeyboardSubType)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_KeyboardFunctionKey(long pkeyboardFunctionKey)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_KeyboardFunctionKey(long *pkeyboardFunctionKey)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_WinceFixedPalette(long pwinceFixedPalette)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_WinceFixedPalette(long *pwinceFixedPalette)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_ConnectToServerConsole(VARIANT_BOOL pConnectToConsole)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	mSettings->ConsoleSession = (pConnectToConsole == FALSE ? FALSE : TRUE);
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_ConnectToServerConsole(VARIANT_BOOL *pConnectToConsole)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pConnectToConsole = (mSettings->ConsoleSession == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_BitmapPersistence(long pbitmapPersistence)
 {
-	BOOL bitmapPersistence = (pbitmapPersistence == 0 ? FALSE : TRUE);
-	if (mDeffered.BitmapPersistenceEnabled != bitmapPersistence)
+	if (mSettings == NULL)
 	{
-		mDeffered.BitmapPersistenceEnabled = bitmapPersistence;
-		PostTransferMessage();
+		return E_OUTOFMEMORY;
 	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	mSettings->BitmapCachePersistEnabled = pbitmapPersistence;
 
 	return S_OK;
 }
@@ -758,7 +812,7 @@ STDMETHODIMP CFreeRdpCtrl::put_BitmapPersistence(long pbitmapPersistence)
 
 STDMETHODIMP CFreeRdpCtrl::get_BitmapPersistence(long *pbitmapPersistence)
 {
-	*pbitmapPersistence = mDeffered.BitmapPersistenceEnabled;
+	*pbitmapPersistence = mSettings->BitmapCachePersistEnabled;
 
 	return S_OK;
 }
@@ -778,14 +832,16 @@ STDMETHODIMP CFreeRdpCtrl::put_MinutesToIdleTimeout(long pminutesToIdleTimeout)
 
 	if (mConnectionState == CONNECTED)
 	{
-		if (pminutesToIdleTimeout == 0 && mMinutesToIdleTimeout != 0)
+		if (pminutesToIdleTimeout == 0)
 		{
-			KillTimer(mIdleTimer);
-			mIdleTimer = 0;
+			if (mMinutesToIdleTimeout != 0)
+			{
+				KillTimer(TIMER_IDLE);
+			}
 		}
 		else
 		{
-			mIdleTimer = SetTimer(mIdleTimer, pminutesToIdleTimeout, NULL);
+			SetTimer(TIMER_IDLE, pminutesToIdleTimeout, NULL);
 		}
 	}
 	mMinutesToIdleTimeout = pminutesToIdleTimeout;
@@ -852,7 +908,7 @@ STDMETHODIMP CFreeRdpCtrl::put_SmartSizing(VARIANT_BOOL pfSmartSizing)
 
 STDMETHODIMP CFreeRdpCtrl::get_SmartSizing(VARIANT_BOOL *pfSmartSizing)
 {
-	*pfSmartSizing = (mDeffered.SmartSizing == 0 ? 0 : -1);
+	*pfSmartSizing = (mDeffered.SmartSizing == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 
 	return S_OK;
 }
@@ -860,49 +916,40 @@ STDMETHODIMP CFreeRdpCtrl::get_SmartSizing(VARIANT_BOOL *pfSmartSizing)
 
 STDMETHODIMP CFreeRdpCtrl::put_RdpdrLocalPrintingDocName(BSTR pLocalPrintingDocName)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_RdpdrLocalPrintingDocName(BSTR *pLocalPrintingDocName)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pLocalPrintingDocName = 0;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_RdpdrClipCleanTempDirString(BSTR clipCleanTempDirString)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_RdpdrClipCleanTempDirString(BSTR *clipCleanTempDirString)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*clipCleanTempDirString = 0;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_RdpdrClipPasteInfoString(BSTR clipPasteInfoString)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_RdpdrClipPasteInfoString(BSTR *clipPasteInfoString)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*clipPasteInfoString = 0;
+	return S_OK;
 }
 
 
@@ -919,6 +966,7 @@ STDMETHODIMP CFreeRdpCtrl::put_ClearTextPassword(BSTR rhs)
 		return E_FAIL;
 	}
 
+	free(mSettings->Password);
 	mSettings->Password = _strdup(OLE2A(rhs));
 	if (!mSettings->Password)
 	{
@@ -963,17 +1011,15 @@ STDMETHODIMP CFreeRdpCtrl::get_PinConnectionBar(VARIANT_BOOL *pPinConnectionBar)
 
 STDMETHODIMP CFreeRdpCtrl::put_GrabFocusOnConnect(VARIANT_BOOL pfGrabFocusOnConnect)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	mGrabFocus = (pfGrabFocusOnConnect == FALSE ? FALSE : TRUE);
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_GrabFocusOnConnect(VARIANT_BOOL *pfGrabFocusOnConnect)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pfGrabFocusOnConnect = (mGrabFocus == FALSE ? FALSE : -1);
+	return S_OK;
 }
 
 
@@ -990,6 +1036,7 @@ STDMETHODIMP CFreeRdpCtrl::put_LoadBalanceInfo(BSTR pLBInfo)
 		return E_FAIL;
 	}
 
+	free(mSettings->LoadBalanceInfo);
 	mSettings->LoadBalanceInfo = (BYTE*)_strdup(OLE2A(pLBInfo));
 	if (!mSettings->LoadBalanceInfo)
 	{
@@ -1041,7 +1088,7 @@ STDMETHODIMP CFreeRdpCtrl::put_RedirectDrives(VARIANT_BOOL pRedirectDrives)
 
 STDMETHODIMP CFreeRdpCtrl::get_RedirectDrives(VARIANT_BOOL *pRedirectDrives)
 {
-	*pRedirectDrives = (mSettings->RedirectDrives == FALSE ? FALSE : -1);
+	*pRedirectDrives = (mSettings->RedirectDrives == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
 
@@ -1065,7 +1112,7 @@ STDMETHODIMP CFreeRdpCtrl::put_RedirectPrinters(VARIANT_BOOL pRedirectPrinters)
 
 STDMETHODIMP CFreeRdpCtrl::get_RedirectPrinters(VARIANT_BOOL *pRedirectPrinters)
 {
-	*pRedirectPrinters = (mSettings->RedirectPrinters == FALSE ? FALSE : -1);
+	*pRedirectPrinters = (mSettings->RedirectPrinters == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
 
@@ -1090,7 +1137,7 @@ STDMETHODIMP CFreeRdpCtrl::put_RedirectPorts(VARIANT_BOOL pRedirectPorts)
 
 STDMETHODIMP CFreeRdpCtrl::get_RedirectPorts(VARIANT_BOOL *pRedirectPorts)
 {
-	*pRedirectPorts = (mSettings->RedirectSerialPorts == FALSE ? FALSE : -1);
+	*pRedirectPorts = (mSettings->RedirectSerialPorts == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
 
@@ -1114,7 +1161,7 @@ STDMETHODIMP CFreeRdpCtrl::put_RedirectSmartCards(VARIANT_BOOL pRedirectSmartCar
 
 STDMETHODIMP CFreeRdpCtrl::get_RedirectSmartCards(VARIANT_BOOL *pRedirectSmartCards)
 {
-	*pRedirectSmartCards = (mSettings->RedirectSmartCards == FALSE ? FALSE : -1);
+	*pRedirectSmartCards = (mSettings->RedirectSmartCards == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
 
@@ -1178,33 +1225,27 @@ STDMETHODIMP CFreeRdpCtrl::get_PerformanceFlags(long *pDisableList)
 
 STDMETHODIMP CFreeRdpCtrl::put_ConnectWithEndpoint(VARIANT *rhs)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_NotifyTSPublicKey(VARIANT_BOOL pfNotify)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_NotifyTSPublicKey(VARIANT_BOOL *pfNotify)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pfNotify = VARIANT_FALSE;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_CanAutoReconnect(VARIANT_BOOL *pfCanAutoReconnect)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pfCanAutoReconnect = VARIANT_TRUE;
+	return S_OK;
 }
 
 
@@ -1227,7 +1268,7 @@ STDMETHODIMP CFreeRdpCtrl::put_EnableAutoReconnect(VARIANT_BOOL pfEnableAutoReco
 
 STDMETHODIMP CFreeRdpCtrl::get_EnableAutoReconnect(VARIANT_BOOL *pfEnableAutoReconnect)
 {
-	*pfEnableAutoReconnect = (mSettings->AutoReconnectionEnabled == FALSE ? FALSE : -1);
+	*pfEnableAutoReconnect = (mSettings->AutoReconnectionEnabled == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
 
@@ -1335,24 +1376,23 @@ STDMETHODIMP CFreeRdpCtrl::put_RedirectClipboard(VARIANT_BOOL pfRedirectClipboar
 
 STDMETHODIMP CFreeRdpCtrl::get_RedirectClipboard(VARIANT_BOOL *pfRedirectClipboard)
 {
-	*pfRedirectClipboard = (mSettings->RedirectClipboard == FALSE ? FALSE : -1);
+	*pfRedirectClipboard = (mSettings->RedirectClipboard == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_AudioRedirectionMode(unsigned int puiAudioRedirectionMode)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return put_AudioRedirectionMode((LONG)puiAudioRedirectionMode);
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_AudioRedirectionMode(unsigned int *puiAudioRedirectionMode)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	LONG audioRedirectionMode;
+	HRESULT result = get_AudioRedirectionMode(&audioRedirectionMode);
+	*puiAudioRedirectionMode = audioRedirectionMode;
+	return result;
 }
 
 
@@ -1407,7 +1447,7 @@ STDMETHODIMP CFreeRdpCtrl::put_RedirectDevices(VARIANT_BOOL pfRedirectPnPDevices
 
 STDMETHODIMP CFreeRdpCtrl::get_RedirectDevices(VARIANT_BOOL *pfRedirectPnPDevices)
 {
-	*pfRedirectPnPDevices = (mSettings->DeviceRedirection == FALSE ? FALSE : -1);
+	*pfRedirectPnPDevices = (mSettings->DeviceRedirection == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
 
@@ -1446,33 +1486,59 @@ STDMETHODIMP CFreeRdpCtrl::get_BitmapVirtualCache32BppSize(long *pBitmapVirtualC
 
 STDMETHODIMP CFreeRdpCtrl::put_RelativeMouseMode(VARIANT_BOOL pfRelativeMouseMode)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_RelativeMouseMode(VARIANT_BOOL *pfRelativeMouseMode)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pfRelativeMouseMode = VARIANT_FALSE;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_AuthenticationServiceClass(BSTR *pbstrAuthServiceClass)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
 
-	return E_NOTIMPL;
+	try
+	{
+		CComBSTR string(mSettings->AuthenticationServiceClass);
+		string.CopyTo(pbstrAuthServiceClass);
+	}
+	catch (...)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_AuthenticationServiceClass(BSTR pbstrAuthServiceClass)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	USES_CONVERSION;
 
-	return E_NOTIMPL;
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	free(mSettings->AuthenticationServiceClass);
+	mSettings->AuthenticationServiceClass = _strdup(OLE2A(pbstrAuthServiceClass));
+	if (!mSettings->AuthenticationServiceClass)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 
@@ -1534,9 +1600,24 @@ STDMETHODIMP CFreeRdpCtrl::get_HotKeyFocusReleaseRight(long *HotKeyFocusReleaseR
 
 STDMETHODIMP CFreeRdpCtrl::get_AuthenticationType(unsigned int *puiAuthType)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	if (mSettings->IgnoreCertificate == FALSE && mSettings->KerberosKdc != NULL)
+	{
+		*puiAuthType = 3;
+	}
+	else if (mSettings->IgnoreCertificate)
+	{
+		*puiAuthType = 2;
+	}
+	else if (mSettings->KerberosKdc == NULL)
+	{
+		*puiAuthType = 1;
+	}
+	else
+	{
+		*puiAuthType = 0;
+	}
 
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 
@@ -1552,6 +1633,7 @@ STDMETHODIMP CFreeRdpCtrl::put_ConnectToAdministerServer(VARIANT_BOOL pConnectTo
 	}
 
 	mSettings->RestrictedAdminModeRequired = (pConnectToAdministerServer == FALSE ? FALSE : TRUE);
+	mSettings->ConsoleSession = mSettings->RestrictedAdminModeRequired;
 
 	return S_OK;
 }
@@ -1559,7 +1641,7 @@ STDMETHODIMP CFreeRdpCtrl::put_ConnectToAdministerServer(VARIANT_BOOL pConnectTo
 
 STDMETHODIMP CFreeRdpCtrl::get_ConnectToAdministerServer(VARIANT_BOOL *pConnectToAdministerServer)
 {
-	*pConnectToAdministerServer = (mSettings->RestrictedAdminModeRequired == FALSE ? FALSE : -1);
+	*pConnectToAdministerServer = (mSettings->RestrictedAdminModeRequired == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
 
@@ -1583,7 +1665,7 @@ STDMETHODIMP CFreeRdpCtrl::put_AudioCaptureRedirectionMode(VARIANT_BOOL pfRedir)
 
 STDMETHODIMP CFreeRdpCtrl::get_AudioCaptureRedirectionMode(VARIANT_BOOL *pfRedir)
 {
-	*pfRedir = (mSettings->AudioCapture == FALSE ? FALSE : -1);
+	*pfRedir = (mSettings->AudioCapture == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
 
@@ -1726,17 +1808,58 @@ STDMETHODIMP CFreeRdpCtrl::get_BandwidthDetection(VARIANT_BOOL *pfAutodetect)
 
 STDMETHODIMP CFreeRdpCtrl::put_ClientProtocolSpec(ClientSpec pClientMode)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	if (pClientMode == 0)
+	{
+		// Full mode:
+		mSettings->GfxThinClient = FALSE;
+		mSettings->GfxSmallCache = FALSE;
+	}
+	else if (pClientMode == 1)
+	{
+		// Thin client mode:
+		mSettings->GfxThinClient = TRUE;
+		mSettings->GfxSmallCache = FALSE;
+	}
+	else if (pClientMode == 2)
+	{
+		// Small cache mode:
+		mSettings->GfxThinClient = FALSE;
+		mSettings->GfxSmallCache = TRUE;
+	}
+	else
+	{
+		return E_INVALIDARG;
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_ClientProtocolSpec(ClientSpec *pClientMode)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	if (mSettings->GfxThinClient == FALSE && mSettings->GfxSmallCache == FALSE)
+	{
+		*pClientMode = (ClientSpec)0;
+	}
+	else if (mSettings->GfxThinClient)
+	{
+		*pClientMode = (ClientSpec)1;
+	}
+	else
+	{
+		*pClientMode = (ClientSpec)2;
+	}
 
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 

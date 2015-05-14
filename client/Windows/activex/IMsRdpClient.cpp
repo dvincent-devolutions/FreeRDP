@@ -19,6 +19,7 @@ STDMETHODIMP CFreeRdpCtrl::put_Server(BSTR text)
 		return E_FAIL;
 	}
 
+	free(mSettings->ServerHostname);
 	mSettings->ServerHostname = _strdup(OLE2A(text));
 	if (!mSettings->ServerHostname)
 	{
@@ -63,6 +64,7 @@ STDMETHODIMP CFreeRdpCtrl::put_Domain(BSTR text)
 		return E_FAIL;
 	}
 
+	free(mSettings->Domain);
 	mSettings->Domain = _strdup(OLE2A(text));
 	if (!mSettings->Domain)
 	{
@@ -107,6 +109,7 @@ STDMETHODIMP CFreeRdpCtrl::put_UserName(BSTR text)
 		return E_FAIL;
 	}
 
+	free(mSettings->Username);
 	mSettings->Username = _strdup(OLE2A(text));
 	if (!mSettings->Username)
 	{

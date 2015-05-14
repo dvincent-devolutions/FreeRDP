@@ -2,61 +2,49 @@
 
 #include "stdafx.h"
 #include "FreeRdpCtrl.h"
-
-
-//STDMETHODIMP_(ULONG) CFreeRdpCtrl::AddRef()
-//{
-//	//(CFreeRdpActivexCtrl, RdpDeviceCollection);
-//
-//	return pThis->ExternalAddRef();
-//}
-//
-//
-//STDMETHODIMP_(ULONG) CFreeRdpCtrl::Release()
-//{
-//	//(CFreeRdpActivexCtrl, RdpDeviceCollection);
-//
-//	return pThis->ExternalRelease();
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::QueryInterface(REFIID iid, LPVOID* ppvObj)
-//{
-//	//(CFreeRdpActivexCtrl, RdpDeviceCollection);
-//
-//	return pThis->ExternalQueryInterface(&iid, ppvObj);
-//}
+#include "IMsRdpDevice.h"
 
 
 STDMETHODIMP CFreeRdpCtrl::RescanDevices(VARIANT_BOOL vboolDynRedir)
 {
-	//(CFreeRdpActivexCtrl, RdpDeviceCollection);
-
 	return E_NOTIMPL;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_DeviceByIndex(unsigned long index, IMsRdpDevice **ppDevice)
 {
-	//(CFreeRdpActivexCtrl, RdpDeviceCollection);
+	//if (mSettings == NULL)
+	//{
+	//	return E_OUTOFMEMORY;
+	//}
+	//if (index < 0 || index >= mSettings->DeviceCount)
+	//{
+	//	return E_INVALIDARG;
+	//}
 
+	//CFreeRdpDevice* device = new CComObject<CFreeRdpDevice>;
+	////device->LinkDevice(*this, index);
+	//*ppDevice = (IMsRdpDevice*)device;
+	//return S_OK;
 	return E_NOTIMPL;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_DeviceById(BSTR devInstanceId, IMsRdpDevice **ppDevice)
 {
-	//(CFreeRdpActivexCtrl, RdpDeviceCollection);
-
 	return E_NOTIMPL;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_DeviceCount(unsigned long *pDeviceCount)
 {
-	//(CFreeRdpActivexCtrl, RdpDeviceCollection);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
 
-	return E_NOTIMPL;
+	*pDeviceCount = mSettings->DeviceCount;
+	return S_OK;
 }
 
 

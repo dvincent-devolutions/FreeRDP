@@ -27,12 +27,15 @@ CFreeRdpCtrl::CFreeRdpCtrl()
 
 	mConnectionState = NOT_CONNECTED;
 	mFullScreen = FALSE;
+	mFullScreenKey = VK_CANCEL;
 	mMinutesToIdleTimeout = 0;
+	mMinInputSendInterval = 0;
 
 	mFreeRdpThread = NULL;
 	mTerminationMonitoringThread = NULL;
 	mDisableScrollbars = TRUE;
 	mHasFocus = FALSE;
+	mHoldingMouse = FALSE;
 }
 
 
@@ -56,11 +59,6 @@ HRESULT CFreeRdpCtrl::FinalConstruct()
 	mContext->pUser = this;
 	PubSub_SubscribeConnectionResult(mContext->pubSub, (pConnectionResultEventHandler)ConnectionResultHandler);
 
-	mDeffered.BitmapCacheEnabled = mSettings->BitmapCacheEnabled;
-	mDeffered.BitmapPersistenceEnabled = mSettings->BitmapCachePersistEnabled;
-	mDeffered.CompressionEnabled = mSettings->CompressionEnabled;
-	mDeffered.KeyboardLayout = mSettings->KeyboardLayout;
-	mDeffered.ClipBoardPrinterRedirectionEnabled = mSettings->RedirectClipboard;
 	mDeffered.SmartSizing = mSettings->SmartSizing;
 
 	if (instances.GetSize() == 0)
@@ -264,7 +262,7 @@ LRESULT CFreeRdpCtrl::OnUserInput(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*
 {
 	if (mMinutesToIdleTimeout > 0 && mConnectionState == CONNECTED)
 	{
-		SetTimer(mIdleTimer, mMinutesToIdleTimeout, NULL);
+		SetTimer(TIMER_IDLE, mMinutesToIdleTimeout, NULL);
 	}
 
 	return 0;
@@ -273,10 +271,9 @@ LRESULT CFreeRdpCtrl::OnUserInput(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*
 
 LRESULT CFreeRdpCtrl::OnTimer(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
-	if (wParam == mIdleTimer)
+	if (wParam == TIMER_IDLE)
 	{
-		KillTimer(mIdleTimer);
-		mIdleTimer = 0;
+		KillTimer(TIMER_IDLE);
 		Disconnect();
 	}
 
@@ -414,33 +411,103 @@ LRESULT CFreeRdpCtrl::OnVScroll(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/,
 
 LRESULT CFreeRdpCtrl::InterceptProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	rdpContext* context = (rdpContext*)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
+	CWindow wnd(hwnd);
+	rdpContext* context = (rdpContext*)wnd.GetWindowLongPtr(GWLP_USERDATA);
 	if (context == NULL)
 	{
 		return 0;
 	}
 	CFreeRdpCtrl& parentCtrl = *(CFreeRdpCtrl*)(context->pUser);
 
-	if (parentCtrl.mMinutesToIdleTimeout > 0)
+	if (msg >= WM_MOUSEFIRST && msg <= WM_MOUSELAST || msg >= WM_KEYFIRST && msg <= WM_KEYLAST)
 	{
-		if (msg >= WM_MOUSEFIRST && msg <= WM_MOUSELAST || msg >= WM_KEYFIRST && msg <= WM_KEYLAST)
+		if (parentCtrl.mMinutesToIdleTimeout > 0)
 		{
-			parentCtrl.SetTimer(parentCtrl.mIdleTimer, parentCtrl.mMinutesToIdleTimeout, NULL);
+			parentCtrl.SetTimer(TIMER_IDLE, parentCtrl.mMinutesToIdleTimeout);
+		}
+
+		if (parentCtrl.mKeepAliveInterval > 0)
+		{
+			wnd.SetTimer(TIMER_KEEP_ALIVE, parentCtrl.mKeepAliveInterval);
+		}
+
+		if (msg == WM_MOUSEMOVE)
+		{
+			parentCtrl.mLastInput.wParam = wParam;
+			parentCtrl.mLastInput.lParam = lParam;
+			if (parentCtrl.mMinInputSendInterval > 0)
+			{
+				if (parentCtrl.mHoldingMouse == FALSE)
+				{
+					parentCtrl.mHoldingMouse = TRUE;
+					wnd.SetTimer(TIMER_INPUT_SEND_INTERVAL, parentCtrl.mMinInputSendInterval);
+				}
+				else
+				{
+					parentCtrl.mLastInput.dirty = TRUE;
+					return 0;
+				}
+			}
+		}
+		else if (msg == WM_KEYDOWN)
+		{
+			//if (wParam == VK_CANCEL)
+			//{
+			//	if (GetKeyState(VK_LCONTROL) != 0)
+			//	{
+			//		if (parentCtrl.mFullScreen == FALSE)
+			//		{
+			//			parentCtrl.put_FullScreen((LONG)TRUE);
+			//		}
+			//		else
+			//		{
+			//			parentCtrl.put_FullScreen((LONG)FALSE);
+			//		}
+			//	}
+			//}
+		}
+		else if (msg == WM_RBUTTONDOWN || msg == WM_MBUTTONDOWN || msg == WM_LBUTTONDOWN)
+		{
+			if (parentCtrl.mHasFocus == FALSE)
+			{
+				if (parentCtrl.mFullScreen == FALSE)
+				{
+					parentCtrl.SetFocus();
+				}
+				else
+				{
+					parentCtrl.mFullScreenWindow.SetFocus();
+				}
+			}
+
+			if (parentCtrl.mHoldingMouse != FALSE)
+			{
+				wnd.KillTimer(TIMER_INPUT_SEND_INTERVAL);
+				parentCtrl.mHoldingMouse = FALSE;
+			}
+			if (parentCtrl.mLastInput.dirty != FALSE)
+			{
+				parentCtrl.mLastInput.dirty = FALSE;
+				CallWindowProc((WNDPROC)parentCtrl.mChildProc, hwnd, WM_MOUSEMOVE, parentCtrl.mLastInput.wParam, parentCtrl.mLastInput.lParam);
+			}
 		}
 	}
-
-	if (msg == WM_RBUTTONDOWN || msg == WM_MBUTTONDOWN || msg == WM_LBUTTONDOWN)
+	else if (msg == WM_TIMER)
 	{
-		if (parentCtrl.mHasFocus == FALSE)
+		if (wParam == TIMER_INPUT_SEND_INTERVAL)
 		{
-			if (parentCtrl.mFullScreen == FALSE)
+			if (parentCtrl.mLastInput.dirty == FALSE)
 			{
-				parentCtrl.SetFocus();
+				wnd.KillTimer(TIMER_INPUT_SEND_INTERVAL);
+				parentCtrl.mHoldingMouse = FALSE;
+				return 0;
 			}
-			else
-			{
-				parentCtrl.mFullScreenWindow.SetFocus();
-			}
+			parentCtrl.mLastInput.dirty = FALSE;
+			return CallWindowProc((WNDPROC)parentCtrl.mChildProc, hwnd, WM_MOUSEMOVE, parentCtrl.mLastInput.wParam, parentCtrl.mLastInput.lParam);
+		}
+		else if (wParam == TIMER_KEEP_ALIVE)
+		{
+			return CallWindowProc((WNDPROC)parentCtrl.mChildProc, hwnd, WM_MOUSEMOVE, parentCtrl.mLastInput.wParam, parentCtrl.mLastInput.lParam);
 		}
 	}
 	else if (msg == WM_KILLFOCUS)
@@ -504,7 +571,7 @@ LRESULT CFreeRdpCtrl::OnParentNotify(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lPar
 
 			if (mMinutesToIdleTimeout > 0)
 			{
-				mIdleTimer = SetTimer(mIdleTimer, mMinutesToIdleTimeout, NULL);
+				SetTimer(TIMER_IDLE, mMinutesToIdleTimeout, NULL);
 			}
 		}
 	}
@@ -530,12 +597,6 @@ void CFreeRdpCtrl::PostTransferMessage()
 
 void CFreeRdpCtrl::TransferDefferedProperties()
 {
-	mSettings->BitmapCacheEnabled = mDeffered.BitmapCacheEnabled;
-	mSettings->BitmapCachePersistEnabled = mDeffered.BitmapPersistenceEnabled;
-	mSettings->CompressionEnabled = mDeffered.CompressionEnabled;
-	mSettings->KeyboardLayout = mDeffered.KeyboardLayout;
-	mSettings->RedirectClipboard = mDeffered.ClipBoardPrinterRedirectionEnabled;
-	mSettings->RedirectPrinters = mDeffered.ClipBoardPrinterRedirectionEnabled;
 	mSettings->SmartSizing = mDeffered.SmartSizing;
 }
 
@@ -549,6 +610,10 @@ void CFreeRdpCtrl::ChangeToConnecting()
 void CFreeRdpCtrl::ChangeToConnected()
 {
 	mConnectionState = CONNECTED;
+	if (mGrabFocus != FALSE)
+	{
+		mFreeRdpWindow.SetFocus();
+	}
 	if (mFullScreen == TRUE && mFullScreenWindow == NULL && m_hWnd != NULL)
 	{
 		PostMessage(WM_AX_STARTFULLSCREEN, 0, 0);
@@ -560,6 +625,10 @@ void CFreeRdpCtrl::ChangeToConnected()
 void CFreeRdpCtrl::ChangeToLoginCompleted()
 {
 	mConnectionState = CONNECTED;
+	if (mGrabFocus != FALSE)
+	{
+		mFreeRdpWindow.SetFocus();
+	}
 	if (mFullScreen == TRUE && mFullScreenWindow == NULL && m_hWnd != NULL)
 	{
 		PostMessage(WM_AX_STARTFULLSCREEN, 0, 0);

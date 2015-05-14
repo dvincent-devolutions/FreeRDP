@@ -53,11 +53,7 @@ DWORD WINAPI CFreeRdpCtrl::TerminationMonitoringThread(LPVOID parameters)
 	if (rThis.m_hWnd != NULL)
 	{
 		rThis.Invalidate();
-		if (rThis.mIdleTimer != 0)
-		{
-			rThis.KillTimer(rThis.mIdleTimer);
-			rThis.mIdleTimer = 0;
-		}
+		rThis.KillTimer(TIMER_IDLE);
 	}
 
 	return 0;

@@ -17,6 +17,7 @@ STDMETHODIMP CFreeRdpCtrl::put_GatewayHostname(BSTR pProxyHostname)
 		return E_FAIL;
 	}
 
+	free(mSettings->GatewayHostname);
 	mSettings->GatewayHostname = _strdup(OLE2A(pProxyHostname));
 	if (!mSettings->GatewayHostname)
 	{
@@ -90,17 +91,25 @@ STDMETHODIMP CFreeRdpCtrl::get_GatewayProfileUsageMethod(unsigned long *pulProxy
 
 STDMETHODIMP CFreeRdpCtrl::put_GatewayCredsSource(unsigned long pulProxyCredsSource)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	mSettings->GatewayCredentialsSource = pulProxyCredsSource;
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_GatewayCredsSource(unsigned long *pulProxyCredsSource)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
-
-	return E_NOTIMPL;
+	*pulProxyCredsSource = mSettings->GatewayCredentialsSource;
+	return S_OK;
 }
 
 
@@ -136,17 +145,25 @@ STDMETHODIMP CFreeRdpCtrl::get_GatewayDefaultUsageMethod(unsigned long *pulProxy
 
 STDMETHODIMP CFreeRdpCtrl::put_GatewayCredSharing(unsigned long pulProxyCredSharing)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	mSettings->GatewayUseSameCredentials = (pulProxyCredSharing == 0 ? FALSE : TRUE);
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_GatewayCredSharing(unsigned long *pulProxyCredSharing)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
-
-	return E_NOTIMPL;
+	*pulProxyCredSharing = mSettings->GatewayUseSameCredentials;
+	return S_OK;
 }
 
 
@@ -243,6 +260,7 @@ STDMETHODIMP CFreeRdpCtrl::put_GatewayUsername(BSTR pProxyUsername)
 		return E_FAIL;
 	}
 
+	free(mSettings->GatewayUsername);
 	mSettings->GatewayUsername = _strdup(OLE2A(pProxyUsername));
 	if (!mSettings->GatewayUsername)
 	{
@@ -287,6 +305,7 @@ STDMETHODIMP CFreeRdpCtrl::put_GatewayDomain(BSTR pProxyDomain)
 		return E_FAIL;
 	}
 
+	free(mSettings->GatewayDomain);
 	mSettings->GatewayDomain = _strdup(OLE2A(pProxyDomain));
 	if (!mSettings->GatewayDomain)
 	{
@@ -331,6 +350,7 @@ STDMETHODIMP CFreeRdpCtrl::put_GatewayPassword(BSTR rhs)
 		return E_FAIL;
 	}
 
+	free(mSettings->GatewayPassword);
 	mSettings->GatewayPassword = _strdup(OLE2A(rhs));
 	if (!mSettings->GatewayPassword)
 	{

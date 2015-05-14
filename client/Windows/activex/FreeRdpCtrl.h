@@ -20,6 +20,10 @@ extern "C" FREERDP_API int RdpClientEntry(RDP_CLIENT_ENTRY_POINTS* pEntryPoints)
 #define WM_AX_STARTFULLSCREEN (WM_USER + 501)
 #define WM_AX_ENDFULLSCREEN (WM_USER + 502)
 
+#define TIMER_INPUT_SEND_INTERVAL 100
+#define TIMER_IDLE 101
+#define TIMER_KEEP_ALIVE 102
+
 using namespace ATL;
 
 
@@ -50,9 +54,8 @@ class ATL_NO_VTABLE CFreeRdpCtrl :
 	public CComCoClass<CFreeRdpCtrl, &CLSID_FreeRdpCtrl>,
 	public CComControl<CFreeRdpCtrl>,
 	public IMsRdpClientNonScriptable5,
-	public IMsRdpDevice,
 	public IMsRdpDeviceCollection,
-	public IMsRdpDrive,
+	//public IMsRdpDrive,
 	public IMsRdpDriveCollection,
 	public IMsRdpPreferredRedirectionInfo,
 	public CProxyIMsTscAxEvents<CFreeRdpCtrl>
@@ -114,9 +117,8 @@ BEGIN_COM_MAP(CFreeRdpCtrl)
 	COM_INTERFACE_ENTRY_IID(IID_IMsRdpClientTransportSettings3, IMsRdpClientTransportSettings4)
 	COM_INTERFACE_ENTRY_IID(IID_IMsRdpClientTransportSettings4, IMsRdpClientTransportSettings4)
 
-	COM_INTERFACE_ENTRY_IID(IID_IMsRdpDevice, IMsRdpDevice)
 	COM_INTERFACE_ENTRY_IID(IID_IMsRdpDeviceCollection, IMsRdpDeviceCollection)
-	COM_INTERFACE_ENTRY_IID(IID_IMsRdpDrive, IMsRdpDrive)
+	//COM_INTERFACE_ENTRY_IID(IID_IMsRdpDrive, IMsRdpDrive)
 	COM_INTERFACE_ENTRY_IID(IID_IMsRdpDriveCollection, IMsRdpDriveCollection)
 
 	COM_INTERFACE_ENTRY_IID(IID_IMsRdpPreferredRedirectionInfo, IMsRdpPreferredRedirectionInfo)
@@ -244,27 +246,33 @@ public:
 
 	struct
 	{
-		BOOL BitmapCacheEnabled;
-		BOOL BitmapPersistenceEnabled;
-		BOOL CompressionEnabled;
-		UINT32 KeyboardLayout;
-		BOOL ClipBoardPrinterRedirectionEnabled;
 		BOOL SmartSizing;
 	} mDeffered;
 
 	int mHorizontalPos;
 	int mVerticalPos;
+	BOOL mGrabFocus;
 	BOOL mFullScreen;
+	BOOL mContainerHandledFullScreen;
+	LONG mFullScreenKey;
 	SHORT mConnectionState;
 	CString mConnectingText;
 	CString mDisconnectedText;
 	CString mFullScreenTitle;
 	CSimpleArray<CHANNEL_DEF> mVirtualChannels;
 	LONG mMinutesToIdleTimeout;
+	LONG mMinInputSendInterval;
+	LONG mKeepAliveInterval;
 
 	rdpContext* mContext;
 	rdpSettings* mSettings;
-	UINT_PTR mIdleTimer;
+	BOOL mHoldingMouse;
+	struct
+	{
+		WPARAM wParam;
+		LPARAM lParam;
+		BOOL dirty;
+	} mLastInput;
 	HANDLE mTerminationMonitoringThread;
 	HANDLE mFreeRdpThread;
 	RDP_CLIENT_ENTRY_POINTS mClientEntryPoints;
@@ -713,13 +721,6 @@ public:
 	//STDMETHOD(get_PublicMode)(VARIANT_BOOL *pfPublicMode);
 	STDMETHOD(ShowTrustedSitesManagementDialog)(void);
 
-	// IMsRdpDevice interface methods.
-	STDMETHOD(get_DeviceInstanceId)(BSTR *pDevInstanceId);
-	STDMETHOD(get_FriendlyName)(BSTR *pFriendlyName);
-	STDMETHOD(get_DeviceDescription)(BSTR *pDeviceDescription);
-	STDMETHOD(put_RedirectionState)(VARIANT_BOOL pvboolRedirState);
-	STDMETHOD(get_RedirectionState)(VARIANT_BOOL *pvboolRedirState);
-
 	// IMsRdpDeviceCollection interface methods.
 	STDMETHOD(RescanDevices)(VARIANT_BOOL vboolDynRedir);
 	STDMETHOD(get_DeviceByIndex)(unsigned long index, IMsRdpDevice **ppDevice);
@@ -727,7 +728,7 @@ public:
 	STDMETHOD(get_DeviceCount)(unsigned long *pDeviceCount);
 
 	// IMsRdpDrive interface methods.
-	STDMETHOD(get_Name)(BSTR *pName);
+	//STDMETHOD(get_Name)(BSTR *pName);
 	//STDMETHOD(put_RedirectionState)(VARIANT_BOOL pvboolRedirState);
 	//STDMETHOD(get_RedirectionState)(VARIANT_BOOL *pvboolRedirState);
 

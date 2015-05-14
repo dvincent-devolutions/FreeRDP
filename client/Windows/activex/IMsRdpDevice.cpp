@@ -1,34 +1,10 @@
 // Implementation of the RDP device interface.
 
 #include "stdafx.h"
-#include "FreeRdpCtrl.h"
+#include "IMsRdpDevice.h"
 
 
-//STDMETHODIMP_(ULONG) CFreeRdpCtrl::AddRef()
-//{
-//	//(CFreeRdpActivexCtrl, RdpDevice);
-//
-//	return pThis->ExternalAddRef();
-//}
-//
-//
-//STDMETHODIMP_(ULONG) CFreeRdpCtrl::Release()
-//{
-//	//(CFreeRdpActivexCtrl, RdpDevice);
-//
-//	return pThis->ExternalRelease();
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::QueryInterface(REFIID iid, LPVOID* ppvObj)
-//{
-//	//(CFreeRdpActivexCtrl, RdpDevice);
-//
-//	return pThis->ExternalQueryInterface(&iid, ppvObj);
-//}
-
-
-STDMETHODIMP CFreeRdpCtrl::get_DeviceInstanceId(BSTR *pDevInstanceId)
+STDMETHODIMP CFreeRdpDevice::get_DeviceInstanceId(BSTR *pDevInstanceId)
 {
 	//(CFreeRdpActivexCtrl, RdpDevice);
 
@@ -36,7 +12,7 @@ STDMETHODIMP CFreeRdpCtrl::get_DeviceInstanceId(BSTR *pDevInstanceId)
 }
 
 
-STDMETHODIMP CFreeRdpCtrl::get_FriendlyName(BSTR *pFriendlyName)
+STDMETHODIMP CFreeRdpDevice::get_FriendlyName(BSTR *pFriendlyName)
 {
 	//(CFreeRdpActivexCtrl, RdpDevice);
 
@@ -44,7 +20,7 @@ STDMETHODIMP CFreeRdpCtrl::get_FriendlyName(BSTR *pFriendlyName)
 }
 
 
-STDMETHODIMP CFreeRdpCtrl::get_DeviceDescription(BSTR *pDeviceDescription)
+STDMETHODIMP CFreeRdpDevice::get_DeviceDescription(BSTR *pDeviceDescription)
 {
 	//(CFreeRdpActivexCtrl, RdpDevice);
 
@@ -52,7 +28,7 @@ STDMETHODIMP CFreeRdpCtrl::get_DeviceDescription(BSTR *pDeviceDescription)
 }
 
 
-STDMETHODIMP CFreeRdpCtrl::put_RedirectionState(VARIANT_BOOL pvboolRedirState)
+STDMETHODIMP CFreeRdpDevice::put_RedirectionState(VARIANT_BOOL pvboolRedirState)
 {
 	//(CFreeRdpActivexCtrl, RdpDevice);
 
@@ -60,7 +36,7 @@ STDMETHODIMP CFreeRdpCtrl::put_RedirectionState(VARIANT_BOOL pvboolRedirState)
 }
 
 
-STDMETHODIMP CFreeRdpCtrl::get_RedirectionState(VARIANT_BOOL *pvboolRedirState)
+STDMETHODIMP CFreeRdpDevice::get_RedirectionState(VARIANT_BOOL *pvboolRedirState)
 {
 	//(CFreeRdpActivexCtrl, RdpDevice);
 

@@ -28,12 +28,12 @@
 //}
 
 
-STDMETHODIMP CFreeRdpCtrl::get_Name(BSTR *pName)
-{
-	//(CFreeRdpActivexCtrl, RdpDrive);
-
-	return E_NOTIMPL;
-}
+//STDMETHODIMP CFreeRdpCtrl::get_Name(BSTR *pName)
+//{
+//	//(CFreeRdpActivexCtrl, RdpDrive);
+//
+//	return E_NOTIMPL;
+//}
 
 
 //STDMETHODIMP CFreeRdpCtrl::put_RedirectionState(VARIANT_BOOL pvboolRedirState)

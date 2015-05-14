@@ -4,139 +4,110 @@
 #include "FreeRdpCtrl.h"
 
 
-//STDMETHODIMP_(ULONG) CFreeRdpCtrl::AddRef()
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-//
-//	return pThis->ExternalAddRef();
-//}
-//
-//
-//STDMETHODIMP_(ULONG) CFreeRdpCtrl::Release()
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-//
-//	return pThis->ExternalRelease();
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::QueryInterface(REFIID iid, LPVOID* ppvObj)
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-//
-//	return pThis->ExternalQueryInterface(&iid, ppvObj);
-//}
-
-
-//STDMETHODIMP CFreeRdpCtrl::put_ClearTextPassword(BSTR rhs)
-//{
-//	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-//
-//	return pThis->SetClearTextPassword(rhs);
-//}
-
-
 STDMETHODIMP CFreeRdpCtrl::put_PortablePassword(BSTR pPortablePass)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_PortablePassword(BSTR *pPortablePass)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_PortableSalt(BSTR pPortableSalt)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_PortableSalt(BSTR *pPortableSalt)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_BinaryPassword(BSTR pBinaryPassword)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_BinaryPassword(BSTR *pBinaryPassword)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_BinarySalt(BSTR pSalt)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_BinarySalt(BSTR *pSalt)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::ResetPassword(void)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	free(mSettings->Password);
+	mSettings->Password = NULL;
+	free(mSettings->GatewayPassword);
+	mSettings->GatewayPassword = NULL;
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::NotifyRedirectDeviceChange(UINT_PTR wParam, LONG_PTR lParam)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	// Device change is already intercepted by FreeRDP threads.
+	return S_OK;
 }
-
 
 STDMETHODIMP CFreeRdpCtrl::SendKeys(long numKeys, VARIANT_BOOL *pbArrayKeyUp, long *plKeyData)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	if ((HWND)mFreeRdpWindow == NULL)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	for (long i = 0; i < numKeys; i++)
+	{
+		UINT msg = (pbArrayKeyUp[i] == FALSE ? WM_KEYDOWN : WM_KEYUP);
+		UINT vkCode = MapVirtualKey(plKeyData[i], MAPVK_VSC_TO_VK);
+		DWORD rdp_scancode = MAKE_RDP_SCANCODE((BYTE)plKeyData[i], 0);
+		freerdp_input_send_keyboard_event_ex(mContext->input, !pbArrayKeyUp[i], rdp_scancode);
+		//mFreeRdpWindow.SendMessage(msg, vkCode, plKeyData[i]);
+	}
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_UIParentWindowHandle(wireHWND phwndUIParentWindowHandle)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_UIParentWindowHandle(wireHWND *phwndUIParentWindowHandle)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	*phwndUIParentWindowHandle = (wireHWND)mSettings->ParentWindowId;
+	return S_OK;
 }
 
 
@@ -191,7 +162,7 @@ STDMETHODIMP CFreeRdpCtrl::put_NegotiateSecurityLayer(VARIANT_BOOL pfNegotiate)
 
 STDMETHODIMP CFreeRdpCtrl::get_NegotiateSecurityLayer(VARIANT_BOOL *pfNegotiate)
 {
-	*pfNegotiate = (mSettings->NegotiateSecurityLayer == FALSE ? FALSE : -1);
+	*pfNegotiate = (mSettings->NegotiateSecurityLayer == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
 
@@ -214,17 +185,14 @@ STDMETHODIMP CFreeRdpCtrl::get_EnableCredSspSupport(VARIANT_BOOL *pfEnableSuppor
 
 STDMETHODIMP CFreeRdpCtrl::put_RedirectDynamicDrives(VARIANT_BOOL pfRedirectDynamicDrives)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_RedirectDynamicDrives(VARIANT_BOOL *pfRedirectDynamicDrives)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	*pfRedirectDynamicDrives = VARIANT_TRUE;
+	return S_OK;
 }
 
 
@@ -246,17 +214,15 @@ STDMETHODIMP CFreeRdpCtrl::get_RedirectDynamicDevices(VARIANT_BOOL *pfRedirectDy
 
 STDMETHODIMP CFreeRdpCtrl::get_DeviceCollection(IMsRdpDeviceCollection **ppDeviceCollection)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	*ppDeviceCollection = (IMsRdpDeviceCollection*)this;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_DriveCollection(IMsRdpDriveCollection **ppDeviceCollection)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	*ppDeviceCollection = (IMsRdpDriveCollection*)this;
+	return S_OK;
 }
 
 
@@ -294,17 +260,23 @@ STDMETHODIMP CFreeRdpCtrl::get_WarnAboutClipboardRedirection(VARIANT_BOOL *pfWar
 
 STDMETHODIMP CFreeRdpCtrl::put_ConnectionBarText(BSTR pConnectionBarText)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return put_FullScreenTitle(pConnectionBarText);
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_ConnectionBarText(BSTR *pConnectionBarText)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	try
+	{
+		CComBSTR string(mFullScreenTitle);
+		string.CopyTo(pConnectionBarText);
+	}
+	catch (...)
+	{
+		return E_OUTOFMEMORY;
+	}
 
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 
