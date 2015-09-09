@@ -129,17 +129,29 @@ STDMETHODIMP CFreeRdpCtrl::get_ShowRedirectionWarningDialog(VARIANT_BOOL *pfShow
 
 STDMETHODIMP CFreeRdpCtrl::put_PromptForCredentials(VARIANT_BOOL pfPrompt)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	if (mContext == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	mContext->instance->Authenticate = (pfPrompt == VARIANT_FALSE ? NULL : wf_authenticate);
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_PromptForCredentials(VARIANT_BOOL *pfPrompt)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	if (mContext == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
 
-	return E_NOTIMPL;
+	*pfPrompt = (mContext->instance->Authenticate == NULL ? VARIANT_FALSE : VARIANT_TRUE);
+	return S_OK;
 }
 
 
@@ -169,17 +181,30 @@ STDMETHODIMP CFreeRdpCtrl::get_NegotiateSecurityLayer(VARIANT_BOOL *pfNegotiate)
 
 STDMETHODIMP CFreeRdpCtrl::put_EnableCredSspSupport(VARIANT_BOOL pfEnableSupport)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	mSettings->NlaSecurity = (pfEnableSupport == VARIANT_FALSE ? FALSE : TRUE);
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_EnableCredSspSupport(VARIANT_BOOL *pfEnableSupport)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
 
-	return E_NOTIMPL;
+	*pfEnableSupport = (mSettings->NlaSecurity == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
+	return S_OK;
 }
 
 
@@ -362,17 +387,13 @@ STDMETHODIMP CFreeRdpCtrl::get_AllowCredentialSaving(VARIANT_BOOL *pfAllowSave)
 
 STDMETHODIMP CFreeRdpCtrl::put_PromptForCredsOnClient(VARIANT_BOOL pfPromptForCredsOnClient)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return put_PromptForCredentials(pfPromptForCredsOnClient);
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_PromptForCredsOnClient(VARIANT_BOOL *pfPromptForCredsOnClient)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return get_PromptForCredentials(pfPromptForCredsOnClient);
 }
 
 
@@ -474,33 +495,26 @@ STDMETHODIMP CFreeRdpCtrl::get_DisableRemoteAppCapsCheck(VARIANT_BOOL *pfDisable
 
 STDMETHODIMP CFreeRdpCtrl::put_WarnAboutDirectXRedirection(VARIANT_BOOL pfWarn)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_WarnAboutDirectXRedirection(VARIANT_BOOL *pfWarn)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	*pfWarn = VARIANT_FALSE;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_AllowPromptingForCredentials(VARIANT_BOOL pfAllow)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return put_PromptForCredentials(pfAllow);
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_AllowPromptingForCredentials(VARIANT_BOOL *pfAllow)
 {
-	//(CFreeRdpActivexCtrl, RdpClientNonScriptable);
-
-	return E_NOTIMPL;
+	return get_PromptForCredentials(pfAllow);
 }
 
 

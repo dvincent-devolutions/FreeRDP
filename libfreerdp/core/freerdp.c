@@ -64,6 +64,7 @@ BOOL freerdp_connect(freerdp* instance)
 	rdpRdp* rdp;
 	BOOL status = TRUE;
 	rdpSettings* settings;
+	IpConnectionEventArgs e_ip;
 	ConnectionResultEventArgs e;
 
 	/* We always set the return code to 0 before we start the connect sequence*/
@@ -92,6 +93,12 @@ BOOL freerdp_connect(freerdp* instance)
 	}
 
 	status = rdp_client_connect(rdp);
+	if (status)
+	{
+		EventArgsInit(&e_ip, "freerdp");
+		e_ip.code = 0;
+		PubSub_OnIpConnection(instance->context->pubSub, instance->context, &e_ip);
+	}
 
 	/* --authonly tests the connection without a UI */
 	if (instance->settings->AuthenticationOnly)
@@ -423,6 +430,7 @@ static wEventType FreeRDP_Events[] =
 	DEFINE_EVENT_ENTRY(ZoomingChange)
 	DEFINE_EVENT_ENTRY(ErrorInfo)
 	DEFINE_EVENT_ENTRY(Terminate)
+	DEFINE_EVENT_ENTRY(IpConnection)
 	DEFINE_EVENT_ENTRY(ConnectionResult)
 	DEFINE_EVENT_ENTRY(ChannelConnected)
 	DEFINE_EVENT_ENTRY(ChannelDisconnected)

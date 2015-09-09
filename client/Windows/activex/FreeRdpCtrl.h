@@ -10,7 +10,12 @@
 #include "_IFreeRdpCtrlEvents_CP.h"
 #include "IMsTscAxEvents_CP.H"
 
-extern "C" FREERDP_API int RdpClientEntry(RDP_CLIENT_ENTRY_POINTS* pEntryPoints);
+extern "C" int RdpClientEntry(RDP_CLIENT_ENTRY_POINTS* pEntryPoints);
+extern "C" int freerdp_client_add_static_channel(rdpSettings* settings, int count, char** params);
+extern "C" int freerdp_client_add_dynamic_channel(rdpSettings* settings, int count, char** params);
+extern "C" int freerdp_client_add_device_channel(rdpSettings* settings, int count, char** params);
+extern "C" void wf_keep_windows_shortcut(rdpContext* context, int keep);
+extern "C" BOOL wf_authenticate(freerdp* instance, char** username, char** password, char** domain);
 
 #if defined(_WIN32_WCE) && !defined(_CE_DCOM) && !defined(_CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA)
 #error "Single-threaded COM objects are not properly supported on Windows CE platform, such as the Windows Mobile platforms that do not include full DCOM support. Define _CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA to force ATL to support creating single-thread COM object's and allow use of it's single-threaded COM object implementations. The threading model in your rgs file was set to 'Free' as that is the only threading model supported in non DCOM Windows CE platforms."
@@ -238,6 +243,19 @@ public:
 		CONNECTING = 2,
 	};
 
+	enum AudioMode
+	{
+		AUDIO_REDIRECT = 0,
+		AUDIO_ON_SERVER = 1,
+		AUDIO_NONE = 2,
+	};
+	enum AudioQuality
+	{
+		AUDIO_DYNAMIC_QUALITY = 0,
+		AUDIO_MEDIUM_QUALITY = 1,
+		AUDIO_HIGH_QUALITY = 2,
+	};
+
 	struct ReadChannelBuffer
 	{
 		BYTE* buffer;
@@ -253,16 +271,28 @@ public:
 	int mVerticalPos;
 	BOOL mGrabFocus;
 	BOOL mFullScreen;
+	BOOL mBackgroundInput;
 	BOOL mContainerHandledFullScreen;
 	LONG mFullScreenKey;
 	SHORT mConnectionState;
+	SHORT mLoginComplete;
 	CString mConnectingText;
+	CString mConnectedText;
 	CString mDisconnectedText;
 	CString mFullScreenTitle;
 	CSimpleArray<CHANNEL_DEF> mVirtualChannels;
+	CAtlArray<CStringA,CStringElementTraits<CStringA>> mPlugins;
+	LONG mIpConnectionTimeout;
+	LONG mConnectionTimeout;
 	LONG mMinutesToIdleTimeout;
 	LONG mMinInputSendInterval;
 	LONG mKeepAliveInterval;
+	BOOL mAudioRedirection;
+	BOOL mAudioCaptureRedirection;
+	LONG mAudioQuality;
+	BOOL mRedirectSmartCards;
+	BOOL mRedirectPrinters;
+	BOOL mRedirectPorts;
 
 	rdpContext* mContext;
 	rdpSettings* mSettings;
@@ -273,8 +303,11 @@ public:
 		LPARAM lParam;
 		BOOL dirty;
 	} mLastInput;
-	HANDLE mTerminationMonitoringThread;
+	BOOL mReconnecting;
+	LONG mNewWidth;
+	LONG mNewHeight;
 	HANDLE mFreeRdpThread;
+	LONG mDisconnectionReason;
 	RDP_CLIENT_ENTRY_POINTS mClientEntryPoints;
 	CHANNEL_ENTRY_POINTS_FREERDP mVirtualChannelEntryPoints;
 	LPVOID mVirtualChannelHandle;

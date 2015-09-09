@@ -84,6 +84,7 @@ struct wf_context
 	int offset_y;
 	int fs_toggle;
 	int fullscreen;
+	int keep_windows_shortcut;
 	int percentscreen;
 	char window_title[64];
 	int client_x;

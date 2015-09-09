@@ -23,6 +23,7 @@ STDMETHODIMP CFreeRdpCtrl::put_StartProgram(BSTR pStartProgram)
 	{
 		return E_OUTOFMEMORY;
 	}
+	mSettings->RemoteApplicationMode = TRUE;
 
 	return S_OK;
 }
@@ -151,17 +152,17 @@ STDMETHODIMP CFreeRdpCtrl::put_AudioRedirectionMode(long pAudioRedirectionMode)
 		return E_FAIL;
 	}
 
-	if (pAudioRedirectionMode == 0)
+	if (pAudioRedirectionMode == AUDIO_REDIRECT)
 	{
 		mSettings->AudioPlayback = TRUE;
 		mSettings->RemoteConsoleAudio = FALSE;
 	}
-	else if (pAudioRedirectionMode == 1)
+	else if (pAudioRedirectionMode == AUDIO_ON_SERVER)
 	{
 		mSettings->AudioPlayback = FALSE;
 		mSettings->RemoteConsoleAudio = TRUE;
 	}
-	else if (pAudioRedirectionMode == 2)
+	else if (pAudioRedirectionMode == AUDIO_NONE)
 	{
 		mSettings->AudioPlayback = FALSE;
 		mSettings->RemoteConsoleAudio = FALSE;
@@ -170,6 +171,7 @@ STDMETHODIMP CFreeRdpCtrl::put_AudioRedirectionMode(long pAudioRedirectionMode)
 	{
 		return E_INVALIDARG;
 	}
+	mAudioRedirection = pAudioRedirectionMode;
 
 	return S_OK;
 }
@@ -229,10 +231,18 @@ STDMETHODIMP CFreeRdpCtrl::put_PCB(BSTR bstrPCB)
 	}
 
 	free(mSettings->PreconnectionBlob);
-	mSettings->PreconnectionBlob = _strdup(OLE2A(bstrPCB));
-	if (!mSettings->PreconnectionBlob)
+	if (bstrPCB == NULL || *bstrPCB == 0)
 	{
-		return E_OUTOFMEMORY;
+		mSettings->SendPreconnectionPdu = FALSE;
+	}
+	else
+	{
+		mSettings->PreconnectionBlob = _strdup(OLE2A(bstrPCB));
+		if (!mSettings->PreconnectionBlob)
+		{
+			return E_OUTOFMEMORY;
+		}
+		mSettings->SendPreconnectionPdu = TRUE;
 	}
 
 	return S_OK;

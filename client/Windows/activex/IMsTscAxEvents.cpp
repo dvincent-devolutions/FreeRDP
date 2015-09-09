@@ -44,8 +44,42 @@ enum EventDispid
 DWORD WINAPI CFreeRdpCtrl::TerminationMonitoringThread(LPVOID parameters)
 {
 	CFreeRdpCtrl& rThis = *(CFreeRdpCtrl*)parameters;
+
+	if (rThis.mIpConnectionTimeout > 0)
+	{
+		DWORD result = WaitForSingleObject(rThis.mFreeRdpThread, rThis.mIpConnectionTimeout * 1000);
+		if (result == WAIT_TIMEOUT)
+		{
+			if (rThis.mConnectionState != CONNECTED)
+			{
+				rThis.Disconnect();
+			}
+		}
+		else
+		{
+			goto FREERDP_THREAD_TERMINATED;
+		}
+	}
+	if (rThis.mConnectionTimeout > 0 && rThis.mConnectionTimeout > rThis.mIpConnectionTimeout)
+	{
+		DWORD timeout = (rThis.mConnectionTimeout - rThis.mIpConnectionTimeout) * 1000;
+		DWORD result = WaitForSingleObject(rThis.mFreeRdpThread, timeout);
+		if (result == WAIT_TIMEOUT)
+		{
+			if (rThis.mLoginComplete == FALSE)
+			{
+				rThis.Disconnect();
+			}
+		}
+		else
+		{
+			goto FREERDP_THREAD_TERMINATED;
+		}
+	}
+
 	WaitForSingleObject(rThis.mFreeRdpThread, INFINITE);
 
+FREERDP_THREAD_TERMINATED:
 	freerdp_client_stop(rThis.mContext);
 	rThis.mFreeRdpThread = NULL; // The handle is closed in freerdp_client_stop();
 
@@ -55,6 +89,14 @@ DWORD WINAPI CFreeRdpCtrl::TerminationMonitoringThread(LPVOID parameters)
 		rThis.Invalidate();
 		rThis.KillTimer(TIMER_IDLE);
 	}
+
+	if (rThis.mReconnecting)
+	{
+		rThis.mReconnecting = FALSE;
+		rThis.Connect();
+	}
+
+	rThis.Release();
 
 	return 0;
 }

@@ -489,7 +489,7 @@ static CREDUI_INFOA wfUiInfo =
 	NULL
 };
 
-BOOL wf_authenticate(freerdp* instance, char** username, char** password, char** domain)
+FREERDP_API BOOL wf_authenticate(freerdp* instance, char** username, char** password, char** domain)
 {
 	BOOL fSave;
 	DWORD status;

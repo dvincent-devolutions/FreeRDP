@@ -4,6 +4,13 @@
 
 extern HINSTANCE hModuleInstance;
 
+extern "C" void IpConnectionHandler(rdpContext* context, IpConnectionEventArgs* e)
+{
+	CFreeRdpCtrl& ctrl = *(CFreeRdpCtrl*)(context->pUser);
+	ctrl.ChangeToConnected();
+}
+
+
 extern "C" void ConnectionResultHandler(rdpContext* context, ConnectionResultEventArgs* e)
 {
 	CFreeRdpCtrl& ctrl = *(CFreeRdpCtrl*)(context->pUser);
@@ -26,15 +33,20 @@ CFreeRdpCtrl::CFreeRdpCtrl()
 	mSettings = NULL;
 
 	mConnectionState = NOT_CONNECTED;
+	mLoginComplete = FALSE;
+	mBackgroundInput = TRUE;
 	mFullScreen = FALSE;
 	mFullScreenKey = VK_CANCEL;
+	mIpConnectionTimeout = 0;
+	mConnectionTimeout = 0;
 	mMinutesToIdleTimeout = 0;
 	mMinInputSendInterval = 0;
 
 	mFreeRdpThread = NULL;
-	mTerminationMonitoringThread = NULL;
+	mDisconnectionReason = exDiscReasonNoInfo;
 	mDisableScrollbars = TRUE;
 	mHasFocus = FALSE;
+	mReconnecting = FALSE;
 	mHoldingMouse = FALSE;
 }
 
@@ -57,6 +69,8 @@ HRESULT CFreeRdpCtrl::FinalConstruct()
 	mSettings->SoftwareGdi = TRUE;
 
 	mContext->pUser = this;
+	wf_keep_windows_shortcut(mContext, 1);
+	PubSub_SubscribeIpConnection(mContext->pubSub, (pIpConnectionEventHandler)IpConnectionHandler);
 	PubSub_SubscribeConnectionResult(mContext->pubSub, (pConnectionResultEventHandler)ConnectionResultHandler);
 
 	mDeffered.SmartSizing = mSettings->SmartSizing;
@@ -98,11 +112,6 @@ void CFreeRdpCtrl::FinalRelease()
 
 CFreeRdpCtrl::~CFreeRdpCtrl()
 {
-	if (mTerminationMonitoringThread != NULL)
-	{
-		WaitForSingleObject(mTerminationMonitoringThread, INFINITE);
-		CloseHandle(mTerminationMonitoringThread);
-	}
 	freerdp_client_context_free(mContext);
 }
 
@@ -138,6 +147,10 @@ HRESULT CFreeRdpCtrl::OnDrawAdvanced(ATL_DRAWINFO& di)
 	else if (mConnectionState == CONNECTING)
 	{
 		text = mConnectingText;
+	}
+	else if (mConnectionState == CONNECTED && (HWND)mFullScreenWindow != NULL)
+	{
+		text = mConnectedText;
 	}
 	if (text != NULL)
 	{
@@ -435,6 +448,14 @@ LRESULT CFreeRdpCtrl::InterceptProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 		{
 			parentCtrl.mLastInput.wParam = wParam;
 			parentCtrl.mLastInput.lParam = lParam;
+			if (parentCtrl.mBackgroundInput == FALSE)
+			{
+				HWND ancestor = GetAncestor(hwnd, GA_ROOT);
+				if (ancestor != GetForegroundWindow())
+				{
+					return 0;
+				}
+			}
 			if (parentCtrl.mMinInputSendInterval > 0)
 			{
 				if (parentCtrl.mHoldingMouse == FALSE)
@@ -610,14 +631,6 @@ void CFreeRdpCtrl::ChangeToConnecting()
 void CFreeRdpCtrl::ChangeToConnected()
 {
 	mConnectionState = CONNECTED;
-	if (mGrabFocus != FALSE)
-	{
-		mFreeRdpWindow.SetFocus();
-	}
-	if (mFullScreen == TRUE && mFullScreenWindow == NULL && m_hWnd != NULL)
-	{
-		PostMessage(WM_AX_STARTFULLSCREEN, 0, 0);
-	}
 	Fire_OnConnected();
 }
 
@@ -625,6 +638,7 @@ void CFreeRdpCtrl::ChangeToConnected()
 void CFreeRdpCtrl::ChangeToLoginCompleted()
 {
 	mConnectionState = CONNECTED;
+	mLoginComplete = TRUE;
 	if (mGrabFocus != FALSE)
 	{
 		mFreeRdpWindow.SetFocus();
@@ -640,6 +654,7 @@ void CFreeRdpCtrl::ChangeToLoginCompleted()
 void CFreeRdpCtrl::ChangeToDisconnected(long reason)
 {
 	mConnectionState = NOT_CONNECTED;
+	mLoginComplete = FALSE;
 	if (mFullScreen == TRUE && mFullScreenWindow != NULL && m_hWnd != NULL)
 	{
 		PostMessage(WM_AX_ENDFULLSCREEN, 0, 0);

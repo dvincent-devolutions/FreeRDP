@@ -313,7 +313,7 @@ int freerdp_client_command_line_pre_filter(void* context, int index, int argc, L
 	return 0;
 }
 
-int freerdp_client_add_device_channel(rdpSettings* settings, int count, char** params)
+FREERDP_API int freerdp_client_add_device_channel(rdpSettings* settings, int count, char** params)
 {
 	if (strcmp(params[0], "drive") == 0)
 	{
@@ -465,7 +465,7 @@ int freerdp_client_add_device_channel(rdpSettings* settings, int count, char** p
 	return 0;
 }
 
-int freerdp_client_add_static_channel(rdpSettings* settings, int count, char** params)
+FREERDP_API int freerdp_client_add_static_channel(rdpSettings* settings, int count, char** params)
 {
 	int index;
 	ADDIN_ARGV* args;
@@ -483,7 +483,7 @@ int freerdp_client_add_static_channel(rdpSettings* settings, int count, char** p
 	return 0;
 }
 
-int freerdp_client_add_dynamic_channel(rdpSettings* settings, int count, char** params)
+FREERDP_API int freerdp_client_add_dynamic_channel(rdpSettings* settings, int count, char** params)
 {
 	int index;
 	ADDIN_ARGV* args;
@@ -852,7 +852,7 @@ int freerdp_parse_hostname(char* hostname, char** host, int* port)
 	return 0;
 }
 
-int freerdp_set_connection_type(rdpSettings* settings, int type)
+FREERDP_API int freerdp_set_connection_type(rdpSettings* settings, int type)
 {
 	settings->ConnectionType = type;
 

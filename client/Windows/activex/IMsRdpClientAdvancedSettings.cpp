@@ -3,6 +3,8 @@
 #include "stdafx.h"
 #include "FreeRdpCtrl.h"
 
+extern "C" int freerdp_set_connection_type(rdpSettings* settings, int type);
+
 
 STDMETHODIMP CFreeRdpCtrl::put_Compress(long pcompress)
 {
@@ -54,13 +56,14 @@ STDMETHODIMP CFreeRdpCtrl::get_BitmapPeristence(long *pbitmapPeristence)
 
 STDMETHODIMP CFreeRdpCtrl::put_allowBackgroundInput(long pallowBackgroundInput)
 {
-	return E_NOTIMPL;
+	mBackgroundInput = (pallowBackgroundInput == 0 ? FALSE : TRUE);
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_allowBackgroundInput(long *pallowBackgroundInput)
 {
-	*pallowBackgroundInput = TRUE;
+	*pallowBackgroundInput = mBackgroundInput;
 	return S_OK;
 }
 
@@ -97,7 +100,7 @@ STDMETHODIMP CFreeRdpCtrl::put_PluginDlls(BSTR rhs)
 			CStringA pluginName(p, nameLength);
 			if (pluginName.GetLength() > 0)
 			{
-				//freerdp_channels_load_plugin(mContext->channels, mContext->settings, pluginName, NULL);
+				mPlugins.Add(pluginName);
 			}
 			nameLength = 0;
 			p = pluginList.m_str + i + 1;
@@ -108,8 +111,7 @@ STDMETHODIMP CFreeRdpCtrl::put_PluginDlls(BSTR rhs)
 		}
 	}
 
-	//return S_OK;
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 
@@ -328,7 +330,7 @@ STDMETHODIMP CFreeRdpCtrl::put_EnableWindowsKey(long penableWindowsKey)
 STDMETHODIMP CFreeRdpCtrl::get_EnableWindowsKey(long *penableWindowsKey)
 {
 	*penableWindowsKey = mSettings->EnableWindowsKey;
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 
@@ -675,49 +677,50 @@ STDMETHODIMP CFreeRdpCtrl::get_keepAliveInterval(long *pkeepAliveInterval)
 
 STDMETHODIMP CFreeRdpCtrl::put_shutdownTimeout(long pshutdownTimeout)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_shutdownTimeout(long *pshutdownTimeout)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pshutdownTimeout = 0;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_overallConnectionTimeout(long poverallConnectionTimeout)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	mConnectionTimeout = poverallConnectionTimeout;
+	if (mConnectionTimeout != 0 && mConnectionTimeout < mIpConnectionTimeout)
+	{
+		mIpConnectionTimeout = mConnectionTimeout;
+	}
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_overallConnectionTimeout(long *poverallConnectionTimeout)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*poverallConnectionTimeout = mConnectionTimeout;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_singleConnectionTimeout(long psingleConnectionTimeout)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	mIpConnectionTimeout = psingleConnectionTimeout;
+	if (mIpConnectionTimeout > mConnectionTimeout || mIpConnectionTimeout == 0)
+	{
+		mConnectionTimeout = mIpConnectionTimeout;
+	}
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_singleConnectionTimeout(long *psingleConnectionTimeout)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*psingleConnectionTimeout = mIpConnectionTimeout;
+	return S_OK;
 }
 
 
@@ -1038,6 +1041,7 @@ STDMETHODIMP CFreeRdpCtrl::put_LoadBalanceInfo(BSTR pLBInfo)
 
 	free(mSettings->LoadBalanceInfo);
 	mSettings->LoadBalanceInfo = (BYTE*)_strdup(OLE2A(pLBInfo));
+	mSettings->LoadBalanceInfoLength = strlen((char*)mSettings->LoadBalanceInfo);
 	if (!mSettings->LoadBalanceInfo)
 	{
 		return E_OUTOFMEMORY;
@@ -1057,7 +1061,7 @@ STDMETHODIMP CFreeRdpCtrl::get_LoadBalanceInfo(BSTR *pLBInfo)
 
 	try
 	{
-		CComBSTR string(mSettings->LoadBalanceInfoLength);
+		CComBSTR string((char*)mSettings->LoadBalanceInfo);
 		string.CopyTo(pLBInfo);
 	}
 	catch (...)
@@ -1080,7 +1084,7 @@ STDMETHODIMP CFreeRdpCtrl::put_RedirectDrives(VARIANT_BOOL pRedirectDrives)
 		return E_FAIL;
 	}
 
-	mSettings->RedirectDrives = (pRedirectDrives == FALSE ? FALSE : TRUE);
+	mSettings->RedirectDrives = (pRedirectDrives == VARIANT_FALSE ? FALSE : TRUE);
 
 	return S_OK;
 }
@@ -1095,16 +1099,12 @@ STDMETHODIMP CFreeRdpCtrl::get_RedirectDrives(VARIANT_BOOL *pRedirectDrives)
 
 STDMETHODIMP CFreeRdpCtrl::put_RedirectPrinters(VARIANT_BOOL pRedirectPrinters)
 {
-	if (mSettings == NULL)
-	{
-		return E_OUTOFMEMORY;
-	}
 	if (mConnectionState != NOT_CONNECTED)
 	{
 		return E_FAIL;
 	}
 
-	mSettings->RedirectPrinters = (pRedirectPrinters == FALSE ? FALSE : TRUE);
+	mRedirectPrinters = (pRedirectPrinters == VARIANT_FALSE ? FALSE : TRUE);
 
 	return S_OK;
 }
@@ -1112,24 +1112,19 @@ STDMETHODIMP CFreeRdpCtrl::put_RedirectPrinters(VARIANT_BOOL pRedirectPrinters)
 
 STDMETHODIMP CFreeRdpCtrl::get_RedirectPrinters(VARIANT_BOOL *pRedirectPrinters)
 {
-	*pRedirectPrinters = (mSettings->RedirectPrinters == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
+	*pRedirectPrinters = (mRedirectPrinters == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_RedirectPorts(VARIANT_BOOL pRedirectPorts)
 {
-	if (mSettings == NULL)
-	{
-		return E_OUTOFMEMORY;
-	}
 	if (mConnectionState != NOT_CONNECTED)
 	{
 		return E_FAIL;
 	}
 
-	mSettings->RedirectSerialPorts = (pRedirectPorts == FALSE ? FALSE : TRUE);
-	mSettings->RedirectParallelPorts = mSettings->RedirectSerialPorts;
+	mRedirectPorts = (pRedirectPorts == VARIANT_FALSE ? FALSE : TRUE);
 
 	return S_OK;
 }
@@ -1137,23 +1132,19 @@ STDMETHODIMP CFreeRdpCtrl::put_RedirectPorts(VARIANT_BOOL pRedirectPorts)
 
 STDMETHODIMP CFreeRdpCtrl::get_RedirectPorts(VARIANT_BOOL *pRedirectPorts)
 {
-	*pRedirectPorts = (mSettings->RedirectSerialPorts == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
+	*pRedirectPorts = (mRedirectPorts == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_RedirectSmartCards(VARIANT_BOOL pRedirectSmartCards)
 {
-	if (mSettings == NULL)
-	{
-		return E_OUTOFMEMORY;
-	}
 	if (mConnectionState != NOT_CONNECTED)
 	{
 		return E_FAIL;
 	}
 
-	mSettings->RedirectSmartCards = (pRedirectSmartCards == FALSE ? FALSE : TRUE);
+	mRedirectSmartCards = (pRedirectSmartCards == VARIANT_FALSE ? FALSE : TRUE);
 
 	return S_OK;
 }
@@ -1161,7 +1152,7 @@ STDMETHODIMP CFreeRdpCtrl::put_RedirectSmartCards(VARIANT_BOOL pRedirectSmartCar
 
 STDMETHODIMP CFreeRdpCtrl::get_RedirectSmartCards(VARIANT_BOOL *pRedirectSmartCards)
 {
-	*pRedirectSmartCards = (mSettings->RedirectSmartCards == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
+	*pRedirectSmartCards = (mRedirectSmartCards == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
 
@@ -1376,6 +1367,11 @@ STDMETHODIMP CFreeRdpCtrl::put_RedirectClipboard(VARIANT_BOOL pfRedirectClipboar
 
 STDMETHODIMP CFreeRdpCtrl::get_RedirectClipboard(VARIANT_BOOL *pfRedirectClipboard)
 {
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+
 	*pfRedirectClipboard = (mSettings->RedirectClipboard == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
@@ -1447,6 +1443,10 @@ STDMETHODIMP CFreeRdpCtrl::put_RedirectDevices(VARIANT_BOOL pfRedirectPnPDevices
 
 STDMETHODIMP CFreeRdpCtrl::get_RedirectDevices(VARIANT_BOOL *pfRedirectPnPDevices)
 {
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
 	*pfRedirectPnPDevices = (mSettings->DeviceRedirection == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
@@ -1657,7 +1657,7 @@ STDMETHODIMP CFreeRdpCtrl::put_AudioCaptureRedirectionMode(VARIANT_BOOL pfRedir)
 		return E_FAIL;
 	}
 
-	mSettings->AudioCapture = (pfRedir == FALSE ? FALSE : TRUE);
+	mAudioCaptureRedirection = (pfRedir == FALSE ? FALSE : TRUE);
 
 	return S_OK;
 }
@@ -1665,7 +1665,7 @@ STDMETHODIMP CFreeRdpCtrl::put_AudioCaptureRedirectionMode(VARIANT_BOOL pfRedir)
 
 STDMETHODIMP CFreeRdpCtrl::get_AudioCaptureRedirectionMode(VARIANT_BOOL *pfRedir)
 {
-	*pfRedir = (mSettings->AudioCapture == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
+	*pfRedir = (mAudioCaptureRedirection == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
 	return S_OK;
 }
 
@@ -1744,65 +1744,98 @@ STDMETHODIMP CFreeRdpCtrl::get_SuperPanAccelerationFactor(unsigned long *puAccel
 
 STDMETHODIMP CFreeRdpCtrl::put_AudioQualityMode(unsigned int pAudioQualityMode)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	if (pAudioQualityMode > AUDIO_HIGH_QUALITY)
+	{
+		return E_INVALIDARG;
+	}
+
+	mAudioQuality = pAudioQualityMode;
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_AudioQualityMode(unsigned int *pAudioQualityMode)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pAudioQualityMode = mAudioQuality;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_RedirectDirectX(VARIANT_BOOL pfRedirectDirectX)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_RedirectDirectX(VARIANT_BOOL *pfRedirectDirectX)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pfRedirectDirectX = VARIANT_FALSE;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_NetworkConnectionType(unsigned int pConnectionType)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+	if (pConnectionType < CONNECTION_TYPE_MODEM || pConnectionType > CONNECTION_TYPE_AUTODETECT)
+	{
+		return E_INVALIDARG;
+	}
 
-	return E_NOTIMPL;
+	freerdp_set_connection_type(mSettings, pConnectionType);
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_NetworkConnectionType(unsigned int *pConnectionType)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	*pConnectionType = mSettings->ConnectionType;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_BandwidthDetection(VARIANT_BOOL pfAutodetect)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
-
-	return E_NOTIMPL;
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+	mSettings->NetworkAutoDetect = (pfAutodetect == VARIANT_FALSE ? FALSE : TRUE);
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_BandwidthDetection(VARIANT_BOOL *pfAutodetect)
 {
-	//(CFreeRdpActivexCtrl, RdpClientAdvancedSettings);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
 
-	return E_NOTIMPL;
+	*pfAutodetect = (mSettings->NetworkAutoDetect == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
+	return S_OK;
 }
 
 
@@ -1822,18 +1855,21 @@ STDMETHODIMP CFreeRdpCtrl::put_ClientProtocolSpec(ClientSpec pClientMode)
 		// Full mode:
 		mSettings->GfxThinClient = FALSE;
 		mSettings->GfxSmallCache = FALSE;
+		mSettings->SupportGraphicsPipeline = FALSE;
 	}
 	else if (pClientMode == 1)
 	{
 		// Thin client mode:
 		mSettings->GfxThinClient = TRUE;
 		mSettings->GfxSmallCache = FALSE;
+		mSettings->SupportGraphicsPipeline = TRUE;
 	}
 	else if (pClientMode == 2)
 	{
 		// Small cache mode:
 		mSettings->GfxThinClient = FALSE;
 		mSettings->GfxSmallCache = TRUE;
+		mSettings->SupportGraphicsPipeline = TRUE;
 	}
 	else
 	{

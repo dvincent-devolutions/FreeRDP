@@ -377,6 +377,7 @@ STDMETHODIMP CFreeRdpCtrl::get_SecuredSettingsEnabled(LONG* val)
 STDMETHODIMP CFreeRdpCtrl::get_SecuredSettings(IMsTscSecuredSettings** ppSecuredSettings)
 {
 	*ppSecuredSettings = (IMsRdpClientSecuredSettings2*)this;
+	AddRef();
 	return S_OK;
 }
 
@@ -384,6 +385,7 @@ STDMETHODIMP CFreeRdpCtrl::get_SecuredSettings(IMsTscSecuredSettings** ppSecured
 STDMETHODIMP CFreeRdpCtrl::get_AdvancedSettings(IMsTscAdvancedSettings** ppAdvSettings)
 {
 	*ppAdvSettings = (IMsRdpClientAdvancedSettings8*)this;
+	AddRef();
 	return S_OK;
 }
 
@@ -391,6 +393,7 @@ STDMETHODIMP CFreeRdpCtrl::get_AdvancedSettings(IMsTscAdvancedSettings** ppAdvSe
 STDMETHODIMP CFreeRdpCtrl::get_Debugger(IMsTscDebug** ppTscDebug)
 {
 	*ppTscDebug = (IMsTscDebug*)this;
+	AddRef();
 	return S_OK;
 }
 
@@ -406,7 +409,54 @@ STDMETHODIMP CFreeRdpCtrl::Connect()
 		return E_FAIL;
 	}
 
+	mDisconnectionReason = exDiscReasonNoInfo;
 	ChangeToConnecting();
+
+	if (mAudioRedirection != AUDIO_NONE)
+	{
+		char* audioParams[2];
+		audioParams[0] = "rdpsnd";
+		audioParams[1] = "quality:dynamic";
+		if (mAudioQuality == AUDIO_HIGH_QUALITY)
+		{
+			audioParams[1] = "quality:high";
+		}
+		else if (mAudioQuality == AUDIO_MEDIUM_QUALITY)
+		{
+			audioParams[1] = "quality:medium";
+		}
+		freerdp_client_add_static_channel(mSettings, 2, audioParams);
+	}
+
+	if (mAudioCaptureRedirection)
+	{
+		char* captureParams[1];
+		captureParams[0] = "audin";
+		freerdp_client_add_dynamic_channel(mSettings, 1, captureParams);
+	}
+
+	if (mRedirectSmartCards)
+	{
+		char* redirParams[1];
+		redirParams[0] = "smartcard";
+		freerdp_client_add_device_channel(mSettings, 1, redirParams);
+	}
+
+	if (mRedirectPrinters)
+	{
+		char* redirParams[1];
+		redirParams[0] = "printer";
+		freerdp_client_add_device_channel(mSettings, 1, redirParams);
+	}
+
+	if (mRedirectPorts)
+	{
+		char* redirParams[1];
+		redirParams[0] = "serial";
+		freerdp_client_add_device_channel(mSettings, 1, redirParams);
+		redirParams[0] = "parallel";
+		freerdp_client_add_device_channel(mSettings, 1, redirParams);
+	}
 
 	HRESULT result = CreateVirtualChannels();
 	if (result != S_OK)
@@ -414,20 +464,19 @@ STDMETHODIMP CFreeRdpCtrl::Connect()
 		ChangeToDisconnected(0);
 		return E_ABORT;
 	}
-	TransferDefferedProperties();
 
-	if (mTerminationMonitoringThread != NULL)
-	{
-		WaitForSingleObject(mTerminationMonitoringThread, INFINITE);
-		CloseHandle(mTerminationMonitoringThread);
-		mTerminationMonitoringThread = NULL;
-	}
+	TransferDefferedProperties();
 
 	mSettings->ParentWindowId = (UINT64)m_hWnd;
 	freerdp_client_start(mContext);
 	mFreeRdpThread = freerdp_client_get_thread(mContext);
 
-	mTerminationMonitoringThread = CreateThread(NULL, 0, TerminationMonitoringThread, this, 0, NULL);
+	HANDLE handle = CreateThread(NULL, 0, TerminationMonitoringThread, this, 0, NULL);
+	if (handle != NULL)
+	{
+		AddRef();
+		CloseHandle(handle);
+	}
 
 	return S_OK;
 }
@@ -435,6 +484,7 @@ STDMETHODIMP CFreeRdpCtrl::Connect()
 
 STDMETHODIMP CFreeRdpCtrl::Disconnect()
 {
+	mDisconnectionReason = exDiscReasonAPIInitiatedDisconnect;
 	if ((HWND)mFreeRdpWindow != NULL)
 	{
 		mFreeRdpWindow.PostMessage(WM_CLOSE, 0, 0);
@@ -532,6 +582,7 @@ STDMETHODIMP CFreeRdpCtrl::get_ColorDepth(long *pcolorDepth)
 STDMETHODIMP CFreeRdpCtrl::get_AdvancedSettings2(IMsRdpClientAdvancedSettings **ppAdvSettings)
 {
 	*ppAdvSettings = (IMsRdpClientAdvancedSettings8*)this;
+	AddRef();
 	return S_OK;
 }
 
@@ -539,13 +590,15 @@ STDMETHODIMP CFreeRdpCtrl::get_AdvancedSettings2(IMsRdpClientAdvancedSettings **
 STDMETHODIMP CFreeRdpCtrl::get_SecuredSettings2(IMsRdpClientSecuredSettings **ppSecuredSettings)
 {
 	*ppSecuredSettings = (IMsRdpClientSecuredSettings2*)this;
+	AddRef();
 	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_ExtendedDisconnectReason(ExtendedDisconnectReasonCode *pExtendedDisconnectReason)
 {
-	return E_NOTIMPL;
+	*pExtendedDisconnectReason = (ExtendedDisconnectReasonCode)mDisconnectionReason;
+	return S_OK;
 }
 
 
@@ -605,32 +658,58 @@ STDMETHODIMP CFreeRdpCtrl::GetVirtualChannelOptions(BSTR chanName, long *pChanOp
 
 STDMETHODIMP CFreeRdpCtrl::RequestClose(ControlCloseStatus *pCloseStatus)
 {
-	return E_NOTIMPL;
+	*pCloseStatus = controlCloseCanProceed;
+	Disconnect();
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_AdvancedSettings3(IMsRdpClientAdvancedSettings2 **ppAdvSettings)
 {
 	*ppAdvSettings = (IMsRdpClientAdvancedSettings8*)this;
+	AddRef();
 	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::put_ConnectedStatusText(BSTR pConnectedStatusText)
 {
-	return E_NOTIMPL;
+	try
+	{
+		mConnectedText = pConnectedStatusText;
+	}
+	catch (...)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState == CONNECTED)
+	{
+		Invalidate();
+	}
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_ConnectedStatusText(BSTR *pConnectedStatusText)
 {
-	return E_NOTIMPL;
+	try
+	{
+		CComBSTR string(mConnectedText);
+		string.CopyTo(pConnectedStatusText);
+	}
+	catch (...)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	return S_OK;
 }
 
 	     
 STDMETHODIMP CFreeRdpCtrl::get_AdvancedSettings4(IMsRdpClientAdvancedSettings3 **ppAdvSettings)
 {
 	*ppAdvSettings = (IMsRdpClientAdvancedSettings8*)this;
+	AddRef();
 	return S_OK;
 }
 
@@ -638,19 +717,23 @@ STDMETHODIMP CFreeRdpCtrl::get_AdvancedSettings4(IMsRdpClientAdvancedSettings3 *
 STDMETHODIMP CFreeRdpCtrl::get_AdvancedSettings5(IMsRdpClientAdvancedSettings4 **ppAdvSettings)
 {
 	*ppAdvSettings = (IMsRdpClientAdvancedSettings8*)this;
+	AddRef();
 	return S_OK;
 }
 
 	     
 STDMETHODIMP CFreeRdpCtrl::get_TransportSettings(IMsRdpClientTransportSettings **ppXportSet)
 {
-	return E_NOTIMPL;
+	*ppXportSet = (IMsRdpClientTransportSettings4*)this;
+	AddRef();
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_AdvancedSettings6(IMsRdpClientAdvancedSettings5 **ppAdvSettings)
 {
 	*ppAdvSettings = (IMsRdpClientAdvancedSettings8*)this;
+	AddRef();
 	return S_OK;
 }
 
@@ -663,58 +746,70 @@ STDMETHODIMP CFreeRdpCtrl::GetErrorDescription(unsigned int disconnectReason, un
 
 STDMETHODIMP CFreeRdpCtrl::get_RemoteProgram(ITSRemoteProgram **ppRemoteProgram)
 {
-	return E_NOTIMPL;
+	*ppRemoteProgram = (ITSRemoteProgram2*)this;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_MsRdpClientShell(IMsRdpClientShell **ppLauncher)
 {
-	return E_NOTIMPL;
+	*ppLauncher = (IMsRdpClientShell*)this;
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_AdvancedSettings7(IMsRdpClientAdvancedSettings6 **ppAdvSettings)
 {
 	*ppAdvSettings = (IMsRdpClientAdvancedSettings8*)this;
+	AddRef();
 	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_TransportSettings2(IMsRdpClientTransportSettings2 **ppXportSet2)
 {
-	return E_NOTIMPL;
+	*ppXportSet2 = (IMsRdpClientTransportSettings4*)this;
+	AddRef();
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_AdvancedSettings8(IMsRdpClientAdvancedSettings7 **ppAdvSettings)
 {
 	*ppAdvSettings = (IMsRdpClientAdvancedSettings8*)this;
+	AddRef();
 	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_TransportSettings3(IMsRdpClientTransportSettings3 **ppXportSet3)
 {
-	return E_NOTIMPL;
+	*ppXportSet3 = (IMsRdpClientTransportSettings4*)this;
+	AddRef();
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::GetStatusText(unsigned int statusCode, BSTR *pBstrStatusText)
 {
-	return E_NOTIMPL;
+	*pBstrStatusText = SysAllocString(L"");
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_SecuredSettings3(IMsRdpClientSecuredSettings2 **ppSecuredSettings)
 {
 	*ppSecuredSettings = (IMsRdpClientSecuredSettings2*)this;
+	AddRef();
 	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_RemoteProgram2(ITSRemoteProgram2 **ppRemoteProgram)
 {
-	return E_NOTIMPL;
+	*ppRemoteProgram = (ITSRemoteProgram2*)this;
+	AddRef();
+	return S_OK;
 }
 
 
@@ -727,19 +822,34 @@ STDMETHODIMP CFreeRdpCtrl::SendRemoteAction(RemoteSessionActionType actionType)
 STDMETHODIMP CFreeRdpCtrl::get_AdvancedSettings9(IMsRdpClientAdvancedSettings8 **ppAdvSettings)
 {
 	*ppAdvSettings = (IMsRdpClientAdvancedSettings8*)this;
+	AddRef();
 	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::Reconnect(unsigned long ulWidth, unsigned long ulHeight, ControlReconnectStatus *pReconnectStatus)
 {
-	return E_NOTIMPL;
+	if (mConnectionState != CONNECTED)
+	{
+		*pReconnectStatus = controlReconnectBlocked;
+		E_FAIL;
+	}
+
+	mReconnecting = TRUE;
+	mSettings->DesktopWidth = ulWidth;
+	mSettings->DesktopHeight = ulHeight;
+	Disconnect();
+	*pReconnectStatus = controlReconnectStarted;
+
+	return S_OK;
 }
 
 	     
 STDMETHODIMP CFreeRdpCtrl::get_TransportSettings4(IMsRdpClientTransportSettings4 **ppXportSet4)
 {
-	return E_NOTIMPL;
+	*ppXportSet4 = (IMsRdpClientTransportSettings4*)this;
+	AddRef();
+	return S_OK;
 }
 
 

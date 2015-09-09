@@ -75,17 +75,14 @@ STDMETHODIMP CFreeRdpCtrl::get_GatewayUsageMethod(unsigned long *pulProxyUsageMe
 
 STDMETHODIMP CFreeRdpCtrl::put_GatewayProfileUsageMethod(unsigned long pulProxyProfileUsageMethod)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
-
-	return E_NOTIMPL;
+	return S_FALSE;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_GatewayProfileUsageMethod(unsigned long *pulProxyProfileUsageMethod)
 {
-	//(CFreeRdpActivexCtrl, RdpClientTransportSettings);
-
-	return E_NOTIMPL;
+	*pulProxyProfileUsageMethod = 0;
+	return S_OK;
 }
 
 

@@ -4,113 +4,87 @@
 #include "FreeRdpCtrl.h"
 
 
-//STDMETHODIMP_(ULONG) CFreeRdpCtrl::AddRef()
-//{
-//	//(CFreeRdpActivexCtrl, RemoteProgram);
-//
-//	return pThis->ExternalAddRef();
-//}
-//
-//
-//STDMETHODIMP_(ULONG) CFreeRdpCtrl::Release()
-//{
-//	//(CFreeRdpActivexCtrl, RemoteProgram);
-//
-//	return pThis->ExternalRelease();
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::QueryInterface(REFIID iid, LPVOID* ppvObj)
-//{
-//	//(CFreeRdpActivexCtrl, RemoteProgram);
-//
-//	return pThis->ExternalQueryInterface(&iid, ppvObj);
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::GetTypeInfoCount(UINT* pCount)
-//{
-//	//(CFreeRdpActivexCtrl, RemoteProgram);
-//
-//	*pCount = 1;
-//
-//	return S_OK;
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::GetTypeInfo(UINT info, LCID lcid, ITypeInfo** pInfo)
-//{
-//	//(CFreeRdpActivexCtrl, RemoteProgram);
-//
-//	if (info != 0)
-//	{
-//		return DISP_E_BADINDEX;
-//	}
-//
-//	if (pThis->mRemoteProgramTypeInfo == NULL)
-//	{
-//		HRESULT result = pThis->GetTypeInfoOfGuid(lcid, IID_ITSRemoteProgram2, &pThis->mRemoteProgramTypeInfo);
-//		if (FAILED(result))
-//		{
-//			pThis->mRemoteProgramTypeInfo = NULL;
-//			return E_FAIL;
-//		}
-//	}
-//	pThis->mRemoteProgramTypeInfo->AddRef();
-//	*pInfo = pThis->mRemoteProgramTypeInfo;
-//
-//	return S_OK;
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames, LCID lcid, DISPID* rgdispid)
-//{
-//	//(CFreeRdpActivexCtrl, RemoteProgram);
-//
-//	if (pThis->mRemoteProgramTypeInfo == NULL)
-//	{
-//		return E_FAIL;
-//	}
-//
-//	return DispGetIDsOfNames(pThis->mRemoteProgramTypeInfo, rgszNames, cNames, rgdispid);
-//}
-//
-//
-//STDMETHODIMP CFreeRdpCtrl::Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD flags, DISPPARAMS* pParams, VARIANT* pResult, EXCEPINFO* pExcep, UINT* pErr)
-//{
-//	//(CFreeRdpActivexCtrl, RemoteProgram);
-//
-//	if (pThis->mRemoteProgramTypeInfo == NULL)
-//	{
-//		return E_FAIL;
-//	}
-//
-//	return DispInvoke(this, pThis->mRemoteProgramTypeInfo, dispid, flags, pParams, pResult, pExcep, pErr);
-//}
-
-
 STDMETHODIMP CFreeRdpCtrl::put_RemoteProgramMode(VARIANT_BOOL pvboolRemoteProgramMode)
 {
-	//(CFreeRdpActivexCtrl, RemoteProgram);
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
 
-	return E_NOTIMPL;
+	mSettings->RemoteApplicationMode = (pvboolRemoteProgramMode == VARIANT_FALSE ? FALSE : TRUE);
+
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::get_RemoteProgramMode(VARIANT_BOOL *pvboolRemoteProgramMode)
 {
-	//(CFreeRdpActivexCtrl, RemoteProgram);
-
-	return E_NOTIMPL;
+	*pvboolRemoteProgramMode = (mSettings->RemoteApplicationMode == FALSE ? VARIANT_FALSE : VARIANT_TRUE);
+	return S_OK;
 }
 
 
 STDMETHODIMP CFreeRdpCtrl::ServerStartProgram(BSTR bstrExecutablePath, BSTR bstrFilePath, BSTR bstrWorkingDirectory,
 	VARIANT_BOOL vbExpandEnvVarInWorkingDirectoryOnServer, BSTR bstrArguments, VARIANT_BOOL vbExpandEnvVarInArgumentsOnServer)
 {
-	//(CFreeRdpActivexCtrl, RemoteProgram);
+	USES_CONVERSION;
 
-	return E_NOTIMPL;
+	if (mSettings == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+	if (mConnectionState != NOT_CONNECTED)
+	{
+		return E_FAIL;
+	}
+
+	free(mSettings->RemoteApplicationName);
+	mSettings->RemoteApplicationName = NULL;
+	if (bstrExecutablePath)
+	{
+		mSettings->RemoteApplicationName = _strdup(OLE2A(bstrExecutablePath));
+		if (!mSettings->RemoteApplicationName)
+		{
+			return E_OUTOFMEMORY;
+		}
+	}
+
+	free(mSettings->RemoteApplicationFile);
+	mSettings->RemoteApplicationFile = NULL;
+	if (bstrFilePath)
+	{
+		mSettings->RemoteApplicationFile = _strdup(OLE2A(bstrFilePath));
+		if (!mSettings->RemoteApplicationFile)
+		{
+			return E_OUTOFMEMORY;
+		}
+	}
+
+	//free(mSettings->RemoteApplicationFile);
+	//mSettings->RemoteApplicationFile = _strdup(OLE2A(bstrWorkingDirectory));
+	//if (!mSettings->RemoteApplicationFile)
+	//{
+	//	return E_OUTOFMEMORY;
+	//}
+	mSettings->RemoteApplicationExpandWorkingDir = (vbExpandEnvVarInWorkingDirectoryOnServer == VARIANT_FALSE ? FALSE : TRUE);
+
+	free(mSettings->RemoteApplicationCmdLine);
+	mSettings->RemoteApplicationCmdLine = NULL;
+	if (bstrArguments)
+	{
+		mSettings->RemoteApplicationCmdLine = _strdup(OLE2A(bstrArguments));
+		if (!mSettings->RemoteApplicationCmdLine)
+		{
+			return E_OUTOFMEMORY;
+		}
+	}
+	mSettings->RemoteApplicationExpandCmdLine = (vbExpandEnvVarInArgumentsOnServer == VARIANT_FALSE ? FALSE : TRUE);
+
+	return S_OK;
 }
 
 

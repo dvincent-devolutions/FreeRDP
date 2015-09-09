@@ -45,6 +45,93 @@ void wf_scale_mouse_event(wfContext* wfc, rdpInput* input, UINT16 flags, UINT16 
 static BOOL g_flipping_in;
 static BOOL g_flipping_out;
 
+static BYTE g_modifiers[6] = { 0, 0, 0, 0, 0, 0 };
+static BYTE g_local_modifiers[6] = { 0, 0, 0, 0, 0, 0 };
+static BYTE g_remote_modifiers[6] = { 0, 0, 0, 0, 0, 0 };
+static const int g_modifier_order[6] = { 4, 5, 0, 1, 2, 3 };
+
+#define ALT_DOWN() (*(SHORT*)(g_modifiers + 4))
+#define SHIFT_DOWN() (*(SHORT*)(g_modifiers + 0))
+#define CTRL_DOWN() (*(SHORT*)(g_modifiers + 2))
+
+FREERDP_API void wf_keep_windows_shortcut(rdpContext* context, int keep)
+{
+	wfContext* wfc = (wfContext*)context;
+	wfc->keep_windows_shortcut = keep;
+}
+
+static void update_local_modifiers()
+{
+	BYTE vk_code;
+	DWORD flags;
+	int index;
+	int i;
+
+	for (i = 0; i < 6; i++)
+	{
+		index = g_modifier_order[i];
+		if (g_modifiers[index] && !g_local_modifiers[index])
+		{
+			g_local_modifiers[index] = 1;
+			vk_code = VK_LSHIFT + index;
+			flags = (vk_code == VK_RMENU || vk_code == VK_RCONTROL ? KEYEVENTF_EXTENDEDKEY : 0);
+			keybd_event(vk_code, MapVirtualKey(vk_code, MAPVK_VK_TO_VSC), flags, 0);
+		}
+	}
+}
+
+static void release_local_modifier(int index)
+{
+	BYTE vk_code;
+	DWORD flags;
+
+	if (g_local_modifiers[index])
+	{
+		g_local_modifiers[index] = 0;
+		//vk_code = VK_LSHIFT + index;
+		//flags = (vk_code == VK_RMENU || vk_code == VK_RCONTROL ? KEYEVENTF_EXTENDEDKEY : 0) | KEYEVENTF_KEYUP;
+		//keybd_event(vk_code, MapVirtualKey(vk_code, MAPVK_VK_TO_VSC), flags, 0);
+	}
+}
+
+static void update_remote_modifiers(rdpInput* input)
+{
+	BYTE vk_code;
+	DWORD rdp_scancode;
+	DWORD flags;
+	int index;
+	int i;
+
+	for (i = 0; i < 6; i++)
+	{
+		index = g_modifier_order[i];
+		if (g_modifiers[index] && !g_remote_modifiers[index])
+		{
+			g_remote_modifiers[index] = 1;
+			vk_code = VK_LSHIFT + index;
+			flags = (vk_code == VK_RMENU || vk_code == VK_RCONTROL ? KEYEVENTF_EXTENDEDKEY : 0);
+			rdp_scancode = MAKE_RDP_SCANCODE(MapVirtualKey(vk_code, MAPVK_VK_TO_VSC), flags);
+			freerdp_input_send_keyboard_event_ex(input, TRUE, rdp_scancode);
+		}
+	}
+}
+
+static void release_remote_modifier(rdpInput* input, int index)
+{
+	BYTE vk_code;
+	DWORD rdp_scancode;
+	DWORD flags;
+
+	if (g_remote_modifiers[index])
+	{
+		g_remote_modifiers[index] = 0;
+		//vk_code = VK_LSHIFT + index;
+		//flags = (vk_code == VK_RMENU || vk_code == VK_RCONTROL ? KEYEVENTF_EXTENDEDKEY : 0);
+		//rdp_scancode = MAKE_RDP_SCANCODE(MapVirtualKey(vk_code, MAPVK_VK_TO_VSC), flags);
+		//freerdp_input_send_keyboard_event_ex(input, TRUE, rdp_scancode);
+	}
+}
+
 static BOOL alt_ctrl_down()
 {
 	return ((GetAsyncKeyState(VK_CONTROL) & 0x8000) ||
@@ -57,17 +144,39 @@ LRESULT CALLBACK wf_ll_kbd_proc(int nCode, WPARAM wParam, LPARAM lParam)
 	DWORD rdp_scancode;
 	rdpInput* input;
 	PKBDLLHOOKSTRUCT p;
+	BOOL keep = FALSE;
 
 	DEBUG_KBD("Low-level keyboard hook, hWnd %X nCode %X wParam %X", g_focus_hWnd, nCode, wParam);
 
-	if (g_flipping_in)
+	if (nCode != HC_ACTION || !lParam)
 	{
-		if (!alt_ctrl_down())
-			g_flipping_in = FALSE;
 		return CallNextHookEx(NULL, nCode, wParam, lParam);
 	}
 
-	if (g_focus_hWnd && (nCode == HC_ACTION))
+	p = (PKBDLLHOOKSTRUCT)lParam;
+	if (p->flags & LLKHF_INJECTED)
+	{
+		return CallNextHookEx(NULL, nCode, wParam, lParam);
+	}
+
+	if (p->vkCode >= VK_LSHIFT && p->vkCode <= VK_RMENU)
+	{
+		g_modifiers[p->vkCode - VK_LSHIFT] = (p->flags & LLKHF_UP ? 0 : 1);
+	}
+
+	if (g_flipping_in)
+	{
+		//if (!alt_ctrl_down())
+			g_flipping_in = FALSE;
+	}
+	else if (g_flipping_out)
+	{
+		g_flipping_out = FALSE;
+		g_focus_hWnd = NULL;
+		update_local_modifiers();
+	}
+
+	if (g_focus_hWnd)
 	{
 		switch (wParam)
 		{
@@ -76,9 +185,7 @@ LRESULT CALLBACK wf_ll_kbd_proc(int nCode, WPARAM wParam, LPARAM lParam)
 			case WM_KEYUP:
 			case WM_SYSKEYUP:
 				wfc = (wfContext*) GetWindowLongPtr(g_focus_hWnd, GWLP_USERDATA);
-				p = (PKBDLLHOOKSTRUCT) lParam;
-
-				if (!wfc || !p)
+				if (!wfc)
 					return 1;
 				
 				input = wfc->instance->input;
@@ -96,6 +203,53 @@ LRESULT CALLBACK wf_ll_kbd_proc(int nCode, WPARAM wParam, LPARAM lParam)
 					{
 						wf_toggle_fullscreen(wfc);
 						return 1;
+					}
+				}
+
+				if (wfc->keep_windows_shortcut)
+				{
+					if (!(p->flags & LLKHF_UP) && p->vkCode >= VK_LSHIFT && p->vkCode <= VK_RMENU)
+					{
+						return 1;
+					}
+
+					if (p->vkCode == VK_ESCAPE)
+					{
+						if (CTRL_DOWN() && !ALT_DOWN() && !SHIFT_DOWN())
+						{
+							keep = TRUE;
+						}
+					}
+					else if (p->vkCode == VK_TAB)
+					{
+						if (ALT_DOWN() && !CTRL_DOWN())
+						{
+							keep = TRUE;
+						}
+					}
+					else if (p->vkCode == VK_F4 || p->vkCode == VK_SPACE)
+					{
+						if (ALT_DOWN() && !CTRL_DOWN() && !SHIFT_DOWN())
+						{
+							keep = TRUE;
+						}
+					}
+
+					if (keep)
+					{
+						update_local_modifiers();
+						keybd_event((BYTE)p->vkCode, p->scanCode, p->flags, 0);
+						return 1;
+					}
+					else
+					{
+						update_remote_modifiers(input);
+					}
+
+					if ((p->flags & LLKHF_UP) && p->vkCode >= VK_LSHIFT && p->vkCode <= VK_RMENU)
+					{
+						release_local_modifier(p->vkCode - VK_LSHIFT);
+						release_remote_modifier(input, p->vkCode - VK_LSHIFT);
 					}
 				}
 
@@ -138,15 +292,6 @@ LRESULT CALLBACK wf_ll_kbd_proc(int nCode, WPARAM wParam, LPARAM lParam)
 					return 1;
 
 				break;
-		}
-	}
-
-	if (g_flipping_out)
-	{
-		if (!alt_ctrl_down())
-		{
-			g_flipping_out = FALSE;
-			g_focus_hWnd = NULL;
 		}
 	}
 

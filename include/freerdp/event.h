@@ -70,6 +70,10 @@ DEFINE_EVENT_BEGIN(Terminate)
 	int code;
 DEFINE_EVENT_END(Terminate)
 
+DEFINE_EVENT_BEGIN(IpConnection)
+	int code;
+DEFINE_EVENT_END(IpConnection)
+
 DEFINE_EVENT_BEGIN(ConnectionResult)
 	int result;
 DEFINE_EVENT_END(ConnectionResult)
